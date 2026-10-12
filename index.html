@@ -291,6 +291,7 @@ button.hm:active{background:var(--board-line)}
 .mres small{font:600 13px/1 var(--f-body);color:var(--ink-2)}
 .lteam{display:flex;flex-direction:column;gap:4px}
 .lrowb{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+div.lrowb{cursor:default}
 .pchips{display:flex;flex-wrap:wrap;gap:8px}
 .pchip.fixed{display:inline-flex;align-items:center;background:var(--ink);border-color:var(--ink);color:var(--ice)}
 .pchip.alt{border-style:dashed}
@@ -859,9 +860,10 @@ function roleOf(u) {
 }
 const hasRights = u => { const r = roleOf(u); return r.admin || r.rights.length > 0; };
 const authOn = () => NET || !!(state.users.ADMIN && state.users.ADMIN.hash);
-// On the stand-alone site whoever has not signed in looks on as a guest.
-const GUEST_TABS = ['tulostaulu', 'kaynnissa', 'turnaukset'];
+// On the stand-alone site whoever has not signed in by name is a guest and sees the front page only.
+const GUEST_TABS = [];
 const guest = () => ({ id: 'GUEST', guest: true, admin: false, name: 'Vieras', rights: [], tabs: GUEST_TABS, secs: ALL_SECS });
+const isGuest = () => { const m = me(); return !m || !!m.guest; };
 // Who is using the page right now, or null when a login is needed. Until ADMIN has a password there is no login and everyone is ADMIN.
 // On the stand-alone site ADMIN and the accounts marked for Google count only while Google says that person is signed in.
 function me() {
@@ -878,13 +880,17 @@ function me() {
   if (x.tok !== 'g' && u.hash && x.tok !== u.hash) return none;   // a password that was set or changed signs the account out everywhere
   return { id: x.id, admin: r.admin, name: q.name, rights: r.rights, tabs: r.tabs, secs: r.secs, self: r.self, goal: r.goal, role: r.name };
 }
+// On the site the database takes the changes to teams, players and tournaments from everyone who opened the page with its password,
+// so a Mod's rights work by name alone; the page checks each right. Settings, roles and accounts still need an admin's Google sign-in.
+const byGoogle = () => !NET || (!!ui.fb.user && !!ui.fb.lvl);
 // A right's own name asks for that part; a group's name asks for any part of the group (used to decide what to show).
 function can(right) {
   const m = me();
   if (!m || ui.readOnly) return false;
+  if (right === 'pelattava') return m.admin || m.rights.indexOf('tasetus') >= 0;
   if (m.admin) return true;
   if (right === 'admin') return false;
-  return GROUP_PARTS[right] ? GROUP_PARTS[right].some(x => m.rights.indexOf(x) >= 0) : m.rights.indexOf(right) >= 0;
+  return GROUP_PARTS[right] ? GROUP_PARTS[right].some(x => can(x)) : m.rights.indexOf(right) >= 0;
 }
 const canSec = sec => { const m = me(); return !!m && (m.admin || !m.secs || m.secs.indexOf(sec) >= 0); };
 function setSession(id, tok) {
@@ -906,7 +912,7 @@ function hashPw(salt, pw, scheme) {
 }
 // What each action, field, form and confirmation needs. Anything not listed is plain viewing or navigation.
 const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'note-save': 'kirj', 'note-cancel': 'kirj', 'goal-new': 'kirj', 'goal-edit': 'kmuok', 'goal-p': 'kirj', 'goal-a': 'kirj', 'goal-noa': 'kirj', 'goal-save': 'kirj', 'goal-cancel': 'kirj',
-  'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'tasetus', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
+  'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
   color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'role-goal': 'admin', 'ad-edit': 'admin', 'ad-clear': 'admin', 'add-stat': 'admin', 'val-step': 'admin', acct: 'admin', 'acct-open': 'admin', 'acct-goal': 'admin', 'acct-self': 'admin', 'new-kind': 'admin', kind: 'admin', setview: 'admin', 'log-filter': 'admin', 'log-more': 'admin', 'add-role': 'admin', 'role-open': 'admin', 'card-edit': 'profiilit', backup: 'admin', 'restore-cancel': 'admin', 'auto-now': 'admin', 'auto-pick': 'admin' };
 const FIELD_NEED = { 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
   'role-sec': 'admin', 'role-rgroup': 'admin', 'role-self': 'admin', 'acct-sec': 'admin', 'acct-rgroup': 'admin',
@@ -920,6 +926,7 @@ function mayKey(key) {
 }
 const ownOnly = () => { const m = me(); if (!m || m.admin || m.id === 'ADMIN' || m.guest || ui.readOnly) return ''; return m.self ? m.id : ''; };   // a switch on the player's own account
 function mayAct(a, d) {
+  if (a === 'card' && isGuest()) return false;   // a guest sees the front page only
   if (a === 'ask' || a === 'arm' || a === 'yes') return mayKey(d.key);
   if (a === 'goal-new') { const T = state.tournaments[d.tour], m = T && T.matches[d.id]; if (m && goalWait(m) > nowMs()) return false; }   // fifteen seconds between goals
   if (a === 'open' && d.id === '__new') return can(d.scope === 'tour' ? 'turnaus' : d.scope === 'team' ? 'joukkue' : 'admin');
@@ -963,6 +970,8 @@ function mySide(T, m, pid) {
   if (kindOf(q) !== 'pelaaja' || !state.teams[q.teamId]) return '';
   return sideTeam(T, m.home) === q.teamId ? 'h' : sideTeam(T, m.away) === q.teamId ? 'a' : '';
 }
+// The big-screen show too is for those signed in by name; anyone else gets the front page or the sign-in until they sign in.
+const showOn = () => !!ui.show && (!ui.ready || (!!me() && !me().guest));
 function allowedTabs() {
   const m = me(), T = activeTour();
   if (!m) return [];
@@ -1251,14 +1260,13 @@ async function pump(path, w) {
       if (P && code === 'invalid_argument' && !w.fell) { w.fell = true; w.dirty = true; continue; }   // nothing stored to merge into yet: write the whole tournament
       if (code === 'unavailable' && !w.retried) { w.retried = true; w.dirty = true; await sleep(500 + Math.random() * 700); continue; }
       w.retried = false;
-      if (code === 'denied') { ui.err = 'refused'; revertDoc(path); }   // the site's database turned it down: this change needs a Google sign-in
+      if (code === 'denied') { ui.err = 'refused'; revertDoc(path); }   // the site's database turned it down: settings, roles and accounts need an admin's Google sign-in
       else if (code === 'invalid_argument') { ui.readOnly = true; ui.err = 'denied'; }
       else ui.err = code === 'quota_exceeded' ? 'quota' : 'save';
       break;
     }
   }
   w.busy = false;
-  if (!w.dirty && !w.patch) writers.delete(path);  w.busy = false;
   if (!w.dirty) writers.delete(path);
   render();
 }
@@ -1819,8 +1827,21 @@ function resetAll() {
   for (const id of Object.keys(state.tournaments)) { delete state.tournaments[id]; persist('tournaments/' + id); }
   const keys = Object.keys(logs); logs = {};
   if (ui.backend !== 'db') lsSet(LS_LOG, '{}'); else keys.forEach(x => { db.doc('logs/' + x).delete().catch(() => { /* cleared again next time */ }); });
-  if (state.config.activeT) { state.config.activeT = ''; persist('meta/config'); }
+  if (state.config.activeT) setActiveT('');
   ui.tour = null; ui.tourMatch = null; ui.liveMatch = null; ui.cards = []; ui.own = false; ui.goal = null; ui.note = null;
+}
+// Which tournament is being played. On the site someone without a Google sign-in may change only this one field of the settings,
+// so for them it goes on its own; the rest of the settings stay as the database has them.
+function setActiveT(id) {
+  state.config.activeT = id;
+  if (ui.backend !== 'db' || byGoogle()) { persist('meta/config'); return; }
+  statsCache = null;
+  db.doc('meta/config').update({ activeT: id }).catch(e => {
+    const c = e && e.code;
+    if (c === 'invalid_argument') return;   // no settings saved yet: the newest tournament is the one being played anyway
+    if (c === 'denied') { ui.err = 'refused'; revertDoc('meta/config'); } else ui.err = c === 'quota_exceeded' ? 'quota' : 'save';
+    render();
+  });
 }
 function addTour(form) {
   const input = form.querySelector('#nu-name'), name = (input.value || '').trim().slice(0, 32);
@@ -1828,7 +1849,7 @@ function addTour(form) {
   const id = uid();
   state.tournaments[id] = { name, order: nowMs(), breakMin: 5, matches: {} };
   persist('tournaments/' + id);
-  state.config.activeT = id; persist('meta/config');   // the newest tournament is the one being played
+  setActiveT(id);   // the newest tournament is the one being played
   input.value = '';
   ui.tour = id; ui.tourTab = 'ottelut'; ui.tourErr = null; ui.newMatch = false;
   render();
@@ -2178,7 +2199,7 @@ function confirmed(key) {
   else if (k === 'del-tour') {
     delete state.tournaments[id]; persist('tournaments/' + id);
     if (ui.tour === id) ui.tour = null;
-    if (state.config.activeT === id) { state.config.activeT = ''; persist('meta/config'); }
+    if (state.config.activeT === id) setActiveT('');
   }
   else if (k === 'del-match') { const part = id.split('|'), T = state.tournaments[part[0]]; if (T && T.matches[part[1]] && !T.matches[part[1]].auto) { logAct(part[0], part[1], 'm', 'poisti ottelun'); const before = tourSnap(T); delete T.matches[part[1]]; syncBracket(T); persistTour(part[0], before); } }
 }
@@ -2328,7 +2349,7 @@ function act(a, d) {
     case 'show-pause': ui.showPaused = !ui.showPaused; keepAwake(); break;
     case 'show-full': toggleFull(); break;
     case 'tour-bronze': { const T = state.tournaments[d.id]; if (T) { const before = tourSnap(T); T.bronze = d.on === '1'; syncBracket(T); persistTour(d.id, before); } break; }
-    case 'tour-active': if (state.tournaments[d.id]) { state.config.activeT = d.id; persist('meta/config'); } break;
+    case 'tour-active': if (state.tournaments[d.id]) setActiveT(d.id); break;
     case 'tour-team-all': { const T = state.tournaments[d.id]; if (T) { const before = tourSnap(T), have = tourTeamIds(T); T.teams = (T.teams || []).concat(teamsSorted().map(t => t.id).filter(x => have.indexOf(x) < 0)); persistTour(d.id, before); } break; }
     case 'm-start': case 'm-end': case 'm-resume': case 'm-break': case 'm-break-end': case 'm-pause': case 'm-unpause': runMatch(a, d); break;
     case 'arm': {
@@ -2808,7 +2829,7 @@ function acctTab(pid) {
   if (NET) {
     const mails = accEmails(pid);
     h += mails.length ? `<p class="hint" data-k="ac-g">Kirjautuu Google-tilillä ${esc(mails.join(', '))}. Muokkausoikeudet toimivat tällä tunnuksella.</p>`
-      : rights ? `<p class="warnmsg" data-k="ac-g">Sivustolla muokkausoikeudet toimivat vain Google-tilillä kirjautuneena. Lisää hänen Google-tilinsä kohdassa Asetukset, Käyttäjätunnukset, Google-tilit.</p>` : '';
+      : rights ? `<p class="hint" data-k="ac-g">Hän kirjautuu nimellään, ja roolin oikeudet toimivat ilman Google-tiliä. Asetuksia, rooleja ja tunnuksia voi muuttaa vain Google-tilillä kirjautunut admin.</p>` : '';
   }
   h += `<h3 class="sub sect" data-k="ac-wh">Kirjautuminen</h3>`;
   if (NET && u.g) return h + `<p class="hint" data-k="ac-gpw">Tämä tunnus kirjautuu Google-tilillä, joten salasanaa ei käytetä.</p>`;
@@ -2885,6 +2906,7 @@ const cardObj = c => { const o = c && (c.k === 't' ? state.teams[c.id] : c.k ===
 // The card on top. Cards opened from cards stack up, and Takaisin walks back through them; a card whose team or profile was removed drops out.
 function topCard() {
   const st = ui.cards || (ui.cards = []);
+  if (isGuest()) return null;
   while (st.length && !cardObj(st[st.length - 1])) st.pop();
   return st[st.length - 1] || null;
 }
@@ -3430,7 +3452,7 @@ function tourSettings(T) {
     `<h3 class="sub sect" data-k="ts-h2">Kaavio</h3>` +
     `<div class="f" data-k="tuzf"><span id="tuz-${id}">Pronssiottelu</span><div class="seg" role="group" aria-labelledby="tuz-${id}"><button id="tuz0-${id}" data-act="tour-bronze" data-id="${id}" data-on="0" aria-pressed="${!T.bronze}">Ei</button><button id="tuz1-${id}" data-act="tour-bronze" data-id="${id}" data-on="1" aria-pressed="${!!T.bronze}">Kyllä</button></div><p class="hint">Välierien häviäjät pelaavat pronssista, kun kaaviossa on kaksi välierää.</p></div>` +
     `<h3 class="sub sect" data-k="ts-h3">Näkyvyys</h3>` +
-    `<div class="f" data-k="tuaf"><span>Pelattava turnaus</span>${active ? `<p class="hint">Tämä turnaus näkyy omana välilehtenään sivun ylälaidassa.</p>` : `<p class="hint">Pelattava turnaus näkyy omana välilehtenään sivun ylälaidassa. Muut turnaukset löytyvät tästä listasta.</p><div><button class="btn" id="tua-${id}" data-act="tour-active" data-id="${id}">Näytä omana välilehtenä</button></div>`}</div>` +
+    `<div class="f" data-k="tuaf"><span>Pelattava turnaus</span>${active ? `<p class="hint">Tämä turnaus näkyy omana välilehtenään sivun ylälaidassa.</p>` : `<p class="hint">Pelattava turnaus näkyy omana välilehtenään sivun ylälaidassa. Muut turnaukset löytyvät tästä listasta.</p>${can('pelattava') ? `<div><button class="btn" id="tua-${id}" data-act="tour-active" data-id="${id}">Näytä omana välilehtenä</button></div>` : ''}`}</div>` +
     '' : '') + `<h3 class="sub sect" data-k="ts-h4">Esitys isolle näytölle</h3>${showLink(T, false)}` +
     (D ? `<h3 class="sub sect" data-k="ts-h5">Poista turnaus</h3><p class="hint" data-k="ts-del">Poistaminen vie turnauksen ottelut mukanaan, joten niistä kertyneet pisteet häviävät myös tulostaulusta.</p>` +
     `<div class="rowbtns" data-k="tudw">${twice('tudp-' + T.id, 'del-tour:' + T.id, 'Poista turnaus')}</div>` : '');
@@ -3762,7 +3784,7 @@ let presAt = 0, presKey = '';
 function beat(force) {
   if (!db || ui.backend !== 'db' || !ui.ready || ui.readOnly) return;
   if (document.visibilityState === 'hidden') return;
-  const m = me(), body = { at: nowMs(), n: m && !m.guest ? String(m.name).slice(0, 30) : '', pid: m && !m.guest ? String(m.id).slice(0, 30) : '', tab: (ui.show ? 'esitys' : ui.tab).slice(0, 20), dev: devName() };
+  const m = me(), body = { at: nowMs(), n: m && !m.guest ? String(m.name).slice(0, 30) : '', pid: m && !m.guest ? String(m.id).slice(0, 30) : '', tab: (showOn() ? 'esitys' : ui.tab).slice(0, 20), dev: devName() };
   const key = body.n + '|' + body.tab;
   if (!force && key === presKey && body.at - presAt < 90000) return;
   presAt = body.at; presKey = key;
@@ -4019,7 +4041,7 @@ function googleBlock() {
   const list = Object.keys(ui.access).sort(), who = pid => pid === 'ADMIN' ? 'ADMIN' : state.players[pid] ? state.players[pid].name : 'Poistettu profiili';
   const ps = Object.keys(state.players).map(id => Object.assign({ id }, state.players[id])).filter(q => kindOf(q) !== 'katsoja' || (state.users[q.id] && state.users[q.id].on)).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
   const msg = ui.accMsg;
-  return `<h3 class="sub" data-k="ga-h">Google-tilit</h3><p class="hint" data-k="ga-hint">Adminit ja Modit kirjautuvat Google-tilillä. Vain Google-tilillä kirjautunut voi muuttaa profiileja, joukkueita, oikeuksia ja asetuksia, ja sen tarkistaa tietokanta. Tunnuksen oikeudet tulevat edelleen sen roolista.</p>` +
+  return `<h3 class="sub" data-k="ga-h">Google-tilit</h3><p class="hint" data-k="ga-hint">Adminit kirjautuvat Google-tilillä. Vain Google-tilillä kirjautunut voi muuttaa asetuksia, rooleja ja tunnuksia, ja sen tarkistaa tietokanta. Modit pärjäävät ilman Google-tiliä: otteluiden, joukkueiden, pelaajien ja turnausten muutokset toimivat nimellä kirjautuneena roolin oikeuksilla. Google-tili Modille avaa lisäksi muutosvirran ja laiteluettelon.</p>` +
     (list.length ? `<ul class="mlist" data-k="ga-list">${list.map((e, i) => { const a = ui.access[e]; return `<li data-k="ga-${i}"><span class="itxt"><b>${esc(e)}</b><small>${esc(who(a.pid))} · ${a.lvl === 'admin' ? 'admin' : 'Mod'}${e === ui.fb.email ? ' · sinä' : ''}</small></span>${e === ui.fb.email ? '' : twice('gad-' + i, 'del-acc:' + e, 'Poista', true)}</li>`; }).join('')}</ul>` : `<p class="hint" data-k="ga-none">Ei vielä Google-tilejä.</p>`) +
     `<form class="tset" data-k="ga-form" data-form="add-acc" novalidate><label class="f"><span>Google-tilin sähköposti</span><input id="ga-email" data-free type="email" autocomplete="off" inputmode="email" placeholder="nimi@gmail.com" maxlength="120"></label>` +
     `<label class="f"><span>Kenen tunnus</span><select id="ga-pid" data-free><option value="ADMIN">ADMIN</option>${ps.map(q => `<option value="${esc(q.id)}">${esc(q.name)}</option>`).join('')}</select></label>` +
@@ -4125,18 +4147,20 @@ function homeCountdown() {
   else body = `<p class="hint" data-k="hcd-nodate">Alkamisaikaa ei ole vielä päätetty.${can('tasetus') ? ' Aseta se turnauksen asetuksista.' : ''}</p>`;
   return `<section class="set hcd" data-k="h-cd"><h2 class="sec">Seuraava turnaus</h2><div class="hcdrow" data-k="hcd-row">${tile}<div class="hcdtx"><b class="hcdn">${esc(T.name)}</b>${when ? `<small>${esc(when)}</small>` : ''}</div></div>${body}${go}</section>`;
 }
+// A row on the front page opens the player's or team's card; for a guest it is only a row, since a guest sees the front page alone.
+const homeRow = (k, id, cb, inner) => isGuest() ? `<div class="lrowb">${inner}</div>` : `<button type="button" class="lrowb crd" ${cardAttrs(k, id, cb)}>${inner}</button>`;
 function homeBoard() {
   const rows = realPlayers().map(q => ({ p: q, t: state.teams[q.teamId] || null, pts: points(q, 'p') })).sort((a, b) => (b.pts - a.pts) || a.p.name.localeCompare(b.p.name, 'fi'));
   rank(rows);
   const top = rows.slice(0, 5), more = allowedTabs().indexOf('tulostaulu') >= 0;
-  return `<section class="set hpp" data-k="h-pp"><h2 class="sec">Pistepörssi</h2>` + (top.length ? `<ol class="mlist podium" data-k="hpp-l">${top.map(r => `<li data-k="hpp-${esc(r.p.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', r.p.id, 'hpp-' + r.p.id)}><span class="mtime">${r.rank}.</span>${playerAv(r.p, 'sm')}<span class="itxt"><b>${esc(r.p.name)}</b><small>${r.t ? esc(r.t.name) : 'Ei joukkuetta'}</small></span><span class="mres">${fmt(r.pts)} <small>p</small></span></button></li>`).join('')}</ol>`
+  return `<section class="set hpp" data-k="h-pp"><h2 class="sec">Pistepörssi</h2>` + (top.length ? `<ol class="mlist podium" data-k="hpp-l">${top.map(r => `<li data-k="hpp-${esc(r.p.id)}">${homeRow('p', r.p.id, 'hpp-' + r.p.id, `<span class="mtime">${r.rank}.</span>${playerAv(r.p, 'sm')}<span class="itxt"><b>${esc(r.p.name)}</b><small>${r.t ? esc(r.t.name) : 'Ei joukkuetta'}</small></span><span class="mres">${fmt(r.pts)} <small>p</small></span>`)}</li>`).join('')}</ol>`
     : `<p class="hint" data-k="hpp-none">Pistepörssissä ei ole vielä pelaajia.</p>`) + (more && rows.length > 5 ? `<div class="rowbtns" data-k="hpp-more"><button class="btn" id="hpp-all" data-act="tab" data-tab="tulostaulu">Koko pistepörssi</button></div>` : '') + `</section>`;
 }
 function homeLists() {
   const all = ui.homeAll || {}, N = 8;
   const ps = realPlayers().sort((a, b) => a.name.localeCompare(b.name, 'fi')), ts = teamsSorted();
-  const pRow = q => { const t = state.teams[q.teamId]; return `<li data-k="hpl-${esc(q.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', q.id, 'hpl-' + q.id)}>${playerAv(q, 'sm')}<span class="itxt"><b>${esc(q.name)}</b><small>${t ? esc(t.name) : 'Ei joukkuetta'}</small></span></button></li>`; };
-  const tRow = t => { const n = playersOf(t.id).length; return `<li data-k="htl-${esc(t.id)}"><button type="button" class="lrowb crd" ${cardAttrs('t', t.id, 'htl-' + t.id)}>${teamAv(t, 'sm')}<span class="itxt"><b>${esc(t.name)}</b><small>${n} ${n === 1 ? 'pelaaja' : 'pelaajaa'}</small></span></button></li>`; };
+  const pRow = q => { const t = state.teams[q.teamId]; return `<li data-k="hpl-${esc(q.id)}">${homeRow('p', q.id, 'hpl-' + q.id, `${playerAv(q, 'sm')}<span class="itxt"><b>${esc(q.name)}</b><small>${t ? esc(t.name) : 'Ei joukkuetta'}</small></span>`)}</li>`; };
+  const tRow = t => { const n = playersOf(t.id).length; return `<li data-k="htl-${esc(t.id)}">${homeRow('t', t.id, 'htl-' + t.id, `${teamAv(t, 'sm')}<span class="itxt"><b>${esc(t.name)}</b><small>${n} ${n === 1 ? 'pelaaja' : 'pelaajaa'}</small></span>`)}</li>`; };
   const list = (w, title, items, row, none) => `<section class="set" data-k="h-${w}"><h2 class="sec">${title} <small class="muted">${items.length}</small></h2>` +
     (items.length ? `<ul class="mlist" data-k="h${w}-l">${(all[w] ? items : items.slice(0, N)).map(row).join('')}</ul>` + (items.length > N ? `<div class="rowbtns" data-k="h${w}-m"><button class="btn sm" id="h${w}-all" data-act="home-all" data-w="${w}">${all[w] ? 'Näytä vähemmän' : 'Näytä kaikki ' + items.length}</button></div>` : '')
       : `<p class="hint" data-k="h${w}-none">${none}</p>`) + `</section>`;
@@ -4164,7 +4188,7 @@ function safeView() {
 function view() {
   const loading = `<div class="empty" role="status" data-k="loading"><strong>Ladataan tulostaulua…</strong><span>Joukkueet ja pisteet ilmestyvät tähän hetken päästä.</span></div>`;
   if (GATED && ui.gate !== 'open') return ui.gate === 'locked' ? gateView() : `<header class="top" data-k="top"><div class="brand"><h1>${MARK}<span>${esc(state.config.title)}</span></h1></div></header>` + loading;
-  if (ui.show) return viewShow();
+  if (showOn()) return viewShow();
   if (!ui.ready) return topBar('', []) + loading;
   if (!me() || (NET && ui.loginOpen && me().guest)) return loginView();
   const tabs = allowedTabs(), tab = tabs.indexOf(ui.tab) >= 0 ? ui.tab : (tabs[0] || '');
@@ -4174,8 +4198,7 @@ function view() {
   if (ui.subError) h += `<div class="note" data-k="n-sub"><span>Yhteys tallennukseen katkesi. Lataa sivu uudelleen, niin pisteet päivittyvät taas.</span></div>`;
   if (ui.readOnly) h += `<div class="note" data-k="n-ro"><span>Katselet tulostaulua. Muutoksia voi tallentaa vain sivun omistaja.</span></div>`;
   const mm = me(), mu = mm && !mm.guest && mm.id !== 'ADMIN' ? state.users[mm.id] : null;
-  if (NET && mu && !mu.g && hasRights(mu)) h += `<div class="note" data-k="n-g"><span>Muokkausoikeutesi toimivat sivustolla vain Google-tilillä kirjautuneena. Pyydä ADMINia liittämään Google-tilisi tunnukseesi. Maalien kirjaus toimii silti.</span></div>`;
-  if (ui.err === 'refused') h += `<div class="note" data-k="n-ref"><span>Viimeisintä muutosta ei tallennettu. Profiilien, joukkueiden, oikeuksien ja asetusten muuttaminen vaatii kirjautumisen Google-tilillä.</span></div>`;
+  if (ui.err === 'refused') h += `<div class="note" data-k="n-ref"><span>Viimeisintä muutosta ei tallennettu.</span></div>`;
   if (card) return h + viewCard(card);
   if (own) return h + viewOwn();
   if (!tab) return h + `<div class="empty" data-k="notabs"><strong>Ei näkymiä</strong><span>Tunnuksellesi ei ole valittu yhtään välilehteä. Pyydä ADMINia lisäämään niitä.</span></div>`;
@@ -4226,7 +4249,7 @@ function morphKids(from, to) {
 function render() {
   statsCache = null;
   markSeen();
-  document.documentElement.classList.toggle('showing', !!ui.show);
+  document.documentElement.classList.toggle('showing', showOn());
   // moving a focused button within the page drops its focus, so the one that had it gets it back
   const fa = document.activeElement, fid = fa && fa !== document.body && app.contains(fa) ? fa.id : '';
   const tpl = document.createElement('div');
@@ -4239,9 +4262,9 @@ function render() {
   for (const id in ui.pend) { const el = document.getElementById(id); if (!el || !fieldDiffers(el)) { delete ui.pend[id]; gone = true; } }
   if (gone) { const t2 = document.createElement('div'); t2.innerHTML = safeView(); morphKids(app, t2); }
   if (ui.ready && ui.backend === 'db' && !logSub && (can('admin') || (vmAllowed() && logReader()))) needLogs();
-  needPresence(ui.ready && !ui.show && ui.tab === 'valvomo' && vmAllowed() && logReader());
+  needPresence(ui.ready && !showOn() && ui.tab === 'valvomo' && vmAllowed() && logReader());
   beat();
-  if (ui.show) fitShow();
+  if (showOn()) fitShow();
   const pics = app.querySelectorAll('img[data-ph]');
   for (let i = 0; i < pics.length; i++) { const want = photos[pics[i].getAttribute('data-ph')] || ''; if ((pics[i].getAttribute('src') || '') !== want) { if (want) pics[i].setAttribute('src', want); else pics[i].removeAttribute('src'); } }
   if (ui.revealId) {
@@ -4309,19 +4332,19 @@ window.addEventListener('storage', e => {
   render();
 });
 document.addEventListener('keydown', e => {
-  if (!ui.show || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (!showOn() || e.altKey || e.ctrlKey || e.metaKey) return;
   if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { showStep(e.key === 'ArrowRight' ? 1 : -1); render(); }
   else if (e.key === ' ' && !(e.target && e.target.closest && e.target.closest('button'))) { e.preventDefault(); ui.showPaused = !ui.showPaused; render(); }
 });
-window.addEventListener('resize', () => { if (ui.show) render(); else tabFade(); });
+window.addEventListener('resize', () => { if (showOn()) render(); else tabFade(); });
 app.addEventListener('scroll', e => { if (e.target && e.target.classList && e.target.classList.contains('tabsx')) tabFade(); }, true);
-document.addEventListener('visibilitychange', () => { if (ui.show && document.visibilityState === 'visible') keepAwake(); if (document.visibilityState === 'hidden') leave(); else beat(true); });
+document.addEventListener('visibilitychange', () => { if (showOn() && document.visibilityState === 'visible') keepAwake(); if (document.visibilityState === 'hidden') leave(); else beat(true); });
 window.addEventListener('pagehide', () => leave());
 
 // Running clocks tick on their own once a second; a countdown reaching zero repaints so the break controls come back.
 let vmTick = 0, vmTick2 = 0;
 setInterval(() => {
-  if (ui.show) {
+  if (showOn()) {
     const T = showTour();
     if (T && !ui.showPaused) {
       const sl = showSlides(T), cur = sl[(ui.showIdx || 0) % sl.length];
@@ -4333,7 +4356,7 @@ setInterval(() => {
   }
   // Valvomo looks again every half minute, so a match turning late or an interruption growing long shows up by itself
   if (app.querySelector('.vmwrap') && (vmTick = (vmTick + 1) % 30) === 0) { render(); return; }
-  if (!ui.show && (vmTick2 = (vmTick2 + 1) % 30) === 0) beat();
+  if (!showOn() && (vmTick2 = (vmTick2 + 1) % 30) === 0) beat();
   const els = app.querySelectorAll('[data-clk]');
   if (!els.length) return;
   const now = nowMs(); let over = false;
