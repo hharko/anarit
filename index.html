@@ -1460,11 +1460,26 @@ async function netInit(cfg) {
   provider.setCustomParameters({ prompt: 'select_account' });
   const accRef = email => S.doc(fs, 'access', email);
   // the site password belongs to one shared account; the rules let that account (and admins) read
+  let side = null;
   const viewEmail = String(cfg.viewer || ('sivu@' + ((cfg.config && cfg.config.authDomain) || 'anarit.firebaseapp.com'))).toLowerCase();
   return {
     db,
     viewEmail,
     unlock: pw => U.signInWithEmailAndPassword(auth, viewEmail, pw).then(r => r.user),
+    // the first time the shared account is made; after that the current password is needed to change it
+    setViewPw: async (oldPw, newPw) => {
+      if (!side) { side = U.getAuth(A.initializeApp(cfg.config, 'sivu')); try { await U.setPersistence(side, U.inMemoryPersistence); } catch (e) { /* kept in memory anyway */ } }
+      try {
+        try { await U.createUserWithEmailAndPassword(side, viewEmail, newPw); return 'created'; }
+        catch (e) {
+          if (!e || e.code !== 'auth/email-already-in-use') throw e;
+          if (!oldPw) { const x = new Error('need-old'); x.code = 'need-old'; throw x; }
+          const r = await U.signInWithEmailAndPassword(side, viewEmail, oldPw);
+          await U.updatePassword(r.user, newPw);
+          return 'changed';
+        }
+      } finally { try { await U.signOut(side); } catch (e) { /* gone with the page */ } }
+    },
     signIn: () => U.signInWithPopup(auth, provider).then(r => r.user),
     signOut: () => U.signOut(auth),
     onUser: cb => U.onAuthStateChanged(auth, cb),
@@ -3968,6 +3983,37 @@ function rolesBlock() {
       return `<div class="rrow" data-k="role-${id}"><span class="itxt"><b>${esc(r.name)}</b><small>${esc(rightNames(r.rights))}${(r.secs || ALL_SECS).length < ALL_SECS.length ? ' · osiot: ' + esc(secNames(r.secs)) : ''}${r.self || r.goal ? ' · omat asiat' : ''} · ${count(used(r.id))}</small></span><button class="btn" id="redit-${id}" data-act="role-open" data-id="${id}">Muokkaa</button></div>`;
     }).join('') + `</div><div data-k="role-add"><button class="btn" id="add-role" data-act="add-role">Lisää rooli</button></div>`;
 }
+// The site password the friends open the page with. Set here the first time; changing it needs the current one.
+function viewPwBlock() {
+  const m = ui.vpMsg;
+  return `<h3 class="sub" data-k="vp-h">Sivun salasana</h3><form class="tset" data-k="vp-form" data-form="view-pw" novalidate>` +
+    `<p class="hint" data-k="vp-hint">Kaverit avaavat sivun tällä salasanalla, ja sen jälkeen jokainen valitsee oman nimensä. Kun vaihdat salasanan, muut laitteet lukittuvat noin tunnin sisällä ja kysyvät uutta. Älä käytä salasanaa, jota käytät muualla.</p>` +
+    `<input type="text" name="username" autocomplete="username" value="${esc(state.config.title)}" hidden>` +
+    `<label class="f"><span>Nykyinen sivun salasana</span><input id="vp-old" data-free type="password" maxlength="64" autocomplete="current-password" placeholder="Jätä tyhjäksi ensimmäisellä kerralla"></label>` +
+    `<label class="f"><span>Uusi sivun salasana</span><input id="vp-new" data-free type="password" maxlength="64" autocomplete="new-password"></label>` +
+    `<div class="rowbtns"><button class="btn primary" type="submit" id="vp-go"${ui.vpBusy ? ' disabled' : ''}>${ui.vpBusy ? 'Tallennetaan…' : 'Tallenna sivun salasana'}</button></div>` +
+    (m ? `<p class="${m.ok ? 'okmsg' : 'err'}" role="status" data-k="vp-msg">${esc(m.text)}</p>` : '') + `</form>`;
+}
+async function saveViewPw(form) {
+  if (!fb || !fb.setViewPw || ui.vpBusy) return;
+  const o = form.querySelector('#vp-old'), n = form.querySelector('#vp-new'), oldPw = o ? o.value : '', newPw = n ? n.value : '';
+  if (newPw.length < 6) { ui.vpMsg = { ok: false, text: 'Salasanassa pitää olla vähintään 6 merkkiä.' }; ui.focusId = 'vp-new'; render(); return; }
+  ui.vpBusy = true; ui.vpMsg = null; render();
+  try {
+    const r = await fb.setViewPw(oldPw, newPw);
+    ui.vpMsg = { ok: true, text: r === 'created' ? 'Sivun salasana on asetettu. Kerro se kavereille.' : 'Sivun salasana on vaihdettu. Muut laitteet kysyvät uutta salasanaa viimeistään tunnin päästä.' };
+    if (o) o.value = ''; if (n) n.value = '';
+  } catch (e) {
+    const c = e && e.code;
+    ui.vpMsg = { ok: false, text: c === 'need-old' ? 'Sivun salasana on jo asetettu. Kirjoita nykyinen salasana, niin voit vaihtaa sen.'
+      : c === 'auth/wrong-password' || c === 'auth/invalid-credential' || c === 'auth/invalid-login-credentials' ? 'Nykyinen sivun salasana on väärä.'
+      : c === 'auth/weak-password' ? 'Salasana on liian heikko. Käytä vähintään 6 merkkiä.'
+      : c === 'auth/operation-not-allowed' ? 'Salasanakirjautuminen ei ole käytössä Firebasessa.'
+      : c === 'auth/too-many-requests' ? 'Liian monta yritystä. Odota hetki ja yritä uudelleen.'
+      : c === 'auth/network-request-failed' ? 'Ei yhteyttä. Tarkista verkkoyhteys ja yritä uudelleen.' : 'Salasanan tallennus ei onnistunut. Yritä uudelleen.' };
+  }
+  ui.vpBusy = false; render();
+}
 // The Google accounts that may sign in, each tied to ADMIN or to a player's profile. Only admins see the addresses.
 function googleBlock() {
   const list = Object.keys(ui.access).sort(), who = pid => pid === 'ADMIN' ? 'ADMIN' : state.players[pid] ? state.players[pid].name : 'Poistettu profiili';
@@ -4002,7 +4048,7 @@ function accountsSection() {
   if (NET) {
     const list = Object.keys(state.users).filter(id => id !== 'ADMIN' && state.users[id].on && state.players[id]).map(id => Object.assign({ id }, state.players[id])).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
     const what = (u, q) => (kindOf(q) === 'pelaaja' ? 'Pelaaja · ' : '') + roleOf(u).name + (kindOf(q) === 'katsoja' ? '' : u.goal === 'own' ? ' · kirjaa omat maalinsa' : u.goal === 'all' ? ' · kirjaa maaleja' : '') + (u.g ? ' · Google-tili' : u.hash ? '' : ' · ei salasanaa');
-    return `<section class="set"><h2 class="sec">Käyttäjätunnukset</h2>` + googleBlock() +
+    return `<section class="set"><h2 class="sec">Käyttäjätunnukset</h2>` + (GATED ? viewPwBlock() : '') + googleBlock() +
       `<p class="hint" data-k="pw-hint">Jokainen kirjautuu omalla nimellään ja halutessaan salasanalla. Se on kevyt lukko kavereiden kesken, ei oikeaa tietoturvaa, joten älä käytä salasanaa, jota käytät muualla.</p>` +
       rolesBlock() + `<h3 class="sub" data-k="ac-h">Tunnukset ja roolit</h3>` +
       (list.length ? `<ul class="slist" data-k="acl" aria-label="Tunnukset ja roolit">${list.map(q => `<li data-k="acli-${esc(q.id)}"><button class="item" id="aco-${esc(q.id)}" data-act="acct-open" data-id="${esc(q.id)}">${playerAv(q)}<span class="itxt"><b>${esc(q.name)}</b><small>${esc(what(state.users[q.id], q))}</small></span></button></li>`).join('')}</ul>`
@@ -4233,6 +4279,7 @@ app.addEventListener('submit', e => {
   const f = e.target;
   if (f.dataset.form === 'gate') { gateUnlock(f); return; }
   if (f.dataset.form === 'ad-save') { if (can('admin')) saveAd(f); return; }
+  if (f.dataset.form === 'view-pw') { if (can('admin') && ui.fb.lvl === 'admin') saveViewPw(f); return; }
   if (f.dataset.form === 'login-name') { loginName(f); return; }
   if (f.dataset.form === 'login-pw') { loginPw(f); return; }
   if (ui.readOnly || !can(FORM_NEED[f.dataset.form] || 'admin')) return;
