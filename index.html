@@ -234,38 +234,99 @@ html.showing .wrap{max-width:none;height:100%}
 .chk.rtg input:checked::after{transform:translateX(16px)}
 .chk.rtg.rlim{padding-left:52px}
 @media (prefers-reduced-motion:reduce){.chk.rtg input,.chk.rtg input::after{transition:none}}
-.bracket{--bkg:28px;--bkl:#3a5068;display:grid;grid-template-columns:repeat(var(--cols),minmax(150px,1fr));column-gap:var(--bkg);row-gap:2px;max-width:calc(var(--cols) * 250px + (var(--cols) - 1) * var(--bkg));overflow-x:auto;overflow-y:hidden;padding:0 1px 8px}
-.bracket.zpad{padding-bottom:64px}
+.bracket{--bkg:36px;--bkd:8px;--bkl:#3a5068;--bkx:#9a4a57;display:grid;grid-template-columns:repeat(var(--cols),minmax(140px,1fr));column-gap:var(--bkg);row-gap:2px;max-width:calc(var(--cols) * 240px + (var(--cols) - 1) * var(--bkg));overflow-x:auto;overflow-y:hidden;padding:0 1px 8px}
 .bkh{grid-row:1;min-height:15px;font:700 12px/1.2 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
 .bkc{grid-row:2;display:flex;flex-direction:column;min-width:0}
-.bkm{flex:1 1 0;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0}
-.bkw{position:relative;min-width:0;margin:22px 0}
-/* the lines: half a gap out from each match, and a line down the middle of the gap joining the two that meet */
-.bkm.from > .bkw::before,.bkm.to > .bkw::after{content:"";position:absolute;top:50%;width:calc(var(--bkg) / 2 + 1px);margin-top:-1px;border-top:2px solid var(--bkl)}
-.bkm.from > .bkw::before{right:100%}
-.bkm.to > .bkw::after{left:100%}
-.bkm.join::before{content:"";position:absolute;left:calc(var(--bkg) / -2 - 1px);top:calc(var(--t) - 1px);bottom:calc(var(--b) - 1px);border-left:2px solid var(--bkl)}
-.bkp{position:relative;display:flex;flex-direction:column;gap:4px;width:100%;min-width:0;padding:0;margin:0;border:0;background:none;color:inherit;font:inherit;text-align:left}
-button.bkp{cursor:pointer;touch-action:manipulation;border-radius:10px}
+.bgr{flex:1 1 0;display:flex;flex-direction:column;position:relative;min-width:0}
+.bgr.bsp{visibility:hidden}
+.bgr.bsp::after{content:none}
+.bsl{flex:1 1 0;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0}
+/* the lines: a bracket from the two places of a match out to the middle of the gap, and from there a line to the next place */
+.bgr::after{content:"";position:absolute;left:100%;width:calc(var(--bkg) / 2);top:calc(var(--t) - 1px);bottom:calc(var(--b) - 1px);border:2px solid var(--bkl);border-left:0;border-radius:0 5px 5px 0}
+.bgr.r0::after{top:calc(var(--t) + var(--bkd) - 1px);bottom:calc(var(--b) + var(--bkd) - 1px)}
+.bgr.one::after{top:calc(50% - 1px);bottom:auto;height:0;border-bottom:0;border-radius:0}
+.bgr.bz::after{content:none}
+.bsl.from > .bkt::before{content:"";position:absolute;right:calc(100% + 1px);top:50%;margin-top:-1px;width:calc(var(--bkg) / 2);border-top:2px solid var(--bkl)}
+/* the losers of the semi-finals: dashed lines down to the bronze match */
+.lo1,.lx1{--lx:calc(var(--bkg) / 4)}
+.lo2,.lx2{--lx:calc(var(--bkg) / 2)}
+.bsl.lo > .bkt::after{content:"";position:absolute;left:calc(100% + var(--bkg) / 2 + 1px);top:50%;margin-top:-1px;width:calc(var(--bkg) / 2 - var(--lx));border-top:2px dashed var(--bkx)}
+.bsl.lx::before{content:"";position:absolute;right:calc(100% - 1px);width:var(--lx);bottom:50%;margin-bottom:-1px;top:calc(50% - var(--up) * 100%);border-left:2px dashed var(--bkx);border-bottom:2px dashed var(--bkx);border-bottom-left-radius:5px}
+.bsl.lx.z0::before{top:calc(50% - var(--up) * 100% - var(--bkd))}
+.bkt{position:relative;display:flex;align-items:center;gap:8px;width:100%;min-width:0;min-height:40px;margin:18px 0;padding:5px 10px 5px 6px;border:1px solid var(--bkl);border-radius:10px;background:var(--sheet);color:inherit;font:inherit;text-align:left}
+.bsl.h0 > .bkt{margin:26px 0 10px}
+.bsl.a0 > .bkt{margin:10px 0 26px}
+button.bkt{cursor:pointer;touch-action:manipulation}
+button.bkt:hover{border-color:var(--ink-2)}
+button.bkt:active{background:var(--press)}
+.bkt .av{flex:none}
 .bkmeta{position:absolute;bottom:calc(100% + 4px);left:2px;right:0;font:600 12px/1.25 var(--f-body);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bkmeta.big{font:700 13px/1.2 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
 .bkmeta.on{color:var(--red)}
 .bkmeta .clk{font-weight:700}
-.bkt{display:flex;align-items:center;gap:8px;min-height:40px;padding:5px 10px 5px 6px;border:1px solid var(--bkl);border-radius:10px;background:var(--sheet);min-width:0}
-.bkt .av{flex:none}
 .bkn{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-.bks{flex:none;font:800 18px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.bkv{flex:none;font:800 18px/1 var(--f-display);font-variant-numeric:tabular-nums}
 .bkt.tbd{border-style:dashed;background:transparent}
-.bkt.none{background:transparent;border-style:dashed;color:var(--ink-2)}
-.bkt.none .bkn{font-weight:400}
+.bkt.tbd .bkn{font-weight:400;font-size:14px;color:var(--ink-2);opacity:.85}
 .bkt.win{border-color:var(--ink-2)}
 .bkt.win .bkn{font-weight:800}
 .bkt.lose{color:var(--ink-2)}
 .bkt.champ{border-color:#e2b33c;box-shadow:inset 0 0 0 1px #e2b33c}
-.bkp.live .bkt{border-color:var(--red)}
-button.bkp:hover .bkt:not(.tbd){border-color:var(--ink-2)}
-button.bkp:active .bkt{background:var(--press)}
-.bkz{position:absolute;top:calc(100% + 34px);left:0;right:0}
+.bkt.live{border-color:var(--red)}
+/* The match maker: a window over the page; on a phone it fills the screen. */
+html.wizon body{overflow:hidden}
+.wiz{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:rgb(0 0 0 / .62)}
+.wizp{display:flex;flex-direction:column;width:min(860px,100%);max-height:100%;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--ice)}
+@media (max-width:600px){.wiz{padding:0}.wizp{height:100%;border:0;border-radius:0}}
+.wizh{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px 12px;border-bottom:1px solid var(--line)}
+.wizh .sec{margin:0}
+.wizb{flex:1 1 auto;min-height:0;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.wizf{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.wzsp{flex:1 1 0}
+.wzerr{padding:8px 16px 0}
+.wzcols{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:14px;align-items:start}
+.wzpool{position:sticky;top:0;display:flex;flex-direction:column;gap:6px;min-height:140px;padding:8px;border:1px dashed var(--line);border-radius:12px;background:var(--ice)}
+.wzpool.wzover{border-color:var(--blue)}
+.wzpool .sub{margin:2px 2px 4px}
+.wzchip{display:flex;align-items:center;gap:8px;width:100%;min-width:0;min-height:42px;padding:4px 10px 4px 6px;border:1px solid #3a5068;border-radius:10px;background:var(--sheet);color:inherit;font:inherit;text-align:left;cursor:grab;touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.wzchip.sel{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue)}
+.wzghost{position:fixed;left:0;top:0;z-index:60;pointer-events:none;opacity:.92;box-shadow:0 8px 24px rgb(0 0 0 / .5);cursor:grabbing}
+.wzms{display:flex;flex-direction:column;gap:14px;min-width:0}
+.wzm{position:relative;display:flex;flex-direction:column;gap:6px;padding-right:16px;min-width:0}
+.wzm::after{content:"";position:absolute;right:0;top:calc(1.25em + 27px);bottom:21px;width:12px;border:2px solid #3a5068;border-left:0;border-radius:0 5px 5px 0}
+.wzl{font:600 12px/1.25 var(--f-body);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wzs{display:flex;align-items:center;gap:6px;min-height:44px;min-width:0;padding:0;border:1px dashed #3a5068;border-radius:10px;background:transparent;color:var(--ink-2);font:400 14px/1.2 var(--f-body);text-align:left}
+button.wzs{padding:0 12px;cursor:pointer}
+.wzs.full{border:0}
+.wzs.full .wzchip{flex:1 1 auto}
+.wzs.wzover,button.wzs:hover{border-color:var(--blue);background:var(--press)}
+.wzs.full.wzover .wzchip{border-color:var(--blue)}
+.wzx{flex:none;width:36px;min-height:42px;border:1px solid var(--line);border-radius:10px;background:var(--sheet);color:var(--ink-2)}
+.wzctl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end}
+@media (max-width:560px){.wzctl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.wzctl > :first-child{grid-column:1 / -1}}
+.wzstep{grid-template-columns:42px minmax(0,1fr) 42px}
+.wzstep output{display:grid;place-items:center;min-height:42px;padding:0 4px;border:1px solid var(--line);border-radius:8px;background:var(--sheet);font:600 15px/1.1 var(--f-body);text-align:center;font-variant-numeric:tabular-nums}
+.wzwaves{display:flex;flex-direction:column;gap:12px}
+.wzwave{border:1px solid var(--line);border-radius:12px;padding:8px 12px 4px}
+.wzwh{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:2px 0 4px;font:800 20px/1.1 var(--f-display);letter-spacing:.03em}
+.wzwh small{font:500 13px/1.2 var(--f-body);letter-spacing:0}
+.wzcon{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--line);font:700 13px/1 var(--f-body);color:var(--ink)}
+.wzcon:empty{display:none}
+.pzic{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--line);font-size:15px}
+.wzpz{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"i n x" "i t s";align-items:center;gap:6px 10px;padding:10px 12px;border:1px dashed var(--warn);border-radius:12px}
+.wzpz .pzic{grid-area:i}.wzpzn{grid-area:n;min-width:0}.wzpzt{grid-area:t}.wzpzs{grid-area:s;grid-template-columns:36px minmax(70px,1fr) 36px}.wzpz .wzx{grid-area:x;min-height:38px}
+.wzpzs .btn{min-height:36px}.wzpzs output{min-height:36px;font-size:14px}
+.wzpadd{display:flex;justify-content:center;margin:-4px 0}
+.wzpadd .btn{border-style:dashed;color:var(--ink-2)}
+.pzrow{border-left:3px solid var(--warn);padding-left:8px}
+.pzf .pzff{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+@media (max-width:560px){.pzf .pzff{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.pzf .pzff > :first-child{grid-column:1 / -1}}
+.shtbl tr.pz td{color:var(--board-warn)}
+.wzlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.wzlist li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.wzwave .wzlist li:first-child{border-top:0}
+.wzlist li .itxt{flex:1 1 auto;min-width:0}
+.wzt input{width:120px}
+@media (max-width:420px){.wzcols{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:10px}.wzchip{gap:6px;padding-right:6px}.wzchip .av{width:24px;height:24px;font-size:11px}}
 .lhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}
 .hero{background:var(--board);color:var(--board-ink);border:1px solid var(--board-line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
 .hm{padding:12px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
@@ -643,21 +704,20 @@ html.showing body{background:var(--board);padding:0}
 .sn-g{font:600 .8em/1.2 var(--f-body)}
 .sn-w{font:800 3.2em/1.02 var(--f-display);letter-spacing:.03em;text-transform:uppercase;overflow-wrap:anywhere}
 .sb-h{font:700 .7em/1.1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--board-dim)}
-.show .bracket{--bkg:1.6em;--bkl:#3b5068;flex:1 1 auto;align-self:stretch;width:100%;max-width:none;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-template-rows:auto 1fr;row-gap:.1em;overflow:visible;padding:0}
-.show .bracket.zpad{padding-bottom:2.6em}
+.show .bracket{--bkg:1.9em;--bkd:.3em;--bkl:#3b5068;--bkx:#a04b59;flex:1 1 auto;align-self:stretch;width:100%;max-width:none;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-template-rows:auto 1fr;row-gap:.1em;overflow:visible;padding:0}
 .show .bkh{min-height:1.2em;font-size:.6em;color:var(--board-dim)}
-.show .bkw{margin:1em 0}
-.show .bkp{gap:.2em}
+.show .bkt{min-height:2.1em;margin:.75em 0;gap:.45em;padding:.25em .55em .25em .3em;border-radius:.5em;border-color:var(--bkl);background:#0c1520}
+.show .bsl.h0 > .bkt{margin:1.05em 0 .45em}
+.show .bsl.a0 > .bkt{margin:.45em 0 1.05em}
 .show .bkmeta{bottom:calc(100% + .35em);font:600 .55em/1.2 var(--f-body);color:var(--board-dim)}
-.show .bkmeta.big{font:700 .62em/1.15 var(--f-display);letter-spacing:.12em;color:var(--board-ink)}
 .show .bkmeta.on{color:var(--board-accent)}
-.show .bkt{min-height:2.1em;gap:.45em;padding:.25em .55em .25em .3em;border-radius:.5em;border-color:var(--bkl);background:#0c1520}
-.show .bkt.tbd,.show .bkt.none{background:transparent}
+.show .bkt.tbd{background:transparent}
+.show .bkt.tbd .bkn{font-size:.72em;color:var(--board-dim)}
 .show .bkt.win{border-color:var(--board-dim)}
 .show .bkt.lose{color:var(--board-dim)}
-.show .bkp.live .bkt{border-color:var(--board-accent)}
-.show .bks{font-size:1.2em}
-.show .bkz{top:calc(100% + 1.5em)}
+.show .bkt.live{border-color:var(--board-accent)}
+.show .bkt.champ{border-color:#e2b33c}
+.show .bkv{font-size:1.2em}
 .shtbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .shtbl th{padding:.3em .5em;text-align:right;font:700 .55em/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--board-dim);border-bottom:2px solid var(--board-line)}
 .shtbl td{padding:.36em .5em;text-align:right;border-bottom:1px solid var(--board-line);white-space:nowrap}
@@ -937,6 +997,14 @@ function matchBody(m) {
   return o;
 }
 function tourBody(T) { const ms = {}; for (const k in T.matches) ms[k] = matchBody(T.matches[k]); const o = Object.assign({}, T, { matches: ms }); delete o.legacy; return o; }
+// Breaks between a tournament's matches: a name, when it starts and how many minutes it lasts. Listed with the matches.
+function normPauses(x) {
+  if (!Array.isArray(x)) return [];
+  return x.filter(p => p && typeof p === 'object' && /^\d{2}:\d{2}$/.test(p.at || '')).slice(0, 30)
+    .map(p => ({ id: typeof p.id === 'string' && /^[a-z0-9]{1,12}$/.test(p.id) ? p.id : uid(), name: String(p.name || '').trim().slice(0, 40) || 'Tauko', at: p.at, min: Math.max(5, Math.min(240, Math.round(+p.min) || 15)) }))
+    .sort((a, b) => a.at.localeCompare(b.at));
+}
+const pauseEnd = p => { const t = +p.at.slice(0, 2) * 60 + +p.at.slice(3) + p.min; return String(Math.floor(t / 60) % 24).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
 function normTour(t) {
   t = t || {};
   const ms = {};
@@ -947,7 +1015,8 @@ function normTour(t) {
   const ids = x => Array.isArray(x) ? x.filter((v, i) => typeof v === 'string' && v && x.indexOf(v) === i).slice(0, 300) : [];
   // players put in a team for this tournament alone: player id to team id
   const roster = x => { const r = {}; if (x && typeof x === 'object' && !Array.isArray(x)) Object.keys(x).slice(0, 300).forEach(k => { if (typeof x[k] === 'string' && x[k]) r[k] = x[k]; }); return r; };
-  return Object.assign({ name: String(t.name || 'Turnaus'), order: +t.order || 0, breakMin: BREAKS.includes(+t.breakMin) ? +t.breakMin : 5, bronze: !!t.bronze, start: START_RE.test(t.start || '') ? t.start : '', teams: ids(t.teams), extra: ids(t.extra), out: ids(t.out), roster: roster(t.roster), matches: ms }, legacy ? { legacy: true } : {});
+  const pz = normPauses(t.pauses);   // stored only when there are breaks, so tournaments without them stay as before
+  return Object.assign({ name: String(t.name || 'Turnaus'), order: +t.order || 0, breakMin: BREAKS.includes(+t.breakMin) ? +t.breakMin : 5, bronze: !!t.bronze, start: START_RE.test(t.start || '') ? t.start : '', teams: ids(t.teams), extra: ids(t.extra), out: ids(t.out), roster: roster(t.roster), matches: ms }, legacy ? { legacy: true } : {}, pz.length ? { pauses: pz } : {});
 }
 /* ----- user accounts -----
    One account per player (stored under the player's id) plus the main account ADMIN. An account lists the tabs it sees and the rights it has.
@@ -1059,12 +1128,14 @@ function hashPw(salt, pw, scheme) {
 }
 // What each action, field, form and confirmation needs. Anything not listed is plain viewing or navigation.
 const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'note-save': 'kirj', 'note-cancel': 'kirj', 'goal-new': 'kirj', 'goal-edit': 'kmuok', 'goal-p': 'kirj', 'goal-a': 'kirj', 'goal-noa': 'kirj', 'goal-save': 'kirj', 'goal-cancel': 'kirj',
+  'pz-new': 'ottelu', 'pz-edit': 'ottelu', 'pz-cancel': 'ottelu', 'pz-del': 'ottelu', 'wiz-padd': 'ottelu', 'wiz-pmin': 'ottelu', 'wiz-pdel': 'ottelu',
+  'wiz-open': 'ottelu', 'wiz-close': 'ottelu', 'wiz-pick': 'ottelu', 'wiz-pool': 'ottelu', 'wiz-out': 'ottelu', 'wiz-shuffle': 'ottelu', 'wiz-clear': 'ottelu', 'wiz-next': 'ottelu', 'wiz-back': 'ottelu', 'wiz-cons': 'ottelu', 'wiz-gap': 'ottelu', 'wiz-save': 'ottelu',
   'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
   color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
-const FIELD_NEED = { 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
+const FIELD_NEED = { 'wiz-pname': 'ottelu', 'wiz-first': 'ottelu', 'wiz-time': 'ottelu', 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
   'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
-const FORM_NEED = { 'view-pw': 'set:kirjautuminen', 'ad-save': 'admin', 'add-team': 'joukkue', 'add-player': 'admin', 'new-player': 'admin', 'add-tour': 'turnaus', 'add-match': 'ottelu', 'set-pw': 'set:tunnukset', 'add-acc': 'set:kirjautuminen' };
+const FORM_NEED = { 'pz-save': 'ottelu', 'view-pw': 'set:kirjautuminen', 'ad-save': 'admin', 'add-team': 'joukkue', 'add-player': 'admin', 'new-player': 'admin', 'add-tour': 'turnaus', 'add-match': 'ottelu', 'set-pw': 'set:tunnukset', 'add-acc': 'set:kirjautuminen' };
 const KEY_NEED = { 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
 // ADMIN's account and every Superadmin's are the main account's to change; a Superadmin cannot touch them, nor give the role.
 const acctLocked = id => !can('main') && id === 'ADMIN';
@@ -1358,7 +1429,7 @@ function persistMatch(tid, mid, fields, evIds, tourFields, whole, dels) {
 function tourSnap(T) {
   const m = {};
   for (const k in T.matches) m[k] = JSON.stringify(matchBody(T.matches[k]));
-  return { m, f: { name: T.name, breakMin: T.breakMin, bronze: !!T.bronze, order: T.order, teams: JSON.stringify(T.teams || []), extra: JSON.stringify(T.extra || []), out: JSON.stringify(T.out || []), roster: JSON.stringify(T.roster || {}) } };
+  return { m, f: { name: T.name, breakMin: T.breakMin, bronze: !!T.bronze, order: T.order, teams: JSON.stringify(T.teams || []), extra: JSON.stringify(T.extra || []), out: JSON.stringify(T.out || []), roster: JSON.stringify(T.roster || {}), pauses: JSON.stringify(T.pauses || []) } };
 }
 function persistTour(tid, before) {
   const T = state.tournaments[tid];
@@ -1889,7 +1960,7 @@ async function autoPick(id) {
 /* ---------- actions ---------- */
 function setTab(tab) {
   if (!TABS.includes(tab)) return;
-  ui.tab = tab; ui.homeBoard = false; ui.qaMode = false; ui.qa = null; ui.tm = null; ui.bEdit = null; ui.own = false; ui.cards = []; ui.vmBack = false; ui.nameErr = null; ui.confirm = null; ui.playerErr = null; ui.teamErr = null; ui.photoErr = null; ui.tourErr = null; ui.matchErr = null; ui.goal = null; ui.note = null; ui.goalNote = null; ui.rosterErr = null; ui.revealTab = true;
+  ui.tab = tab; ui.wiz = null; ui.homeBoard = false; ui.qaMode = false; ui.qa = null; ui.tm = null; ui.bEdit = null; ui.own = false; ui.cards = []; ui.vmBack = false; ui.nameErr = null; ui.confirm = null; ui.playerErr = null; ui.teamErr = null; ui.photoErr = null; ui.tourErr = null; ui.matchErr = null; ui.goal = null; ui.note = null; ui.goalNote = null; ui.rosterErr = null; ui.revealTab = true;
   lsSet(LS_TAB, tab);
   try { history.replaceState(null, '', '#' + tab); } catch (e) { /* hash is optional */ }
 }
@@ -2511,6 +2582,50 @@ function act(a, d) {
       ui.goal = null; ui.note = null; ui.vmBack = false;
       ui.confirm = null; ui.photoErr = null; break;
     case 'new-match': ui.newMatch = !ui.newMatch; ui.matchErr = null; break;
+    case 'pz-new': ui.pzEdit = 'new'; ui.pzErr = null; ui.focusId = 'pzn-new'; break;
+    case 'pz-edit': ui.pzEdit = d.id; ui.pzErr = null; ui.focusId = 'pzn-' + d.id; break;
+    case 'pz-cancel': ui.pzEdit = null; ui.pzErr = null; break;
+    case 'pz-del': { const T = state.tournaments[d.tour]; if (T) { const before = tourSnap(T); T.pauses = (T.pauses || []).filter(p => p.id !== d.id); persistTour(d.tour, before); } ui.pzEdit = null; break; }
+    case 'wiz-padd': if (ui.wiz && ui.wiz.first) { const id = uid(); ui.wiz.pauses.push({ id, name: 'Tauko', min: 15, after: +d.i, at: '' }); wizSchedule(); ui.focusId = 'wzpn-' + id; } break;
+    case 'wiz-pmin': { const p = ui.wiz && ui.wiz.pauses.find(x => x.id === d.id); if (p) { p.min = Math.max(5, Math.min(240, p.min + 5 * (+d.d || 0))); wizSchedule(); } break; }
+    case 'wiz-pdel': if (ui.wiz) { ui.wiz.pauses = ui.wiz.pauses.filter(x => x.id !== d.id); wizSchedule(); } break;
+    case 'wiz-open': wizOpen(d.tour); break;
+    case 'wiz-close': ui.wiz = null; ui.focusId = 'wz-open'; break;
+    case 'wiz-pick': {
+      const W = ui.wiz;
+      if (!W) break;
+      if (d.team) { W.sel = W.sel === d.team ? null : d.team; break; }
+      const k = +d.slot;
+      if (W.sel) { wizPlace(W.sel, k); ui.focusId = 'wzc-' + k; } else if (W.slots[k]) W.sel = W.slots[k];
+      break;
+    }
+    case 'wiz-pool': { const W = ui.wiz; if (W && W.sel) { const j = W.slots.indexOf(W.sel); if (j >= 0) W.slots[j] = ''; W.sel = null; } break; }
+    case 'wiz-out': if (ui.wiz) { ui.wiz.slots[+d.slot] = ''; ui.wiz.sel = null; ui.focusId = 'wzs-' + (+d.slot); } break;
+    case 'wiz-clear': if (ui.wiz) { ui.wiz.slots = ui.wiz.slots.map(() => ''); ui.wiz.sel = null; ui.wiz.err = null; } break;
+    case 'wiz-shuffle': {   // the teams still in the list go to the empty places at random, the first empty places first
+      const W = ui.wiz, T = W && state.tournaments[W.tid];
+      if (!T) break;
+      const left = tourTeamIds(T).filter(t => W.slots.indexOf(t) < 0);
+      for (let i = left.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [left[i], left[j]] = [left[j], left[i]]; }
+      W.slots = W.slots.map(x => x || left.shift() || ''); W.sel = null; W.err = null;
+      break;
+    }
+    case 'wiz-next': {
+      const W = ui.wiz, T = W && state.tournaments[W.tid];
+      if (!T) break;
+      const left = tourTeamIds(T).filter(t => W.slots.indexOf(t) < 0);
+      if (left.length) { W.err = 'Sijoita vielä ' + left.map(t => state.teams[t].name).join(', ') + '.'; break; }
+      if (!wizPairs().length) { W.err = 'Sijoita joukkueet otteluihin.'; break; }
+      // the first start: as chosen before, else the first match's, else the tournament's own start; the rest follow from it
+      if (!W.first) { const T0 = state.tournaments[W.tid], st = /T(\d{2}:\d{2})$/.exec(T0.start || ''); W.first = W.times.find(t => /^\d{2}:\d{2}$/.test(t || '')) || (st ? st[1] : ''); }
+      if (W.first && !W.times.some(t => /^\d{2}:\d{2}$/.test(t || ''))) wizSchedule();
+      W.step = 2; W.err = null; W.sel = null; ui.focusId = 'wz-title';
+      break;
+    }
+    case 'wiz-back': if (ui.wiz) { ui.wiz.step = 1; ui.wiz.err = null; ui.focusId = 'wz-title'; } break;
+    case 'wiz-cons': if (ui.wiz) { ui.wiz.cons = Math.max(1, Math.min(20, ui.wiz.cons + (+d.d || 0))); lsSet('anarit.consoles', String(ui.wiz.cons)); wizSchedule(); } break;
+    case 'wiz-gap': if (ui.wiz) { const g = ui.wiz.gap, st = g < 30 || (g === 30 && +d.d < 0) ? 5 : 15; ui.wiz.gap = Math.max(5, Math.min(240, g + st * (+d.d || 0))); lsSet('anarit.gap', String(ui.wiz.gap)); wizSchedule(); } break;
+    case 'wiz-save': wizSave(); break;
     case 'open-match': if (d.scope === 'live') ui.liveMatch = d.id; else ui.tourMatch = d.id; ui.goal = null; ui.note = null; ui.confirm = null; ui.toTop = true; ui.vmBack = false; break;
     case 'close-match': if (d.scope === 'live') ui.liveMatch = null; else ui.tourMatch = null; ui.goal = null; ui.note = null; ui.confirm = null; ui.vmBack = false; break;
     case 'vm-back': ui.liveMatch = null; ui.tourMatch = null; setTab('valvomo'); ui.toTop = true; break;
@@ -2665,6 +2780,9 @@ function field(f, d, el) {
   const v = (el.value || '').trim();
   const stat = () => state.config.stats.find(x => x.id === d.id), stat0 = sid => state.config.stats.find(x => x.id === sid);
   switch (f) {
+    case 'wiz-pname': { const x = ui.wiz && ui.wiz.pauses.find(q => q.id === d.id); if (x) x.name = v.slice(0, 40) || 'Tauko'; break; }
+    case 'wiz-first': if (ui.wiz) { ui.wiz.first = /^\d{2}:\d{2}$/.test(v) ? v : ''; wizSchedule(); } break;
+    case 'wiz-time': if (ui.wiz) ui.wiz.times[+d.i] = /^\d{2}:\d{2}$/.test(v) ? v : ''; break;
     case 'title': state.config.title = v.trim(); state.config.titleOwn = true; persistConf(['title', 'titleOwn']); break;
     case 'acct-role': { const u = state.users[d.id]; if (u && (el.value === '' || el.value === 'admin' || (el.value === 'super' && can('main')) || state.config.roles.some(x => x.id === el.value))) { u.role = el.value; persist('users/' + d.id); ui.pwMsg = null; if (NET) syncAccLevel(d.id); } break; }
     case 'restore': readBackup(el.files && el.files[0]); try { el.value = ''; } catch (e) { /* some browsers lock the field */ } return;
@@ -3498,19 +3616,32 @@ function mChip(m, plain) {
   return `<span class="chip">${m.time ? 'klo ' + m.time : 'Tulossa'}</span>`;
 }
 const sideAv = x => x.team ? teamAv(x.team, 'sm') : '<span class="av sm none" aria-hidden="true"></span>';
-// The bracket as a picture: a box for each team, two to a match, and lines joining each match to the one its winner goes on to.
-// Each match takes up the height of the matches feeding it, so it sits halfway between them and the lines meet it in the middle
-// (the room above and below a match is its margin, not padding, so that the heights follow the number of matches exactly).
-// A side not decided yet is an empty box; a coming match shows when it starts, a running one its clock, a played one the score.
-// The final is last, the bronze match under it. In the page each match opens its own page; the big screen draws the same, larger.
+// The bracket as a picture: a box for each team's place, the two places of a match joined by a line that leads on to the place
+// its winner takes in the next round, and the winner of the final in a column of its own. A place not decided yet says in grey
+// whose winner (or loser) comes there. A coming match shows when it starts, a running one its clock, a played one the score.
+// The bronze match sits at the bottom of the final's column, and dashed lines lead the losers of the semi-finals down to it.
+// Each place takes up the height of the places feeding it, so it sits halfway between them and the lines meet it; the room
+// above and below a box is its margin, so that the heights follow the number of places exactly.
+const GEN = { Ottelu: 'Ottelun', 'Välierä': 'Välierän', 'Puolivälierä': 'Puolivälierän', 'Neljännesvälierä': 'Neljännesvälierän', Alkukierros: 'Alkukierroksen', Finaali: 'Finaalin', 'Jatko-ottelu': 'Jatko-ottelun' };
+const labelGen = l => l.replace(/^\S+/, w => GEN[w] || w);
 const ROUNDS_HEAD = n => n === 2 ? 'Välierät' : n <= 4 ? 'Puolivälierät' : n <= 8 ? 'Neljännesvälierät' : 'Alkukierros';
 function bracketView(T, scope, big) {
   const rs = rounds(T), R = rs.length, tid = esc(T.id);
   if (!rs[0].length) return '';
-  const w = {};
-  rs.forEach((ids, r) => ids.forEach((id, i) => { w[id] = r ? (w[rs[r - 1][2 * i]] || 0) + (w[rs[r - 1][2 * i + 1]] || 0) || 1 : 1; }));
-  const pct = x => Math.round(x * 10000) / 100 + '%';
-  const finId = rs[R - 1][0], champ = finId && T.matches[finId] ? outcome(T, T.matches[finId], 0) : null;
+  const finId = rs[R - 1][0];
+  // a match as stored, or as the bracket will make it when it is not stored yet
+  const mOf = (id, r, i) => T.matches[id] ? Object.assign({ id }, T.matches[id])
+    : { id, auto: r > 0, home: r ? { w: rs[r - 1][2 * i] } : null, away: r && rs[r - 1][2 * i + 1] ? { w: rs[r - 1][2 * i + 1] } : null, hs: 0, as: 0, startedAt: 0, endedAt: 0, time: '' };
+  const ms = rs.map((ids, r) => ids.map((id, i) => mOf(id, r, i)));
+  // how many first-round places each place stands for
+  const sw = {}, gw = id => (sw[id + 'h'] || 0) + (sw[id + 'a'] || 0);
+  ms.forEach((row, r) => row.forEach((m, i) => {
+    if (!r) { sw[m.id + 'h'] = m.home || !m.away ? 1 : 0; sw[m.id + 'a'] = m.away ? 1 : 0; return; }
+    sw[m.id + 'h'] = gw(rs[r - 1][2 * i]) || 1; sw[m.id + 'a'] = m.away ? gw(rs[r - 1][2 * i + 1]) || 1 : 0;
+  }));
+  const W = gw(finId), pct = x => Math.round(x * 10000) / 100 + '%';
+  const bz = R >= 2 && T.matches.bronze ? mOf('bronze', R, 0) : null;
+  const pend = sd => { const sid = sd.w || sd.l, src = T.matches[sid]; return src ? labelGen(matchLabel(T, Object.assign({ id: sid }, src))) + (sd.w ? ' voittaja' : ' häviäjä') : ''; };
   const status = m => {
     const st = mStatus(m);
     if (isBye(m)) return 'Vapaakierros';
@@ -3518,34 +3649,49 @@ function bracketView(T, scope, big) {
     if (st === 'done') return 'Päättynyt';
     return m.time ? 'klo ' + esc(m.time) : '';
   };
-  // one team's box: empty while the side is still to be decided, "Ei vastustajaa" on a free pass
-  const box = (m, sd, x, n, o, shown, fin) => {
-    const pend = !x.team && !!sd && !!(sd.w || sd.l), none = !sd;
-    const win = !!o && !!x.id && o.w === x.id, lose = !!o && !!x.id && o.l === x.id && !isBye(m);
-    const cls = 'bkt' + (win ? ' win' : '') + (win && fin ? ' champ' : '') + (lose ? ' lose' : '') + (pend ? ' tbd' : '') + (none ? ' none' : '');
-    if (pend) return `<span class="${cls}"><span class="vh">${esc(x.name)}</span></span>`;
-    return `<span class="${cls}">${x.team ? teamAv(x.team, 'sm') : ''}<span class="bkn">${esc(none ? 'Ei vastustajaa' : x.name)}</span>${shown && !none ? `<b class="bks">${n}</b>` : ''}</span>`;
+  // one team's place in a match: its box, and above the first place of a match the match's name and start time or clock
+  const place = (m, side, cls, style, meta) => {
+    const sd = m[side];
+    const x = sideInfo(T, sd), o = outcome(T, m, 0), st = mStatus(m), shown = st !== 'new' && !isBye(m), n = side === 'home' ? m.hs : m.as;
+    const p = !x.team && !!sd && !!(sd.w || sd.l), win = !!o && !!x.id && o.w === x.id, lose = !!o && !!x.id && o.l === x.id && !isBye(m);
+    const bcls = 'bkt bx' + (win ? ' win' : '') + (lose ? ' lose' : '') + (p ? ' tbd' : '') + (st === 'live' ? ' live' : '');
+    const inner = (meta ? `<span class="bkmeta${st === 'live' ? ' on' : ''}">${meta}</span>` : '') +
+      (p ? `<span class="bkn">${esc(pend(sd))}</span>` : `${x.team ? teamAv(x.team, 'sm') : ''}<span class="bkn">${esc(x.name)}</span>${shown ? `<b class="bkv">${n}</b>` : ''}`);
+    const box = big || isBye(m) || !T.matches[m.id] ? `<div class="${bcls}" data-k="bkb-${esc(m.id)}-${side}">${inner}</div>`
+      : `<button class="${bcls}" id="bx-${scope}-${esc(m.id)}${side === 'away' ? '-2' : ''}" data-act="open-match" data-scope="${scope}" data-tour="${tid}" data-id="${esc(m.id)}">${inner}</button>`;
+    return `<div class="bsl${cls}" data-k="bsl-${esc(m.id)}-${side}" style="${style}">${box}</div>`;
   };
-  // one match: its line above (name, start time or clock) and its two boxes
-  const card = id => {
-    const m = Object.assign({ id }, T.matches[id]), h = sideInfo(T, m.home), a = sideInfo(T, m.away), o = outcome(T, m, 0), st = mStatus(m), bye = isBye(m);
-    const shown = st !== 'new' && !bye, fin = id === finId, s = status(m), meta = esc(matchLabel(T, m)) + (s ? ' · ' + s : '');
-    const inner = (`<span class="bkmeta${st === 'live' ? ' on' : ''}${fin || id === 'bronze' ? ' big' : ''}">${meta}</span>`) + box(m, m.home, h, m.hs, o, shown, fin) + box(m, m.away, a, m.as, o, shown, fin);
-    const cls = 'bkp bx' + (st === 'live' ? ' live' : '');
-    return big || bye ? `<div class="${cls}" data-k="${big ? 'sbx' : 'bx'}-${esc(id)}">${inner}</div>`
-      : `<button class="${cls}" id="bx-${scope}-${esc(id)}" data-act="open-match" data-scope="${scope}" data-tour="${tid}" data-id="${esc(id)}">${inner}</button>`;
+  // a match: its two places and the line joining them on to the next round
+  const group = (m, r) => {
+    const a = sw[m.id + 'h'] || 0, b = sw[m.id + 'a'] || 0, two = a > 0 && b > 0, s = status(m);
+    const meta = esc(m.id === finId && R > 1 ? '' : matchLabel(T, m)), line = [meta, s].filter(Boolean).join(' · ');
+    const from = r > 0 ? ' from' : '', r0 = !r && two;
+    // the losers of the semi-finals go down to the bronze match
+    const lo = bz && r === R - 2 ? (m.id === rs[R - 2][0] ? ' lo lo1' : ' lo lo2') : '';
+    let h = '';
+    if (a) h += place(m, 'home', from + (r0 ? ' h0' : ''), `flex-grow:${a}`, line);
+    if (b) h += place(m, 'away', from + (r0 ? ' a0' : '') + lo, `flex-grow:${b}`, a ? '' : line);
+    return `<div class="bgr${two ? '' : ' one'}${r0 ? ' r0' : ''}" data-k="bgr-${esc(m.id)}" style="flex-grow:${a + b}${two ? `;--t:${pct(a / 2 / (a + b))};--b:${pct(b / 2 / (a + b))}` : ''}">${h}</div>`;
   };
-  const bronze = T.matches.bronze ? `<div class="bkz" data-k="bkz">${card('bronze')}</div>` : '';
-  const slot = (id, r, i) => {
-    const a = r ? w[rs[r - 1][2 * i]] || 0 : 0, b = r ? w[rs[r - 1][2 * i + 1]] || 0 : 0, two = a > 0 && b > 0;
-    const cls = 'bkm' + (r > 0 ? ' from' : '') + (r < R - 1 ? ' to' : '') + (two ? ' join' : '');
-    const st = `flex-grow:${w[id]}` + (two ? `;--t:${pct(a / 2 / (a + b))};--b:${pct(b / 2 / (a + b))}` : '');
-    if (!T.matches[id]) return `<div class="${cls}" data-k="bkm-${esc(id)}" style="${st}"></div>`;
-    return `<div class="${cls}" data-k="bkm-${esc(id)}" style="${st}"><div class="bkw">${card(id)}${r === R - 1 ? bronze : ''}</div></div>`;
+  // the bronze match: each place reached by a dashed line from the semi-final whose loser comes there
+  const bronze = () => {
+    const s1 = rs[R - 2][0], s2 = rs[R - 2][1], g1 = gw(s1), y1 = (sw[s1 + 'h'] || 0) + (sw[s1 + 'a'] || 0) / 2, y2 = g1 + (sw[s2 + 'h'] || 0) + (sw[s2 + 'a'] || 0) / 2;
+    const meta = ['Pronssiottelu', status(bz)].filter(Boolean).join(' · '), deep = R === 2 ? ' z0' : '';
+    return `<div class="bgr bz" data-k="bgr-bronze" style="flex-grow:2">` +
+      place(bz, 'home', ' lx lx1' + deep, `flex-grow:1;--up:${(W + 0.5 - y1).toFixed(4)}`, meta) +
+      place(bz, 'away', ' lx lx2' + deep, `flex-grow:1;--up:${(W + 1.5 - y2).toFixed(4)}`, '') + `</div>`;
   };
-  return `<div class="bracket${big ? ' big' : ''}${bronze && R <= 2 ? ' zpad' : ''}" data-k="bracket" role="group" aria-label="Turnauskaavio" style="--cols:${R}">` +
-    rs.map((ids, r) => `<div class="bkh" data-k="bkh-${r}" style="grid-column:${r + 1}">${r < R - 1 ? ROUNDS_HEAD(ids.length) : ''}</div>`).join('') +
-    rs.map((ids, r) => `<div class="bkc" data-k="bkc-${r}" style="grid-column:${r + 1}">${ids.map((id, i) => slot(id, r, i)).join('')}</div>`).join('') + `</div>`;
+  // room for the bronze match in the other columns: two hidden places, so that it takes as much height as two places do
+  const spacer = `<div class="bgr bsp" aria-hidden="true" style="flex-grow:2">${'<div class="bsl" style="flex-grow:1"><div class="bkt"></div></div>'.repeat(2)}</div>`;
+  // the winner of the final
+  const fo = T.matches[finId] ? outcome(T, T.matches[finId], 0) : null, champ = fo && fo.w && state.teams[fo.w] ? Object.assign({ id: fo.w }, state.teams[fo.w]) : null;
+  const wbox = champ ? `<div class="bkt win champ" data-k="bkb-champ">${teamAv(champ, 'sm')}<span class="bkn">${esc(champ.name)}</span></div>`
+    : `<div class="bkt tbd" data-k="bkb-champ"><span class="bkn">${esc(labelGen(matchLabel(T, ms[R - 1][0])))} voittaja</span></div>`;
+  const cols = ms.map((row, r) => `<div class="bkc" data-k="bkc-${r}" style="grid-column:${r + 1}">${row.map(m => group(m, r)).join('')}${bz ? (r === R - 1 ? bronze() : spacer) : ''}</div>`).join('') +
+    `<div class="bkc bkcw" data-k="bkc-w" style="grid-column:${R + 1}"><div class="bsl from" data-k="bsl-champ" style="flex-grow:${W}">${wbox}</div>${bz ? spacer : ''}</div>`;
+  const heads = rs.map((ids, r) => `<div class="bkh" data-k="bkh-${r}" style="grid-column:${r + 1}">${r < R - 1 ? ROUNDS_HEAD(ids.length) : 'Finaali'}</div>`).join('') +
+    `<div class="bkh" data-k="bkh-w" style="grid-column:${R + 1}">Voittaja</div>`;
+  return `<div class="bracket${big ? ' big' : ''}" data-k="bracket" role="group" aria-label="Turnauskaavio" style="--cols:${R + 1}">${heads}${cols}</div>`;
 }
 function bracket(T, scope) { return bracketView(T, scope, false); }
 
@@ -3843,8 +3989,114 @@ function tourKpis(T) {
 // A match itself is changed on its own page (start time, start, reset, removing it) and in Valvomo.
 function matchesHead(T) {
   if (tourTeamIds(T).length < 2) return `<div class="note" data-k="mf-none"><span>Lisää turnaukseen ensin vähintään kaksi joukkuetta.</span>${can('tasetus') ? `<div class="rowbtns"><button class="btn" id="mf-toset" data-act="subtab" data-scope="${ui.tab === 'turnaukset' ? 'tour' : 'live'}" data-tab="muokkaa">Avaa asetukset</button></div>` : ''}</div>`;
-  return (ui.newMatch ? matchForm(T) : `<div data-k="nm-open"><button class="btn primary" id="nm-open" data-act="new-match">Uusi ottelu</button></div>`) +
+  const wz = wizCan(T) ? `<button class="btn" id="wz-open" data-act="wiz-open" data-tour="${esc(T.id)}">${rounds(T)[0].length ? 'Muuta pareja kaaviolla' : 'Luo ottelut kaaviolla'}</button>` : '';
+  return (ui.newMatch ? matchForm(T) : `<div class="rowbtns" data-k="nm-open"><button class="btn primary" id="nm-open" data-act="new-match">Uusi ottelu</button>${wz}<button class="btn" id="pz-new" data-act="pz-new">Lisää tauko</button></div>`) +
+    (ui.pzEdit === 'new' ? pauseForm(T, null) : '') +
     `<p class="hint" data-k="tm-how">Jatko-ottelut syntyvät kaavioon itsestään.</p>`;
+}
+/* ----- the match maker: a window where the tournament's teams are dragged (or tapped) into the first round's places ----- */
+// Open while no first-round match has started. An earlier first round is filled in; saving keeps those matches (their ids and order)
+// with the new teams, adds the ones missing and removes the ones left empty. The rest of the bracket follows by itself.
+function wizCan(T) { return can('ottelu') && tourTeamIds(T).length >= 2 && !rounds(T)[0].some(id => T.matches[id] && T.matches[id].startedAt); }
+function wizOpen(tid) {
+  const T0 = state.tournaments[tid], T = T0 && Object.assign({ id: tid }, T0);
+  if (!T || !wizCan(T)) return;
+  const ids = tourTeamIds(T), rs0 = rounds(T)[0], n = Math.max(Math.ceil(ids.length / 2), rs0.length), slots = [], seen = {};
+  const keep = x => x && x.t && ids.indexOf(x.t) >= 0 && !seen[x.t] ? (seen[x.t] = 1, x.t) : '';
+  for (let i = 0; i < n; i++) { const m = T.matches[rs0[i]] || {}; slots.push(keep(m.home), keep(m.away)); }
+  const times = rs0.map(id => T.matches[id].time || '');
+  const pauses = (T.pauses || []).map(p => { let after = 0; times.forEach((t, i) => { if (t && t < p.at) after = i; }); return { id: p.id, name: p.name, min: p.min, at: p.at, after }; });
+  ui.wiz = { tid, step: 1, slots, times, pauses, sel: null, err: null, first: '', cons: Math.max(1, Math.min(20, +lsGet('anarit.consoles') || 1)), gap: Math.max(5, Math.min(240, +lsGet('anarit.gap') || 20)) };
+  ui.focusId = 'wz-title';
+}
+// a team into a place: from the list, or from another place (then the two swap); whoever was in the place goes back to the list
+function wizPlace(team, k) {
+  const S = ui.wiz.slots, j = S.indexOf(team);
+  if (j !== k) { if (j >= 0) S[j] = S[k]; S[k] = team; }
+  ui.wiz.sel = null; ui.wiz.err = null;
+}
+const wizPairs = () => { const S = ui.wiz.slots, out = []; for (let i = 0; i < S.length; i += 2) if (S[i] || S[i + 1]) out.push(S[i] ? [S[i], S[i + 1]] : [S[i + 1], '']); return out; };
+const wizTimes = () => wizPairs().map((p, i) => p[1] && /^\d{2}:\d{2}$/.test(ui.wiz.times[i] || '') ? ui.wiz.times[i] : '');
+// The start times from the first: as many matches at a time as there are consoles, the next ones the gap later. A free pass is no
+// match and takes no console. Without a first time the times stay as they are.
+function wizSchedule() {
+  const W = ui.wiz, m = /^(\d{2}):(\d{2})$/.exec(W.first || '');
+  if (!m) return;
+  const pairs = wizPairs(), wave = {}, hhmm = t => String(Math.floor(t / 60) % 24).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0');
+  let k = 0;
+  pairs.forEach((p, i) => { if (p[1]) wave[i] = Math.floor(k++ / W.cons); });
+  const waves = k ? Math.floor((k - 1) / W.cons) + 1 : 0, waveOf = i => { for (let j = Math.min(i, pairs.length - 1); j >= 0; j--) if (wave[j] !== undefined) return wave[j]; return 0; };
+  // a break comes when the next matches would start, and they start once it is over
+  const start = [];
+  let t = +m[1] * 60 + +m[2];
+  for (let w = 0; w < waves; w++) { start[w] = t; t += W.gap; W.pauses.filter(p => waveOf(p.after) === w).forEach(p => { p.at = hhmm(t); t += p.min; }); }
+  W.pauses.filter(p => waveOf(p.after) >= waves).forEach(p => { p.at = hhmm(t); t += p.min; });
+  pairs.forEach((p, i) => { W.times[i] = p[1] ? hhmm(start[wave[i]]) : ''; });
+}
+function wizSave() {
+  const W = ui.wiz, T0 = state.tournaments[W.tid], T = T0 && Object.assign({ id: W.tid }, T0);
+  if (!T || !wizCan(T)) { W.err = 'Ottelu on jo alkanut, joten otteluita voi nyt muuttaa vain yksi kerrallaan.'; render(); return; }
+  const pairs = wizPairs(), times = wizTimes(), rs0 = rounds(T)[0], before = tourSnap(T0);
+  let order = 0;
+  pairs.forEach((p, i) => {
+    const id = rs0[i], home = { t: p[0] }, away = p[1] ? { t: p[1] } : null;
+    if (id) { const m = T0.matches[id]; m.home = home; m.away = away; m.time = times[i]; order = m.order; return; }
+    order = Math.max(order + 1, nowMs() + i);
+    T0.matches[uid()] = normMatch({ home, away, time: times[i], order });
+  });
+  rs0.slice(pairs.length).forEach(id => { delete T0.matches[id]; });
+  T0.pauses = normPauses(W.pauses.filter(p => /^\d{2}:\d{2}$/.test(p.at || '')).map(p => ({ id: p.id, name: p.name, at: p.at, min: p.min })));
+  syncBracket(T0);
+  persistTour(W.tid, before);
+  rounds(T)[0].forEach(id => logAct(W.tid, id, 'm', (rs0.indexOf(id) >= 0 ? 'muutti ottelun parin' : 'loi ottelun') + ' ottelutyökalulla' + (T0.matches[id].time ? ', alkamisaika klo ' + T0.matches[id].time : '')));
+  ui.wiz = null;
+}
+function viewWiz() {
+  const W = ui.wiz, T0 = state.tournaments[W.tid];
+  if (!T0) return '';
+  const T = Object.assign({ id: W.tid }, T0), ids = tourTeamIds(T), team = id => Object.assign({ id }, state.teams[id]);
+  const pool = ids.filter(t => W.slots.indexOf(t) < 0).map(team).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+  const chip = (t, attrs) => `<button type="button" class="wzchip${W.sel === t.id ? ' sel' : ''}" data-wdrag="${esc(t.id)}" aria-pressed="${W.sel === t.id}" ${attrs}>${teamAv(t, 'sm')}<span class="bkn">${esc(t.name)}</span></button>`;
+  const slot = k => {
+    const t = W.slots[k] && state.teams[W.slots[k]] ? team(W.slots[k]) : null;
+    return t ? `<div class="wzs full" data-wslot="${k}" data-k="wzs-${k}">${chip(t, `id="wzc-${k}" data-act="wiz-pick" data-slot="${k}"`)}<button type="button" class="wzx" id="wzx-${k}" data-act="wiz-out" data-slot="${k}" aria-label="Poista ${esc(t.name)} ottelusta">✕</button></div>`
+      : `<button type="button" class="wzs" data-wslot="${k}" data-k="wzs-${k}" id="wzs-${k}" data-act="wiz-pick" data-slot="${k}">${W.sel ? 'Sijoita tähän' : 'Tyhjä paikka'}</button>`;
+  };
+  let body, foot;
+  if (W.step === 1) {
+    const n = W.slots.length / 2;
+    body = `<p class="hint" data-k="wz-how">Vedä joukkue vasemmalta otteluun. Voit myös napauttaa joukkuetta ja sitten paikkaa. Jatko-ottelut syntyvät kaavioon itsestään.</p>` +
+      `<div class="wzcols" data-k="wz-cols"><div class="wzpool" data-wpool="1" data-act="wiz-pool" data-k="wz-pool"><h3 class="sub" data-k="wz-ph">Joukkueet <small class="muted">${pool.length}/${ids.length}</small></h3>` +
+      (pool.length ? pool.map(t => chip(t, `id="wzp-${esc(t.id)}" data-act="wiz-pick" data-team="${esc(t.id)}"`)).join('') : `<p class="hint" data-k="wz-done">Kaikki joukkueet on sijoitettu.</p>`) + `</div>` +
+      `<div class="wzms" data-k="wz-ms">${Array.from({ length: n }, (_, i) => `<div class="wzm" data-k="wzm-${i}"><span class="wzl">Ottelu ${i + 1}</span>${slot(2 * i)}${slot(2 * i + 1)}</div>`).join('')}</div></div>`;
+    foot = `<button type="button" class="btn" id="wz-shuffle" data-act="wiz-shuffle"${pool.length ? '' : ' disabled'}>Arvo loput</button><button type="button" class="btn" id="wz-clear" data-act="wiz-clear"${W.slots.some(Boolean) ? '' : ' disabled'}>Tyhjennä</button>` +
+      `<span class="wzsp"></span><button type="button" class="btn" id="wz-cancel" data-act="wiz-close">Peru</button><button type="button" class="btn primary" id="wz-next" data-act="wiz-next">Seuraava</button>`;
+  } else {
+    const pairs = wizPairs(), waves = [];
+    pairs.forEach((p, i) => { if (!p[1]) return; const t = W.times[i] || '', w = waves[waves.length - 1]; if (w && w.t === t) w.items.push(i); else waves.push({ t, items: [i] }); });
+    // the breaks after a group of matches: those set after one of its matches (or before the next group's first)
+    const pzAfter = (n, w) => W.pauses.filter(p => { const last = w.items[w.items.length - 1], next = waves[n + 1]; return p.after >= w.items[0] && (p.after <= last || !next || p.after < next.items[0]); }).map(p => {
+      const id = esc(p.id);
+      return `<div class="wzpz" data-k="wzpz-${id}"><span class="pzic" aria-hidden="true">☕</span><label class="wzpzn"><span class="vh">Tauon nimi</span><input id="wzpn-${id}" data-field="wiz-pname" data-id="${id}" maxlength="40" value="${esc(p.name)}" autocomplete="off"></label>` +
+        `<small class="muted wzpzt">${p.at ? 'klo ' + p.at + '–' + pauseEnd(p) : ''}</small><div class="stepper wzstep wzpzs" role="group" aria-label="Tauon pituus"><button type="button" class="btn" id="wzpm-${id}" data-act="wiz-pmin" data-id="${id}" data-d="-1" aria-label="Lyhyempi">−</button><output>${p.min} min</output><button type="button" class="btn" id="wzpp-${id}" data-act="wiz-pmin" data-id="${id}" data-d="1" aria-label="Pidempi">+</button></div>` +
+        `<button type="button" class="wzx" id="wzpd-${id}" data-act="wiz-pdel" data-id="${id}" aria-label="Poista tauko ${esc(p.name)}">✕</button></div>`;
+    }).join('');
+    const step = (id, act, val, label, unit) => `<div class="f" data-k="${id}"><span id="${id}-l">${label}</span><div class="stepper wzstep" role="group" aria-labelledby="${id}-l">` +
+      `<button type="button" class="btn" id="${id}-m" data-act="${act}" data-d="-1" aria-label="Vähemmän">−</button><output id="${id}-v" aria-live="polite">${val}${unit}</output><button type="button" class="btn" id="${id}-p" data-act="${act}" data-d="1" aria-label="Enemmän">+</button></div></div>`;
+    body = `<div class="wzctl" data-k="wz-ctl"><label class="f" data-k="wz-fl"><span>Ensimmäiset alkavat</span><input type="time" id="wz-first" data-field="wiz-first" value="${esc(W.first)}"></label>` +
+      step('wz-cons', 'wiz-cons', W.cons, 'Konsoleita', '') + step('wz-gap', 'wiz-gap', W.gap, 'Seuraavat alkavat', ' min päästä') + `</div>` +
+      `<p class="hint" data-k="wz-how2">${W.first ? (W.cons > 1 ? W.cons + ' ottelua alkaa aina samaan aikaan, yksi kullakin konsolilla.' : 'Ottelut alkavat yksi kerrallaan.') + ' Yksittäistä aikaa voi vielä muuttaa alta.' : 'Valitse, mihin aikaan ensimmäiset ottelut alkavat, niin loput ajat täyttyvät itsestään. Ajat voi jättää myös tyhjiksi.'}</p>` +
+      `<div class="wzwaves" data-k="wz-list">${waves.map((w, n) => `<section class="wzwave" data-k="wzw-${n}"><h3 class="wzwh">${w.t ? 'klo ' + w.t : 'Ei aikaa'}<small class="muted">${w.items.length === 1 ? '1 ottelu' : w.items.length + ' ottelua'}</small></h3><ol class="wzlist">` +
+        w.items.map((i, c) => `<li data-k="wzl-${i}"><span class="wzcon" aria-hidden="true">${w.t && W.cons > 1 ? c + 1 : ''}</span><span class="itxt"><b>Ottelu ${i + 1}${w.t && W.cons > 1 ? ` <small class="muted">· konsoli ${c + 1}</small>` : ''}</b><small>${esc(team(pairs[i][0]).name)} – ${esc(team(pairs[i][1]).name)}</small></span>` +
+          `<label class="wzt"><span class="vh">Ottelun ${i + 1} alkamisaika</span><input type="time" id="wzt-${i}" data-field="wiz-time" data-i="${i}" value="${esc(W.times[i] || '')}"></label></li>`).join('') + `</ol></section>` +
+        pzAfter(n, w) + `<div class="wzpadd" data-k="wzpa-${n}"><button type="button" class="btn sm" id="wzpa-${n}" data-act="wiz-padd" data-i="${w.items[w.items.length - 1]}"${W.first ? '' : ' disabled'}>+ Tauko tähän</button></div>`).join('')}` +
+      (pairs.some(p => !p[1]) ? `<p class="hint" data-k="wz-bye">Vapaakierros: ${pairs.filter(p => !p[1]).map(p => esc(team(p[0]).name)).join(', ')}</p>` : '') + `</div>`;
+    foot = `<button type="button" class="btn" id="wz-back" data-act="wiz-back">Takaisin</button><span class="wzsp"></span><button type="button" class="btn primary" id="wz-save" data-act="wiz-save">${rounds(T)[0].length ? 'Tallenna ottelut' : 'Luo ottelut'}</button>`;
+  }
+  return `<div class="wiz" data-k="wiz"><div class="wizp" role="dialog" aria-modal="true" aria-labelledby="wz-title">` +
+    `<div class="wizh" data-k="wz-h"><div><h2 class="sec" id="wz-title" tabindex="-1">Ottelut kaaviolla</h2><small class="muted" data-k="wz-step">Vaihe ${W.step}/2: ${W.step === 1 ? 'kuka pelaa ketä vastaan' : 'aloitusajat'}</small></div>` +
+    `<button type="button" class="btn sm" id="wz-close" data-act="wiz-close" aria-label="Sulje">✕</button></div>` +
+    `<div class="wizb" data-k="wz-b-${W.step}">${body}</div>` + (W.err ? `<p class="err wzerr" role="alert" data-k="wz-err">${esc(W.err)}</p>` : '') + `<div class="wizf" data-k="wz-f">${foot}</div></div></div>`;
 }
 // Asetukset: the tournament's own settings under headings, and removing it last.
 function tourSettings(T) {
@@ -4037,15 +4289,55 @@ const openRow = (T, m, inner, scope) => `<button class="lrowb" id="lr-${esc(m.id
 // Every match of the tournament in one list, the latest round on top: the final first, then the bronze match, the semi-finals and so on,
 // with round one at the bottom. Within a round the coming matches come first (the latest start time on top), then the running ones,
 // then the played ones, newest first, so the oldest match is the last one.
+// The breaks of a tournament as items of its match list: over once a match set after the break has started, and then listed
+// just under that match among the played ones.
+function pauseItems(T) {
+  const ms = matchList(T).filter(m => !isBye(m));
+  return (T.pauses || []).map(p => {
+    const end = pauseEnd(p), after = ms.filter(m => m.startedAt && (m.time || '') >= end);
+    return { id: 'pz-' + p.id, pz: p, time: p.at, order: 0, startedAt: 0, endedAt: 0, pst: after.length ? 'done' : 'new', pend: after.length ? Math.min.apply(null, after.map(m => m.startedAt)) - 1 : 0 };
+  });
+}
+// A break as a row; whoever may change the matches renames, moves or removes it from here.
+function pauseRow(T, x) {
+  const p = x.pz, ed = can('ottelu'), id = esc(p.id);
+  const inner = `<span class="mtime">${p.at}</span><span class="pzic" aria-hidden="true">☕</span><span class="itxt"><b>${esc(p.name)}</b><small>Tauko · ${p.min} min · päättyy klo ${pauseEnd(p)}</small></span>`;
+  if (ui.pzEdit === p.id && ed) return `<li data-k="lt-${esc(x.id)}">${pauseForm(T, p)}</li>`;
+  return `<li data-k="lt-${esc(x.id)}">` + (ed ? `<button type="button" class="lrowb pzrow" id="pze-${id}" data-act="pz-edit" data-id="${id}" aria-label="Muokkaa taukoa ${esc(p.name)}">${inner}<span class="chev" aria-hidden="true"></span></button>` : `<div class="lrowb pzrow">${inner}</div>`) + `</li>`;
+}
+function pauseForm(T, p) {
+  const id = p ? esc(p.id) : 'new';
+  return `<form class="tset pzf" data-k="pzf-${id}" data-form="pz-save" data-tour="${esc(T.id)}" data-id="${p ? id : ''}" novalidate><h3 class="sub">${p ? 'Muokkaa taukoa' : 'Uusi tauko'}</h3>` +
+    `<div class="pzff"><label class="f"><span>Nimi</span><input id="pzn-${id}" data-free maxlength="40" value="${esc(p ? p.name : 'Tauko')}" autocomplete="off"></label>` +
+    `<label class="f"><span>Alkaa</span><input type="time" id="pzt-${id}" data-free value="${esc(p ? p.at : '')}"></label>` +
+    `<label class="f"><span>Kesto (min)</span><input type="number" id="pzm-${id}" data-free inputmode="numeric" min="5" max="240" step="5" value="${p ? p.min : 15}"></label></div>` +
+    (ui.pzErr ? `<p class="err" role="alert" data-k="pz-err">${esc(ui.pzErr)}</p>` : '') +
+    `<div class="rowbtns"><button class="btn primary" type="submit" id="pzs-${id}">Tallenna</button><button class="btn" type="button" id="pzc-${id}" data-act="pz-cancel">Peru</button>` +
+    (p ? `<button class="btn danger" type="button" id="pzd-${id}" data-act="pz-del" data-tour="${esc(T.id)}" data-id="${id}">Poista tauko</button>` : '') + `</div></form>`;
+}
+function pauseSave(form) {
+  const tid = form.dataset.tour, T = state.tournaments[tid];
+  if (!T) return;
+  const id = form.dataset.id, key = id || 'new', val = k => String((form.querySelector('#' + k + key) || {}).value || '').trim();
+  const at = val('pzt-'), name = val('pzn-').slice(0, 40) || 'Tauko', min = Math.max(5, Math.min(240, Math.round(+val('pzm-')) || 15));
+  if (!/^\d{2}:\d{2}$/.test(at)) { ui.pzErr = 'Valitse, mihin aikaan tauko alkaa.'; render(); return; }
+  const before = tourSnap(T), list = (T.pauses || []).filter(p => p.id !== id);
+  list.push({ id: id || uid(), name, at, min });
+  T.pauses = normPauses(list);
+  persistTour(tid, before);
+  ui.pzEdit = null; ui.pzErr = null;
+  render();
+}
 function liveMatches(T, scope) {
   const ms = matchList(T).filter(m => !isBye(m)), rk = { new: 0, live: 1, done: 2 }, rs = rounds(T), lvl = {};
-  if (!ms.length) return '';
+  const items = ms.concat(pauseItems(T));
+  if (!items.length) return '';
   rs.forEach((ids, r) => ids.forEach(id => { lvl[id] = r; }));
   lvl.bronze = rs.length - 1.5;   // played around the final, listed right under it
-  const at = m => lvl[m.id] === undefined ? rs.length : lvl[m.id];
-  ms.sort((x, y) => (at(y) - at(x)) || (rk[mStatus(x)] - rk[mStatus(y)]) ||
-    (mStatus(x) === 'done' ? y.endedAt - x.endedAt : mStatus(x) === 'live' ? y.startedAt - x.startedAt : (y.time || '99:99').localeCompare(x.time || '99:99')) || byOrder(y, x));
-  return `<ul class="mlist" data-k="lt">${ms.map(m => { const st = mStatus(m); return `<li data-k="lt-${esc(m.id)}">${openRow(T, m, `<span class="mtime">${timeCell(m)}</span><span class="itxt"><b>${esc(sideInfo(T, m.home).name)} – ${esc(sideInfo(T, m.away).name)}</b><small>${esc(matchLabel(T, m))}${st === 'done' ? ' · kesto ' + clock(playMs(m, m.endedAt)) : ''}</small></span>${st === 'new' ? '' : `<span class="mres">${m.hs} – ${m.as}</span>`}${st === 'done' ? '' : mChip(m)}`, scope)}</li>`; }).join('')}</ul>`;
+  const at = m => m.pz ? 0 : lvl[m.id] === undefined ? rs.length : lvl[m.id], st = m => m.pz ? m.pst : mStatus(m), ea = m => m.pz ? m.pend : m.endedAt;
+  items.sort((x, y) => (at(y) - at(x)) || (rk[st(x)] - rk[st(y)]) ||
+    (st(x) === 'done' ? ea(y) - ea(x) : st(x) === 'live' ? y.startedAt - x.startedAt : (y.time || '99:99').localeCompare(x.time || '99:99')) || (x.pz || y.pz ? 0 : byOrder(y, x)));
+  return `<ul class="mlist" data-k="lt">${items.map(m => { if (m.pz) return pauseRow(T, m); const st = mStatus(m); return `<li data-k="lt-${esc(m.id)}">${openRow(T, m, `<span class="mtime">${timeCell(m)}</span><span class="itxt"><b>${esc(sideInfo(T, m.home).name)} – ${esc(sideInfo(T, m.away).name)}</b><small>${esc(matchLabel(T, m))}${st === 'done' ? ' · kesto ' + clock(playMs(m, m.endedAt)) : ''}</small></span>${st === 'new' ? '' : `<span class="mres">${m.hs} – ${m.as}</span>`}${st === 'done' ? '' : mChip(m)}`, scope)}</li>`; }).join('')}</ul>`;
 }
 // Joukkueet, a section of the tournament tab: the teams in the order of the tournament's standings. Pressing a team opens its players
 // below it, with their place in the tournament's scoring table and their points from its matches; pressing it again closes them.
@@ -4264,8 +4556,10 @@ function showCols(heads, rows, key, narrow) {
 const showDur = n => 12 + Math.min(12, Math.floor(n / 6) * 2);   // bigger tables stay up a little longer
 function showMatchRows(T, ms) {
   const rk = { live: 0, new: 1, done: 2 };
-  const list = ms.slice().sort((x, y) => (rk[mStatus(x)] - rk[mStatus(y)]) || (mStatus(x) === 'done' ? y.endedAt - x.endedAt : (x.time || '99:99').localeCompare(y.time || '99:99')) || byOrder(x, y));
+  ms = ms.concat(pauseItems(T).filter(x => x.pst === 'new'));
+  const list = ms.slice().sort((x, y) => (rk[mStatus(x)] - rk[mStatus(y)]) || (mStatus(x) === 'done' ? y.endedAt - x.endedAt : (x.time || '99:99').localeCompare(y.time || '99:99')) || (x.pz || y.pz ? (x.pz ? -1 : 1) : byOrder(x, y)));
   return { heads: [['Klo', 1], ['Ottelu', 1], ['Joukkueet', 1], ['Tilanne', 0]], rows: list.map(m => {
+    if (m.pz) return `<tr data-k="shm-${esc(m.id)}" class="pz"><td class="l dim">${m.pz.at}</td><td class="l dim">Tauko</td><td class="l">${esc(m.pz.name)}</td><td class="p"><span class="dim sm">${m.pz.min} min</span></td></tr>`;
     const st = mStatus(m);
     return `<tr data-k="shm-${esc(m.id)}"${st === 'live' ? ' class="live"' : ''}><td class="l dim">${shownTime(m)}</td><td class="l dim">${esc(matchLabel(T, m))}</td><td class="l">${esc(sideInfo(T, m.home).name)} – ${esc(sideInfo(T, m.away).name)}</td>` +
       `<td class="p">${st === 'new' ? '<span class="dim sm">Tulossa</span>' : m.hs + ' – ' + m.as}${st === 'live' ? ' <span class="sm">' + mClock(m) + '</span>' : ''}</td></tr>`;
@@ -4624,7 +4918,7 @@ function view() {
   if (own) return h + viewOwn();
   if (!tab && me().guest) return h + `<div class="empty" data-k="notabs-g"><strong>Etusivu ei ole nyt näkyvissä</strong><span>Kirjaudu sisään, niin näet turnaukset ja tulokset.</span></div>`;
   if (!tab) return h + `<div class="empty" data-k="notabs"><strong>Ei näkymiä</strong><span>Tunnuksellesi ei ole valittu yhtään välilehteä. Pyydä Valvomoa lisäämään niitä.</span></div>`;
-  return h + (tab === 'etusivu' ? (ui.homeBoard ? viewBoard() : viewHome()) : tab === 'joukkueet' ? viewTeams() : tab === 'pelaajat' ? viewPlayers() : tab === 'turnaukset' ? viewTours() : tab === 'kaynnissa' ? viewLive() : tab === 'valvomo' ? viewControl() : viewSettings());
+  return h + (tab === 'etusivu' ? (ui.homeBoard ? viewBoard() : viewHome()) : tab === 'joukkueet' ? viewTeams() : tab === 'pelaajat' ? viewPlayers() : tab === 'turnaukset' ? viewTours() : tab === 'kaynnissa' ? viewLive() : tab === 'valvomo' ? viewControl() : viewSettings()) + (ui.wiz ? viewWiz() : '');
 }
 
 /* ---------- rendering: patch the page in place so buttons and typing survive live updates ---------- */
@@ -4674,6 +4968,7 @@ function render() {
   statsCache = null;
   markSeen();
   document.documentElement.classList.toggle('showing', showOn());
+  document.documentElement.classList.toggle('wizon', !!ui.wiz);
   // moving a focused button within the page drops its focus, so the one that had it gets it back
   const fa = document.activeElement, fid = fa && fa !== document.body && app.contains(fa) ? fa.id : '';
   const tpl = document.createElement('div');
@@ -4715,7 +5010,51 @@ function render() {
 
 /* ---------- events ---------- */
 let qaAt = null;   // where a team was pressed for the quick-add menu, relative to the team list
+// The match maker: a team is dragged with a finger or the mouse from the list to a place, from a place to another, or back to the list.
+// A picture of it follows the pointer; the place under it lights up. A press that does not move is a tap and goes on as a click.
+let wzDrag = null, wzNoClick = 0;
+function wzEnd(drop) {
+  const D = wzDrag;
+  wzDrag = null;
+  if (!D) return;
+  if (D.ghost) D.ghost.remove();
+  app.querySelectorAll('.wzover').forEach(x => x.classList.remove('wzover'));
+  if (!D.on || !ui.wiz) return;
+  wzNoClick = 1; setTimeout(() => { wzNoClick = 0; }, 0);   // the click that ends a drag comes right after this, in the same turn
+  const t = drop && document.elementFromPoint(drop.x, drop.y), tgt = t && t.closest && t.closest('[data-wslot],[data-wpool]');
+  if (tgt && tgt.hasAttribute('data-wslot')) wizPlace(D.team, +tgt.getAttribute('data-wslot'));
+  else if (tgt) { const j = ui.wiz.slots.indexOf(D.team); if (j >= 0) ui.wiz.slots[j] = ''; ui.wiz.sel = null; }
+  render();
+}
+app.addEventListener('pointerdown', e => {
+  const c = ui.wiz && e.button === 0 && e.target.closest && e.target.closest('[data-wdrag]');
+  if (c) wzDrag = { team: c.getAttribute('data-wdrag'), el: c, id: e.pointerId, x: e.clientX, y: e.clientY, on: false, ghost: null };
+});
+app.addEventListener('pointermove', e => {
+  const D = wzDrag;
+  if (!D || e.pointerId !== D.id) return;
+  if (!D.on) {
+    if (Math.abs(e.clientX - D.x) + Math.abs(e.clientY - D.y) < 8) return;
+    D.on = true;
+    const r = D.el.getBoundingClientRect();
+    D.dx = D.x - r.left; D.dy = D.y - r.top;
+    D.ghost = D.el.cloneNode(true); D.ghost.removeAttribute('id'); D.ghost.className += ' wzghost'; D.ghost.style.width = r.width + 'px';
+    document.body.appendChild(D.ghost);
+    try { D.el.setPointerCapture(e.pointerId); } catch (x) { /* the moves still come */ }
+  }
+  e.preventDefault();
+  D.ghost.style.transform = `translate(${e.clientX - D.dx}px,${e.clientY - D.dy}px)`;
+  const t = document.elementFromPoint(e.clientX, e.clientY), tgt = t && t.closest && t.closest('[data-wslot],[data-wpool]');
+  app.querySelectorAll('.wzover').forEach(x => { if (x !== tgt) x.classList.remove('wzover'); });
+  if (tgt) tgt.classList.add('wzover');
+  // near the top or bottom of the window's scrolling part it scrolls along
+  const sc = app.querySelector('.wizb'), sr = sc && sc.getBoundingClientRect();
+  if (sr) { if (e.clientY < sr.top + 40) sc.scrollTop -= 12; else if (e.clientY > sr.bottom - 40) sc.scrollTop += 12; }
+});
+app.addEventListener('pointerup', e => { if (wzDrag && e.pointerId === wzDrag.id) wzEnd({ x: e.clientX, y: e.clientY }); });
+app.addEventListener('pointercancel', e => { if (wzDrag && e.pointerId === wzDrag.id) wzEnd(null); });
 app.addEventListener('click', e => {
+  if (wzNoClick) { wzNoClick = 0; return; }   // the end of a drag is no tap
   const b = e.target.closest && e.target.closest('[data-act]');
   // a press anywhere outside the open quick-add menu closes it
   if (ui.qa && !(e.target.closest && e.target.closest('.qamenu')) && !(b && b.dataset.act === 'qa-open')) { ui.qa = null; if (!b) render(); }
@@ -4738,6 +5077,7 @@ app.addEventListener('submit', e => {
   const f = e.target;
   if (f.dataset.form === 'gate') { gateUnlock(f); return; }
   if (f.dataset.form === 'ad-save') { if (can('admin')) saveAd(f); return; }
+  if (f.dataset.form === 'pz-save') { if (can('ottelu') && !ui.readOnly) pauseSave(f); return; }
   if (f.dataset.form === 'view-pw') { if (can('set:kirjautuminen') && ui.fb.lvl === 'admin') saveViewPw(f); return; }
   if (f.dataset.form === 'login-name') { loginName(f); return; }
   if (f.dataset.form === 'login-pw') { loginPw(f); return; }
@@ -4771,6 +5111,7 @@ window.addEventListener('storage', e => {
   render();
 });
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && ui.wiz) { ui.wiz = null; ui.focusId = 'wz-open'; render(); return; }
   if (e.key === 'Escape' && ui.qa) { const t = ui.qa.tid; ui.qa = null; ui.focusId = 'to-' + t; render(); return; }
   if (e.key === 'Escape' && ui.tm) { const t = ui.tm.pid; ui.tm = null; ui.focusId = 'tc-' + t; render(); return; }
   if (e.key === 'Escape' && ui.bEdit) { const t = ui.bEdit; ui.bEdit = null; ui.focusId = 'pb-' + t; render(); return; }
