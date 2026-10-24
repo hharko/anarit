@@ -92,6 +92,9 @@ h1,h2,h3,h4,p{margin:0}
 .f{display:flex;flex-direction:column;gap:6px;min-width:0}
 .f > span,.f > label{font:600 13px/1.2 var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
 input,select{width:100%;min-width:0;min-height:42px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink);font:500 16px/1.2 var(--f-body)}
+/* the phone's own date and time fields keep a width of their own and centre their text unless told otherwise */
+input[type=datetime-local],input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;display:block;max-width:100%;box-sizing:border-box;text-align:left}
+input::-webkit-date-and-time-value{text-align:left;margin:0}
 ::placeholder{color:var(--ink-2);opacity:1}
 .rows{display:flex;flex-direction:column}
 .srow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"name short" "val target" "del del";gap:10px;align-items:end;padding:12px 0;border-bottom:1px solid var(--line)}
@@ -173,41 +176,21 @@ input,select{width:100%;min-width:0;min-height:42px;padding:8px 10px;border:1px 
 .cols2{display:flex;flex-direction:column;gap:16px;min-width:0}
 .cols2 > div{display:flex;flex-direction:column;gap:12px;min-width:0}
 .wrap{max-width:1240px;margin-inline:auto}
-html.showing .wrap{max-width:none}
+html.showing .wrap{max-width:none;height:100%}
 @media (min-width:1000px){
   .cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
   .kirj .mcards{max-width:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));align-items:start}
   .mpgrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
 }
 .mpmain,.mpside{display:flex;flex-direction:column;gap:14px;min-width:0}
-/* Turnaus: a tournament's sections on one page. On a phone one after another under their headings; on a computer each in its own box,
-   Sinun pelisi and Joukkueet beside Ottelut on top and the wide ones under them. Empty sections are small boxes at the end. */
-.tpage{display:flex;flex-direction:column;gap:28px;min-width:0}
-.ttop,.tcol{display:contents}
-.tbox{display:flex;flex-direction:column;gap:12px;min-width:0}
-.tbh{padding-bottom:8px;border-bottom:2px solid var(--ink);font-size:16px}
-.tx-omat{order:1}.tx-ottelut{order:2}.tx-kaavio{order:3}.tx-taulukko{order:4}.tx-joukkueet{order:5}.tnils{order:6}
-.tbox .sub.sect{margin-top:2px;padding-top:12px;border-top:1px solid var(--line);font:700 13px/1.2 var(--f-body);letter-spacing:.07em;color:var(--ink-2)}
-.tbox .acc{max-width:none}
-.tbox > .mlist:last-child > li:last-child{border-bottom:0;padding-bottom:0}
-.tnils{display:flex;flex-direction:column;gap:8px}
-.tnil{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;padding:12px 14px;border:1px dashed var(--line);border-radius:10px}
-.tnil .sec{font-size:15px;color:var(--ink-2)}
-.tnil span{color:var(--ink-2);font-size:14px}
-@media (min-width:760px){
-  .tpage{gap:18px}
-  .tbox{padding:14px 16px 16px;border:1px solid var(--line);border-radius:12px;background:var(--sheet)}
-  .tbh{padding-bottom:10px;border-bottom:1px solid var(--line)}
-  .tbox .accl,.tbox .bx{background:var(--ice)}
-  .tbox .bcol{flex:1 1 216px;max-width:300px}
-  .tnils{flex-direction:row;flex-wrap:wrap}
-  .tnil{flex:1 1 240px}
-}
-@media (min-width:1000px){
-  .ttop,.tcol{display:flex;flex-direction:column;gap:18px;min-width:0}
-  .ttop{order:1}
-  .ttop.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:start}
-}
+/* A tournament's sections: a row of tabs under the scoreboards, underlined like a ruler. A section with nothing yet says so in a quiet box. */
+.stabs{border-bottom:1px solid var(--line)}
+.stabs .tabsx{overflow-y:hidden}
+.stab{flex:none;white-space:nowrap;border:0;border-radius:0;background:none;color:var(--ink-2);font:700 15px/1 var(--f-display);letter-spacing:.06em;text-transform:uppercase;padding:12px 12px 10px;min-height:44px;touch-action:manipulation}
+.stab:hover{color:var(--ink)}
+.stab[aria-pressed="true"]{color:var(--ink);box-shadow:inset 0 -3px 0 var(--red)}
+@media (min-width:900px){.stab{font-size:16px;padding-inline:14px}}
+.tnone{padding:22px 16px;border:1px dashed var(--line);border-radius:10px;color:var(--ink-2);text-align:center;font-weight:600}
 .gbar{position:sticky;bottom:0;z-index:5;margin:0 -16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--ice);border-top:1px solid var(--line);box-shadow:0 -8px 18px rgb(13 26 43 / .10);display:flex;flex-direction:column;gap:6px}
 .gbar .btn{min-height:50px}
 .gbar > div:not(.rbtns) > .btn{width:100%}
@@ -245,21 +228,44 @@ html.showing .wrap{max-width:none}
 .chk.rgh b{font-weight:700}
 .rsub{padding-left:30px}
 .chk input{flex:none;width:20px;height:20px;min-height:0;padding:0;accent-color:var(--blue)}
-.bracket{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px}
-.bcol{flex:0 0 clamp(150px,calc(50% - 7px),216px);display:flex;flex-direction:column;gap:8px;min-width:0}
-.bracket.many .bcol{flex-basis:clamp(150px,43%,216px)}
-.bcm{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:12px}
-.bx{border:1px solid var(--line);border-radius:8px;background:var(--sheet);overflow:hidden}
-.bx.live{border-color:var(--red)}
-button.bx{display:block;width:100%;padding:0;text-align:left;color:inherit;font:inherit;cursor:pointer;touch-action:manipulation}
-button.bx:hover{border-color:var(--ink-2)}
-button.bx:active{background:var(--press)}
-.bxh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 6px;padding:6px 8px;font:600 13px/1.2 var(--f-body);color:var(--ink-2);border-bottom:1px solid var(--line)}
-.bxr{display:flex;align-items:center;gap:8px;padding:7px 8px;min-width:0}
-.bxr + .bxr{border-top:1px solid var(--line)}
-.bxr .mname{font-weight:500}
-.bxr.win .mname{font-weight:700}
-.bxr b{flex:none;font:800 18px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.chk.rtg input{-webkit-appearance:none;appearance:none;position:relative;width:42px;height:26px;margin:0;border:0;border-radius:999px;background:var(--line);cursor:pointer;transition:background .15s}
+.chk.rtg input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .15s}
+.chk.rtg input:checked{background:var(--ok)}
+.chk.rtg input:checked::after{transform:translateX(16px)}
+.chk.rtg.rlim{padding-left:52px}
+@media (prefers-reduced-motion:reduce){.chk.rtg input,.chk.rtg input::after{transition:none}}
+.bracket{--bkg:28px;--bkl:#3a5068;display:grid;grid-template-columns:repeat(var(--cols),minmax(150px,1fr));column-gap:var(--bkg);row-gap:2px;max-width:calc(var(--cols) * 250px + (var(--cols) - 1) * var(--bkg));overflow-x:auto;overflow-y:hidden;padding:0 1px 8px}
+.bracket.zpad{padding-bottom:64px}
+.bkh{grid-row:1;min-height:15px;font:700 12px/1.2 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.bkc{grid-row:2;display:flex;flex-direction:column;min-width:0}
+.bkm{flex:1 1 0;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0}
+.bkw{position:relative;min-width:0;margin:22px 0}
+/* the lines: half a gap out from each match, and a line down the middle of the gap joining the two that meet */
+.bkm.from > .bkw::before,.bkm.to > .bkw::after{content:"";position:absolute;top:50%;width:calc(var(--bkg) / 2 + 1px);margin-top:-1px;border-top:2px solid var(--bkl)}
+.bkm.from > .bkw::before{right:100%}
+.bkm.to > .bkw::after{left:100%}
+.bkm.join::before{content:"";position:absolute;left:calc(var(--bkg) / -2 - 1px);top:calc(var(--t) - 1px);bottom:calc(var(--b) - 1px);border-left:2px solid var(--bkl)}
+.bkp{position:relative;display:flex;flex-direction:column;gap:4px;width:100%;min-width:0;padding:0;margin:0;border:0;background:none;color:inherit;font:inherit;text-align:left}
+button.bkp{cursor:pointer;touch-action:manipulation;border-radius:10px}
+.bkmeta{position:absolute;bottom:calc(100% + 4px);left:2px;right:0;font:600 12px/1.25 var(--f-body);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bkmeta.big{font:700 13px/1.2 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.bkmeta.on{color:var(--red)}
+.bkmeta .clk{font-weight:700}
+.bkt{display:flex;align-items:center;gap:8px;min-height:40px;padding:5px 10px 5px 6px;border:1px solid var(--bkl);border-radius:10px;background:var(--sheet);min-width:0}
+.bkt .av{flex:none}
+.bkn{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.bks{flex:none;font:800 18px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.bkt.tbd{border-style:dashed;background:transparent}
+.bkt.none{background:transparent;border-style:dashed;color:var(--ink-2)}
+.bkt.none .bkn{font-weight:400}
+.bkt.win{border-color:var(--ink-2)}
+.bkt.win .bkn{font-weight:800}
+.bkt.lose{color:var(--ink-2)}
+.bkt.champ{border-color:#e2b33c;box-shadow:inset 0 0 0 1px #e2b33c}
+.bkp.live .bkt{border-color:var(--red)}
+button.bkp:hover .bkt:not(.tbd){border-color:var(--ink-2)}
+button.bkp:active .bkt{background:var(--press)}
+.bkz{position:absolute;top:calc(100% + 34px);left:0;right:0}
 .lhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}
 .hero{background:var(--board);color:var(--board-ink);border:1px solid var(--board-line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
 .hm{padding:12px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
@@ -415,6 +421,8 @@ button.tchip:hover{border-color:var(--ink-2)}
 .sw[aria-checked="true"]{outline:3px solid var(--ink)}
 .sw:focus-visible{outline:3px solid var(--focus)}
 .addp{display:flex;flex-wrap:wrap;gap:8px}
+.pwrow{display:flex;gap:8px;align-items:stretch;min-width:0}.pwrow input{flex:1 1 auto}.addp .pwrow{flex:1 1 220px}
+.kbt{flex:0 0 auto;min-width:58px;padding:0 10px;font-weight:600;letter-spacing:.02em}
 .addp input{flex:1 1 160px}
 .confirm{display:inline-flex;flex-wrap:wrap;gap:8px}
 .rowbtns{position:relative;display:flex;flex-wrap:wrap;gap:8px}
@@ -559,6 +567,14 @@ span.cardb .nm{text-decoration:none}
 .ad .adedit{align-self:flex-start}
 .ad.empty .adedit{align-self:center}
 .ad.edit{min-height:0;justify-content:flex-start}
+.adbtns{display:flex;flex-wrap:wrap;gap:8px}
+.ad.empty .adbtns{justify-content:center}
+.ad.hid{border:2px dashed var(--warn)}
+.ad .adhid{align-self:flex-start;padding:3px 8px;border-radius:999px;background:var(--warn);color:#201503;font:700 12px/1.2 var(--f-body)}
+.ad.empty .adhid{align-self:center;color:#201503}
+.ads2 > :only-child{grid-column:1 / -1}
+.hvis{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;color:var(--ink-2)}
+.hvis.off{border-color:var(--warn);color:var(--ink)}
 .ad textarea{width:100%;min-height:80px;resize:vertical;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--ice);color:var(--ink)}
 .acc .mtime{width:2.2em}
 .chev{flex:none;width:9px;height:9px;margin:0 3px 0 2px;border-right:2.5px solid var(--ink-2);border-bottom:2.5px solid var(--ink-2);transform:rotate(-45deg);transition:transform .15s}
@@ -574,6 +590,7 @@ span.cardb .nm{text-decoration:none}
 .wl{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:6px;border:1px solid var(--line);font:800 16px/1 var(--f-display);color:var(--ink-2)}
 .wl.v{background:var(--ok);border-color:var(--ok);color:var(--sheet)}
 .wl.h{background:var(--press);border-color:var(--press);color:var(--ink)}
+.f.sectl{margin-top:4px;padding-top:14px;border-top:2px solid var(--ink)}
 .sub.sect{margin-top:4px;padding-top:14px;border-top:2px solid var(--ink);font:700 16px/1.2 var(--f-display);letter-spacing:.09em;color:var(--ink)}
 #v-asetukset > .seg.wide,#v-pelaajat .seg.wide{max-width:640px}
 .warnmsg{border-left:3px solid var(--warn);padding-left:10px;font-size:14px;font-weight:600;max-width:65ch}
@@ -625,20 +642,22 @@ html.showing body{background:var(--board);padding:0}
 .sn-c .clk{color:var(--board-ink);font-weight:700}
 .sn-g{font:600 .8em/1.2 var(--f-body)}
 .sn-w{font:800 3.2em/1.02 var(--f-display);letter-spacing:.03em;text-transform:uppercase;overflow-wrap:anywhere}
-.sb{flex:1 1 auto;min-width:0;display:flex;gap:1.2em}
-.sb.s4{font-size:.86em}.sb.s8{font-size:.62em}.sb.s16{font-size:.4em}
-.sb-c{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:.5em}
 .sb-h{font:700 .7em/1.1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--board-dim)}
-.sb-m{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-around;gap:.6em}
-.sb-x{border:1px solid var(--board-line);border-radius:.4em;overflow:hidden}
-.sb-x.live{border-color:var(--board-accent)}
-.sb-l{display:block;padding:.3em .6em 0;font:700 .55em/1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--board-dim)}
-.sb-r{display:flex;align-items:center;gap:.5em;padding:.34em .6em;min-width:0;font-weight:500}
-.sb-r + .sb-r{border-top:1px solid var(--board-line)}
-.sb-r > span:not(.av){flex:1 1 0;min-width:0;overflow-wrap:anywhere}
-.sb-r.tbd{color:var(--board-dim);font-weight:400}
-.sb-r.win{font-weight:700}
-.sb-r b{flex:none;font:800 1.2em/1 var(--f-display);font-variant-numeric:tabular-nums}
+.show .bracket{--bkg:1.6em;--bkl:#3b5068;flex:1 1 auto;align-self:stretch;width:100%;max-width:none;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-template-rows:auto 1fr;row-gap:.1em;overflow:visible;padding:0}
+.show .bracket.zpad{padding-bottom:2.6em}
+.show .bkh{min-height:1.2em;font-size:.6em;color:var(--board-dim)}
+.show .bkw{margin:1em 0}
+.show .bkp{gap:.2em}
+.show .bkmeta{bottom:calc(100% + .35em);font:600 .55em/1.2 var(--f-body);color:var(--board-dim)}
+.show .bkmeta.big{font:700 .62em/1.15 var(--f-display);letter-spacing:.12em;color:var(--board-ink)}
+.show .bkmeta.on{color:var(--board-accent)}
+.show .bkt{min-height:2.1em;gap:.45em;padding:.25em .55em .25em .3em;border-radius:.5em;border-color:var(--bkl);background:#0c1520}
+.show .bkt.tbd,.show .bkt.none{background:transparent}
+.show .bkt.win{border-color:var(--board-dim)}
+.show .bkt.lose{color:var(--board-dim)}
+.show .bkp.live .bkt{border-color:var(--board-accent)}
+.show .bks{font-size:1.2em}
+.show .bkz{top:calc(100% + 1.5em)}
 .shtbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .shtbl th{padding:.3em .5em;text-align:right;font:700 .55em/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--board-dim);border-bottom:2px solid var(--board-line)}
 .shtbl td{padding:.36em .5em;text-align:right;border-bottom:1px solid var(--board-line);white-space:nowrap}
@@ -691,20 +710,49 @@ const PHOTO_RE = /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
 const START_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;   // a tournament's start, local time, as a datetime-local field gives it
 const startMs = T => { const x = T && START_RE.test(T.start || '') ? T.start : ''; if (!x) return 0; const d = new Date(+x.slice(0, 4), +x.slice(5, 7) - 1, +x.slice(8, 10), +x.slice(11, 13), +x.slice(14, 16)); return isNaN(d.getTime()) ? 0 : d.getTime(); };
 
-// Roles are named sets of tabs and rights. Katsoja and Mod are the starting set and can be edited; Admin is fixed and may do everything.
+// Roles are named sets of tabs and rights. There are four, ready made: Admin, Mod, Merkitsijä and Ei oikeuksia. Valvomo can change
+// what each gives, but none can be removed and no new ones are made.
+// Admin: every tab and right and the settings other than Roolit and Tietojen nollaus, adding users and giving them roles among them.
+// Mod: the matches: making and removing them, running them and recording and fixing their entries; not the tournaments themselves.
+// Merkitsijä: records goals and penalties of both teams, but only in a match he plays in himself, and cannot change what is recorded.
+// The Admin role: Valvomo chooses its tabs, tournament sections and rights; until then it has them all.
+function normAdminRole(a) {
+  a = a && typeof a === 'object' ? a : {};
+  return { tabs: Array.isArray(a.tabs) ? USER_TABS.filter(t => a.tabs.indexOf(t) >= 0) : USER_TABS.slice(), secs: normSecs(a.secs), rights: Array.isArray(a.rights) ? expandRights(a.rights) : RIGHTS.map(r => r[0]) };
+}
+// The ready-made roles other than Admin, from the fewest rights up; written out, as the page's state is made before the lists of rights.
+const BUILTIN = { katsoja: 'Ei oikeuksia', merk: 'Merkitsijä', mod: 'Mod' };
 function defaultRoles() {
-  return [{ id: 'katsoja', name: 'Ei admin-oikeuksia', tabs: ['kaynnissa'], rights: [] },
-    { id: 'mod', name: 'Mod', tabs: ['kaynnissa', 'turnaukset', 'joukkueet', 'pelaajat'], rights: ['kirj', 'kmuok', 'tuur', 'kulku', 'tauot', 'aika', 'ottelu', 'turnaus', 'tasetus', 'joukkue', 'kokoonpano', 'ptiedot'] }];   // every part of every group (the page's state is made before RIGHT_GROUPS exists)
+  return [{ id: 'katsoja', name: 'Ei oikeuksia', tabs: ['kaynnissa'], rights: [] },
+    { id: 'merk', name: 'Merkitsijä', tabs: ['kaynnissa'], rights: ['kirj', 'kirjo'] },
+    { id: 'mod', name: 'Mod', tabs: ['kaynnissa', 'valvomo', 'turnaukset'], rights: ['kirj', 'kmuok', 'tuur', 'kulku', 'tauot', 'aika', 'ottelu'] }];
 }
+// The roles as stored, put in order: the ready-made ones first (set to what they now are, the first time this version reads them),
+// then any role made by hand in an earlier version, which keeps working until it is removed.
+function normRoles(c, d) {
+  const old = Array.isArray(c.roles) ? c.roles.filter(r => r && typeof r.id === 'string' && r.id && r.id !== 'admin' && r.id !== 'super').map(normRole) : [];
+  const fresh = c.rolesV !== 2, made = d.roles.map(normRole);
+  return made.map(b => (!fresh && old.find(r => r.id === b.id)) || b).concat(old.filter(r => !BUILTIN[r.id]));
+}
+// Recording in one's own matches was a setting of its own ("Kirjaa ottelussa, jossa pelaa itse"); it is now the recording right
+// with "Vain omat ottelut" on, unless the role records in every match anyway.
 function normRole(r) {
-  return { id: r.id, name: r.id === 'katsoja' && (r.name === 'Katsoja' || r.name === 'Vain katselu') ? 'Ei admin-oikeuksia' : String(r.name || 'Rooli').slice(0, 20), tabs: Array.isArray(r.tabs) ? r.tabs.filter(t => USER_TABS.indexOf(t) >= 0) : [],
-    rights: expandRights(r.rights), secs: normSecs(r.secs), self: r.self === true, goal: r.goal === 'own' || r.goal === 'all' ? r.goal : '' };
+  let rights = expandRights(r.rights);
+  if ((r.goal === 'own' || r.goal === 'all') && rights.indexOf('kirj') < 0) rights = expandRights(rights.concat(['kirj', 'kirjo']));
+  return { id: r.id, name: BUILTIN[r.id] || String(r.name || 'Rooli').slice(0, 20), tabs: Array.isArray(r.tabs) ? r.tabs.filter(t => USER_TABS.indexOf(t) >= 0) : [],
+    rights, secs: normSecs(r.secs), self: r.self === true, goal: '' };
 }
-// Superadmin: everything an Admin has, and the settings parts the main account ADMIN hands to it. Only ADMIN gives the role.
+// The main account: stored as ADMIN, shown and signed in to as Valvomo. Superadmin, a role of earlier versions, now counts as Admin.
+const MAIN = 'Valvomo';
+// The settings parts an admin has; Roolit and Tietojen nollaus are Valvomo's alone.
+const ADMIN_PARTS = ['pisteet', 'tunnukset', 'kirjautuminen', 'varmuuskopiot', 'loki'];
 const SUPER_PARTS = ['pisteet', 'roolit', 'tunnukset', 'kirjautuminen', 'varmuuskopiot', 'loki', 'nollaus'];
 const SUPER_DEFAULT = ['pisteet', 'roolit', 'tunnukset', 'kirjautuminen', 'varmuuskopiot', 'loki'];
 function defaultConfig() {
-  return { title: '', titleOwn: false, superSecs: SUPER_DEFAULT.slice(), activeT: '', goalStat: '', assistStat: '', winStat: '', roles: defaultRoles(), stats: [
+  // written out, as the page's state is made before the lists of tabs and rights
+  const adminRole = { tabs: ['kaynnissa', 'valvomo', 'turnaukset', 'joukkueet', 'pelaajat'], secs: ['valvomo', 'omat', 'kaavio', 'taulukko', 'ottelut', 'joukkueet'],
+    rights: ['kirj', 'kmuok', 'tuur', 'kulku', 'tauot', 'aika', 'ottelu', 'turnaus', 'tasetus', 'joukkue', 'kokoonpano', 'ptiedot'] };
+  return { title: '', titleOwn: false, superSecs: SUPER_DEFAULT.slice(), adminRole, rolesV: 2, activeT: '', goalStat: '', assistStat: '', winStat: '', roles: defaultRoles(), stats: [
     { id: 'maali', name: 'Maali', short: 'M', value: 2, target: 'player' },
     { id: 'syotto', name: 'Syöttö', short: 'S', value: 1, target: 'player' },
     { id: 'jaahy', name: 'Jäähy', short: 'J', value: -1, target: 'player' },
@@ -716,7 +764,7 @@ function defaultConfig() {
 const state = { config: defaultConfig(), teams: {}, players: {}, tournaments: {}, users: {} };
 const photos = {};   // 't-<team id>' / 'p-<player id>' -> small data: URL, kept apart from the score documents
 let armTimer = 0;
-const ui = { tab: 'kaynnissa', confirm: null, backend: 'loading', ready: false, readOnly: false, err: null, subError: false, focusId: null, selectOnFocus: false, player: null, playerErr: null, team: null, teamErr: null, teamTab: 'kortti', playerTab: 'kortti', photoErr: null, tour: null, tourTab: 'ottelut', liveTab: '', newMatch: false, tourErr: null, matchErr: null, genErr: null, tourMatch: null, liveMatch: null, goal: null, note: null, kfilter: null, show: null, showIdx: 0, showT: 0, showPaused: false, me: null, login: null, loginErr: null, pwMsg: null, owner: false, fb: { ready: !NET, user: null, email: '', pid: '', lvl: '' }, gate: GATED ? 'checking' : 'open', gateErr: null, gateBusy: false, access: {}, loginOpen: false, pend: {}, seen: {} };
+const ui = { tab: 'kaynnissa', confirm: null, backend: 'loading', ready: false, readOnly: false, err: null, subError: false, focusId: null, selectOnFocus: false, player: null, playerErr: null, team: null, teamErr: null, teamTab: 'kortti', playerTab: 'kortti', photoErr: null, tour: null, tourTab: 'ottelut', liveTab: '', newMatch: false, tourErr: null, matchErr: null, genErr: null, tourMatch: null, liveMatch: null, goal: null, note: null, kfilter: null, show: null, showIdx: 0, showT: 0, showPaused: false, me: null, login: null, loginErr: null, pwMsg: null, owner: false, fb: { ready: !NET, user: null, email: '', pid: '', lvl: '' }, gate: GATED ? 'checking' : 'open', gateErr: null, gateBusy: false, access: {}, loginOpen: false, pend: {}, seen: {}, abc: false };
 const loaded = { config: false, teams: false, players: false, users: false };
 let db = null;
 let fb = null;   // the Firebase layer of the stand-alone site
@@ -751,6 +799,7 @@ const autoShort = n => (String(n).trim()[0] || '?').toUpperCase();
 const lcFirst = s => s.charAt(0).toLowerCase() + s.slice(1);
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } };
+ui.abc = lsGet('anarit.abc') === '1';   // password fields on the whole keyboard rather than the number pad, as chosen on this device
 
 function normTeam(t) { t = t || {}; return { name: String(t.name || 'Joukkue'), color: COLOR[t.color] ? t.color : 'red', order: +t.order || 0 }; }
 // A profile is a player (Pelaaja: plays on a team or stands in, and is in the scoring tables) or not ('katsoja').
@@ -782,17 +831,18 @@ function normConfig(c) {
       }))
     : d.stats;
   // the old default title Änärit counts as not written, so the header stays empty until a title is written in the settings
-  return { title: typeof c.title === 'string' && c.title.trim() && (c.titleOwn || c.title.trim() !== 'Änärit') ? c.title.trim() : '', titleOwn: !!c.titleOwn, superSecs: Array.isArray(c.superSecs) ? SUPER_PARTS.filter(x => c.superSecs.indexOf(x) >= 0) : d.superSecs, activeT: typeof c.activeT === 'string' ? c.activeT : '', goalStat: typeof c.goalStat === 'string' ? c.goalStat : '', assistStat: typeof c.assistStat === 'string' ? c.assistStat : '', winStat: typeof c.winStat === 'string' ? c.winStat : '', stats,
-    roles: Array.isArray(c.roles) ? c.roles.filter(r => r && typeof r.id === 'string' && r.id && r.id !== 'admin' && r.id !== 'super').map(normRole) : d.roles, ads: normAds(c.ads) };
+  return { title: typeof c.title === 'string' && c.title.trim() && (c.titleOwn || c.title.trim() !== 'Änärit') ? c.title.trim() : '', titleOwn: !!c.titleOwn, superSecs: Array.isArray(c.superSecs) ? SUPER_PARTS.filter(x => c.superSecs.indexOf(x) >= 0) : d.superSecs, adminRole: c.rolesV === 2 ? normAdminRole(c.adminRole) : d.adminRole, rolesV: 2, activeT: typeof c.activeT === 'string' ? c.activeT : '', goalStat: typeof c.goalStat === 'string' ? c.goalStat : '', assistStat: typeof c.assistStat === 'string' ? c.assistStat : '', winStat: typeof c.winStat === 'string' ? c.winStat : '', stats,
+    roles: normRoles(c, d), ads: normAds(c.ads), homeHidden: c.homeHidden === true };
 }
 // The front page's ad and announcement slots: a title, a few lines and an optional link each. An empty slot waits for content.
+// An admin can hide a slot from everyone but the admins.
 const AD_SLOTS = 3;
 function normAds(a) {
   const out = [];
   for (let i = 0; i < AD_SLOTS; i++) {
     const x = Array.isArray(a) && a[i] && typeof a[i] === 'object' ? a[i] : {};
     const link = typeof x.link === 'string' && /^https?:\/\/[^\s"'<>]+$/.test(x.link) ? x.link.slice(0, 300) : '';
-    out.push({ title: String(x.title || '').slice(0, 60), text: String(x.text || '').slice(0, 400), link });
+    out.push({ title: String(x.title || '').slice(0, 60), text: String(x.text || '').slice(0, 400), link, hidden: x.hidden === true });
   }
   return out;
 }
@@ -813,7 +863,7 @@ function normEv(e) {
   if (!ts) return null;
   // t is the game clock at the event, which stands still during breaks and pauses; events saved before pauses existed have none
   const t = typeof e.t === 'number' && e.t >= 0 ? { t: Math.floor(e.t) } : {};
-  if (typeof e.by === 'string' && e.by) t.by = e.by.slice(0, 40);   // who recorded it
+  if (typeof e.by === 'string' && e.by) t.by = (e.by === 'ADMIN' ? MAIN : e.by).slice(0, 40);   // who recorded it (the main account was called ADMIN before)
   if (e.k === 'b') return Object.assign({ id: e.id, ts, k: 'b', min: posInt(e.min) }, t);
   if (e.k === 'x') return typeof e.st === 'string' && e.st ? Object.assign({ id: e.id, ts, k: 'x', s: e.s === 'a' ? 'a' : 'h', st: e.st, p: typeof e.p === 'string' ? e.p : '' }, t) : null;   // a point of another kind, for a player or for the whole team
   if (e.k === 's' || e.k === 'u') return typeof e.p === 'string' && e.p ? Object.assign({ id: e.id, ts, k: e.k, s: e.s === 'a' ? 'a' : 'h', p: e.p }, t) : null;   // a staff member comes in to stand in on one side ('s'), or is taken out ('u')
@@ -904,13 +954,21 @@ function normTour(t) {
    An account asks for its password only when one has been set; without one the name alone lets it in. The password check runs in the page itself, so it is a light lock between friends, not real security. */
 // Rights come in four groups. A role saved before the groups were split holds the group's name, which stands for all of its parts.
 const RIGHT_GROUPS = [
-  ['tulokset', 'Kirjaus', [['kirj', 'Kirjata maaleja ja muita merkintöjä'], ['kmuok', 'Muokata ja poistaa kirjauksia, myös perua viimeisin maali'], ['tuur', 'Lisätä ja poistaa tuuraajia']]],
-  ['ajat', 'Ottelun kulku', [['kulku', 'Aloittaa, jatkaa ja päättää otteluita'], ['tauot', 'Keskeyttää otteluita ja pitää erätauot'], ['aika', 'Muuttaa otteluiden alkamisaikoja']]],
+  ['tulokset', 'Kirjaus', [['kirj', 'Kirjata maaleja ja jäähyjä'], ['kmuok', 'Muokata kirjauksia'], ['tuur', 'Lisätä ja poistaa tuuraajia']]],
+  ['ajat', 'Ottelut', [['kulku', 'Aloittaa ja päättää otteluita'], ['tauot', 'Keskeyttää ja pitää erätaukoja'], ['aika', 'Muuttaa aikatauluja']]],
   ['ottelut', 'Ottelut ja turnaukset', [['ottelu', 'Luoda ja poistaa otteluita'], ['turnaus', 'Luoda ja poistaa turnauksia'], ['tasetus', 'Muuttaa turnauksen asetuksia: nimi, erätauko, joukkueet ja pelaajat']]],
   ['profiilit', 'Pelaajat ja joukkueet', [['joukkue', 'Luoda, muokata ja poistaa joukkueita'], ['kokoonpano', 'Siirtää pelaajia joukkueisiin ja pois'], ['ptiedot', 'Muokata pelaajien nimeä, kuvaa ja väriä']]]];
 const RIGHTS = [].concat(...RIGHT_GROUPS.map(g => g[2]));
 const GROUP_PARTS = Object.fromEntries(RIGHT_GROUPS.map(g => [g[0], g[2].map(x => x[0])]));
-const expandRights = list => { const out = []; (Array.isArray(list) ? list : []).forEach(x => (GROUP_PARTS[x] || (RIGHTS.some(y => y[0] === x) ? [x] : [])).forEach(y => { if (out.indexOf(y) < 0) out.push(y); })); return out; };
+// Three rights can be limited to the matches the account plays in himself: a flag kept with the rights, never alone.
+const LIMIT_OF = { kirj: 'kirjo', kulku: 'kulkuo', tauot: 'tauoto' };
+const LIMITS = Object.keys(LIMIT_OF).map(k => LIMIT_OF[k]);
+const expandRights = list => {
+  const src = Array.isArray(list) ? list : [], out = [];
+  src.forEach(x => (GROUP_PARTS[x] || (RIGHTS.some(y => y[0] === x) ? [x] : [])).forEach(y => { if (out.indexOf(y) < 0) out.push(y); }));
+  Object.keys(LIMIT_OF).forEach(k => { if (out.indexOf(k) >= 0 && src.indexOf(LIMIT_OF[k]) >= 0) out.push(LIMIT_OF[k]); });
+  return out;
+};
 // The sections of a tournament's page a role sees. Yhteenveto is there for everyone, Asetukset for whoever may change the tournament.
 const SECS = [['valvomo', 'Valvomo'], ['omat', 'Sinun pelisi'], ['kaavio', 'Kaavio'], ['taulukko', 'Tulostaulu'], ['ottelut', 'Ottelut'], ['joukkueet', 'Joukkueet']];
 const ALL_SECS = SECS.map(x => x[0]);
@@ -921,17 +979,16 @@ const USER_TABS = ['kaynnissa', 'valvomo', 'turnaukset', 'joukkueet', 'pelaajat'
 function normUser(u) {
   u = u || {};
   return { on: u.on !== false, tabs: Array.isArray(u.tabs) ? u.tabs.filter(t => USER_TABS.indexOf(t) >= 0) : ['kaynnissa'],
-    rights: expandRights(u.rights), secs: normSecs(u.secs), role: typeof u.role === 'string' ? u.role : '', goal: u.goal === 'own' || u.goal === 'all' ? u.goal : '', self: u.self === true || (Array.isArray(u.rights) && u.rights.indexOf('oma') >= 0), salt: typeof u.salt === 'string' ? u.salt : '', hash: typeof u.hash === 'string' ? u.hash : '', pwReq: u.pwReq === true, g: u.g === true };
+    rights: expandRights(u.rights), secs: normSecs(u.secs), role: u.role === 'super' ? 'admin' : typeof u.role === 'string' ? u.role : '', goal: u.goal === 'own' || u.goal === 'all' ? u.goal : '', self: u.self === true || (Array.isArray(u.rights) && u.rights.indexOf('oma') >= 0), salt: typeof u.salt === 'string' ? u.salt : '', hash: typeof u.hash === 'string' ? u.hash : '', pwReq: u.pwReq === true, g: u.g === true };
 }
 // What an account may see and do: from its role, or from its own settings when the role is "Mukautettu" (empty).
 // A role may also let everyone in it edit their own name, picture and colour, and report goals in their own match;
 // an account can be given these on its own as well, and whichever allows more counts.
 function roleOf(u) {
-  if (u.role === 'super') return { admin: true, sup: true, name: 'Superadmin', tabs: USER_TABS, rights: RIGHTS.map(r => r[0]), secs: ALL_SECS, self: true, goal: moreGoal(u.goal, '') };
-  if (u.role === 'admin') return { admin: true, name: 'Admin', tabs: USER_TABS, rights: RIGHTS.map(r => r[0]), secs: ALL_SECS, self: true, goal: moreGoal(u.goal, '') };
+  if (u.role === 'admin' || u.role === 'super') { const A = state.config.adminRole; return { admin: true, name: 'Admin', tabs: A.tabs, rights: A.rights, secs: A.secs, self: true, goal: '' }; }
   if (!u.role) return { admin: false, name: 'Mukautettu', tabs: u.tabs, rights: u.rights, secs: u.secs || ALL_SECS, self: !!u.self, goal: u.goal || '' };
   const r = state.config.roles.find(x => x.id === u.role);
-  return r ? { admin: false, name: r.name, tabs: r.tabs, rights: r.rights, secs: r.secs, self: !!(r.self || u.self), goal: moreGoal(r.goal, u.goal) }
+  return r ? { admin: false, name: r.name, tabs: r.tabs, rights: r.rights, secs: r.secs, self: true, goal: r.goal || '' }
     : { admin: false, name: 'Poistettu rooli', tabs: ['kaynnissa'], rights: [], secs: ALL_SECS, self: !!u.self, goal: u.goal || '' };
 }
 const hasRights = u => { const r = roleOf(u); return r.admin || r.rights.length > 0; };
@@ -943,36 +1000,46 @@ const isGuest = () => { const m = me(); return !m || !!m.guest; };
 // Who is using the page right now, or null when a login is needed. Until ADMIN has a password there is no login and everyone is ADMIN.
 // On the stand-alone site ADMIN and the accounts marked for Google count only while Google says that person is signed in.
 function me() {
-  if (!authOn()) return { id: 'ADMIN', admin: true, name: 'ADMIN' };
+  if (!authOn()) return { id: 'ADMIN', admin: true, name: MAIN };
   const x = ui.me, none = NET ? guest() : null;
   if (!x) return none;
   if (NET && (x.id === 'ADMIN' || (state.users[x.id] && state.users[x.id].g))) {
     if (x.tok !== 'g' || !ui.fb.user || ui.fb.pid !== x.id) return none;
-    if (x.id === 'ADMIN') return { id: 'ADMIN', admin: true, name: 'ADMIN' };
-  } else if (x.id === 'ADMIN') return x.tok === state.users.ADMIN.hash ? { id: 'ADMIN', admin: true, name: 'ADMIN' } : null;
+    if (x.id === 'ADMIN') return { id: 'ADMIN', admin: true, name: MAIN };
+  } else if (x.id === 'ADMIN') return x.tok === state.users.ADMIN.hash ? { id: 'ADMIN', admin: true, name: MAIN } : null;
   const u = state.users[x.id], q = state.players[x.id];
   if (!u || !u.on || !q) return none;
   const r = roleOf(u);
   if (x.tok !== 'g' && u.hash && x.tok !== u.hash) return none;   // a password that was set or changed signs the account out everywhere
   if (x.tok !== 'g' && u.pwReq && !u.hash) return none;           // a password is required now: it is made at the next sign-in
-  return { id: x.id, admin: r.admin, sup: !!r.sup, name: q.name, rights: r.rights, tabs: r.tabs, secs: r.secs, self: r.self, goal: r.goal, role: r.name };
+  // recording limited to his own matches works as a Merkitsijä's does: both teams' goals and penalties, in a match he plays in
+  const ownRec = r.rights.indexOf('kirj') >= 0 && r.rights.indexOf('kirjo') >= 0;
+  return { id: x.id, admin: r.admin, name: q.name, rights: ownRec ? r.rights.filter(k => k !== 'kirj') : r.rights, tabs: r.tabs, secs: r.secs, self: r.self, goal: ownRec ? 'all' : r.goal, role: r.name };
 }
-// On the site the database takes the changes to teams, players and tournaments from everyone who opened the page with its password,
-// so a Mod's rights work by name alone; the page checks each right. The settings need the main account ADMIN, or a Superadmin for
-// the parts ADMIN has handed to that role, signed in with Google.
+// On the site the database takes the changes to teams, players, tournaments and ordinary accounts from everyone who opened the page
+// with its password, so these rights work by name alone; the page checks each right. The other settings, and the accounts of ADMIN and
+// the Superadmins, need the main account ADMIN, or a Superadmin for the parts ADMIN has handed to that role, signed in with Google.
 // A right's own name asks for that part; a group's name asks for any part of the group (used to decide what to show).
 function can(right) {
   const m = me();
   if (!m || ui.readOnly) return false;
   if (right === 'pelattava') return m.admin || m.rights.indexOf('tasetus') >= 0;
   if (right === 'main') return m.id === 'ADMIN';   // the main account ADMIN: most of the settings are its alone, not every admin's
-  // a settings part: the main account's, and a Superadmin's when ADMIN has handed that part to the role
-  if (right.indexOf('set:') === 0) return m.id === 'ADMIN' || (!!m.sup && state.config.superSecs.indexOf(right.slice(4)) >= 0);
-  if (m.admin) return true;
+  // a settings part: Valvomo's, and an admin's other than Roolit and Tietojen nollaus
+  if (right.indexOf('set:') === 0) return m.id === 'ADMIN' || (!!m.admin && ADMIN_PARTS.indexOf(right.slice(4)) >= 0);
+  // Valvomo has every right; an admin has the rights Valvomo has given the Admin role
+  if (m.admin && (m.id === 'ADMIN' || right === 'admin')) return true;
   if (right === 'admin') return false;
   return GROUP_PARTS[right] ? GROUP_PARTS[right].some(x => can(x)) : m.rights.indexOf(right) >= 0;
 }
-const canSec = sec => { const m = me(); return !!m && (m.admin || !m.secs || m.secs.indexOf(sec) >= 0); };
+// A right in one match: starting, ending and the breaks may be limited to the account's own matches (recording so limited is set up in me()).
+function canMatch(right, T, m) {
+  if (!can(right)) return false;
+  const u = me(), lim = LIMIT_OF[right];
+  if (!lim || !u || u.id === 'ADMIN' || (u.rights || []).indexOf(lim) < 0) return true;
+  return !!T && !!m && !!mySide(T, m, u.id);
+}
+const canSec = sec => { const m = me(); return !!m && (m.id === 'ADMIN' || !m.secs || m.secs.indexOf(sec) >= 0); };
 function setSession(id, tok) {
   const same = ui.me && ui.me.id === id;
   ui.me = id ? { id, tok: tok || '' } : null; lsSet(LS_ME, id ? JSON.stringify(ui.me) : '');
@@ -980,7 +1047,7 @@ function setSession(id, tok) {
   if (same) return;
   // a different person starts from the lists, not from whatever the previous one had open
   ui.team = null; ui.player = null; ui.tour = null; ui.tourMatch = null; ui.liveMatch = null; ui.kfilter = null; ui.setView = ''; ui.own = false; ui.cards = []; ui.nameErr = null; ui.goal = null; ui.note = null; ui.newMatch = false; ui.confirm = null;
-  ui.teamTab = 'kortti'; ui.playerTab = 'kortti'; ui.tourTab = ''; ui.liveTab = ''; ui.liveOpen = {}; ui.vmBack = false;
+  ui.teamTab = 'kortti'; ui.playerTab = 'kortti'; ui.tourTab = 'ottelut'; ui.liveTab = ''; ui.liveOpen = {}; ui.vmBack = false;
   // someone who signs in may be the first on the page who can save, so the matches the bracket has made ready are added now
   if (id && ui.ready) syncTours();
 }
@@ -993,25 +1060,26 @@ function hashPw(salt, pw, scheme) {
 // What each action, field, form and confirmation needs. Anything not listed is plain viewing or navigation.
 const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'note-save': 'kirj', 'note-cancel': 'kirj', 'goal-new': 'kirj', 'goal-edit': 'kmuok', 'goal-p': 'kirj', 'goal-a': 'kirj', 'goal-noa': 'kirj', 'goal-save': 'kirj', 'goal-cancel': 'kirj',
   'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
-  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'role-goal': 'set:roolit', 'ad-edit': 'admin', 'ad-clear': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-goal': 'set:tunnukset', 'acct-self': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'add-role': 'set:roolit', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
-const FIELD_NEED = { 'super-sec': 'main', 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
-  'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'role-self': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
+  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
+const FIELD_NEED = { 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
+  'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
 const FORM_NEED = { 'view-pw': 'set:kirjautuminen', 'ad-save': 'admin', 'add-team': 'joukkue', 'add-player': 'admin', 'new-player': 'admin', 'add-tour': 'turnaus', 'add-match': 'ottelu', 'set-pw': 'set:tunnukset', 'add-acc': 'set:kirjautuminen' };
 const KEY_NEED = { 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
 // ADMIN's account and every Superadmin's are the main account's to change; a Superadmin cannot touch them, nor give the role.
-const isSuper = id => !!state.users[id] && state.users[id].role === 'super';
-const acctLocked = id => !can('main') && (id === 'ADMIN' || isSuper(id));
+const acctLocked = id => !can('main') && id === 'ADMIN';
 function mayKey(key) {
   const k = String(key || '').split(':')[0], kid = String(key || '').split(':').slice(1).join(':');
   if ((k === 'del-player' || k === 'del-user') && acctLocked(kid)) return false;
   if (k === 'reset-admin') return ui.owner;    // only the page's owner can clear a forgotten ADMIN password
+  if (MATCH_ACTS.indexOf(k) >= 0) { const p = kid.split('|'), T = state.tournaments[p[0]], m = T && T.matches[p[1]]; return !!m && canMatch(KEY_NEED[k], T, Object.assign({ id: p[1] }, m)); }
   return KEY_NEED[k] ? can(KEY_NEED[k]) : true;
 }
-const ownOnly = () => { const m = me(); if (!m || m.admin || m.id === 'ADMIN' || m.guest || ui.readOnly) return ''; return m.self ? m.id : ''; };   // a switch on the player's own account
+// Everyone signed in by name changes his own name, picture and colour himself.
+const ownOnly = () => { const m = me(); if (!m || m.admin || m.id === 'ADMIN' || m.guest || ui.readOnly) return ''; return state.players[m.id] ? m.id : ''; };
 function mayAct(a, d) {
-  if ((a === 'acct' || a === 'acct-goal' || a === 'acct-self' || a === 'acct-pwreq') && acctLocked(d.id)) return false;
-  if (a === 'role-open' && d.id === 'super' && !can('main')) return false;
+  if ((a === 'acct' || a === 'acct-goal' || a === 'acct-pwreq') && acctLocked(d.id)) return false;
+  if (a === 'role-open' && (d.id === 'super' || d.id === 'admin') && !can('main')) return false;
   if (a === 'card' && isGuest()) return false;   // a guest sees the front page only
   if (a === 'ask' || a === 'arm' || a === 'yes') return mayKey(d.key);
   if (a === 'goal-new') { const T = state.tournaments[d.tour], m = T && T.matches[d.id]; if (m && goalWait(m) > nowMs()) return false; }   // fifteen seconds between goals
@@ -1019,6 +1087,8 @@ function mayAct(a, d) {
   if (['goal-p', 'goal-a', 'goal-noa', 'goal-save', 'goal-cancel'].indexOf(a) >= 0 && ui.goal && ui.goal.ev) return can('kmuok');
   const need = a === 'color' ? (d.kind === 'p' ? 'ptiedot' : 'joukkue') : a === 'photo-del' ? (String(d.key || '').indexOf('p-') === 0 ? 'ptiedot' : 'joukkue') : ACT_NEED[a];
   if (!need || can(need)) return true;
+  if (a === 'note-new') return ownAll(d.tour, d.id);
+  if (['note-side', 'note-p', 'note-save', 'note-cancel'].indexOf(a) >= 0) return !!ui.note && ownAll(ui.note.tid, ui.note.mid);
   if (a === 'goal-new') return ownLive(d.tour, d.id) && (myGoalScope() === 'all' || (d.side === 'a' ? 'a' : 'h') === mySide(state.tournaments[d.tour], state.tournaments[d.tour].matches[d.id], me().id));
   if (['goal-p', 'goal-a', 'goal-noa', 'goal-save', 'goal-cancel'].indexOf(a) >= 0) {
     const g = ui.goal;
@@ -1049,6 +1119,8 @@ function myGoalScope() {
   const u = me();
   return u && u.id !== 'ADMIN' && !u.guest ? u.goal || '' : '';
 }
+// A Merkitsijä (or another role recording everything in one's own match) also records penalties and the other kinds of point there.
+const ownAll = (tid, mid) => myGoalScope() === 'all' && ownLive(tid, mid);
 // The side ('h' or 'a') a profile plays on in a match: their own team's, or the one they stand in for. Empty when they are not in it.
 function mySide(T, m, pid) {
   const q = state.players[pid];
@@ -1065,8 +1137,10 @@ function allowedTabs() {
   const m = me(), T = activeTour();
   if (!m) return [];
   // Etusivu is everyone's, whatever the role; the rest come from the role
-  const base = m.admin ? (ui.readOnly ? ['etusivu', 'kaynnissa'] : TABS) : ['etusivu'].concat(TABS.filter(t => t !== 'etusivu' && m.tabs.indexOf(t) >= 0));
-  return base.filter(t => t !== 'kaynnissa' || T);
+  const all = m.id === 'ADMIN';   // an admin's tabs come from the Admin role, with the settings always there
+  const base = m.admin && ui.readOnly ? ['etusivu', 'kaynnissa'] : all ? TABS : ['etusivu'].concat(TABS.filter(t => t !== 'etusivu' && (m.tabs.indexOf(t) >= 0 || (m.admin && t === 'asetukset'))));
+  // an admin can hide Etusivu from everyone but the admins
+  return base.filter(t => (t !== 'kaynnissa' || T) && (t !== 'etusivu' || !state.config.homeHidden || (m.admin && !ui.readOnly)));
 }
 const byOrder = (a, b) => (a.order - b.order) || (a.id < b.id ? -1 : 1);
 const toursSorted = () => Object.keys(state.tournaments).map(id => Object.assign({ id }, state.tournaments[id])).sort((a, b) => (b.order - a.order) || (a.id < b.id ? -1 : 1));
@@ -1379,7 +1453,7 @@ function normLogDoc(e) {
   const o = {};
   if (e && typeof e === 'object') for (const k in e) {
     const x = e[k];
-    if (x && typeof x === 'object' && posInt(x.ts)) o[k] = { ts: posInt(x.ts), by: String(x.by || ''), n: String(x.n || ''), c: x.c === 'g' || x.c === 's' ? x.c : 'm', x: String(x.x || ''), tn: String(x.tn || ''), w: String(x.w || '') };
+    if (x && typeof x === 'object' && posInt(x.ts)) o[k] = { ts: posInt(x.ts), by: String(x.by || ''), n: x.n === 'ADMIN' ? MAIN : String(x.n || ''), c: x.c === 'g' || x.c === 's' ? x.c : 'm', x: String(x.x || ''), tn: String(x.tn || ''), w: String(x.w || '') };
   }
   return o;
 }
@@ -1450,6 +1524,7 @@ function subErr() { ui.subError = true; ui.ready = true; render(); }
 function subscribe() {
   db.doc('meta/config').onSnapshot(snap => {
     if (!isDirty('meta/config')) state.config = snap.exists ? normConfig(clone(snap.data() || {})) : defaultConfig();
+    ui.rolesOld = snap.exists && (snap.data() || {}).rolesV !== 2;   // the roles of an earlier version: Valvomo's page stores them as they now are
     settle('config', snap); checkReady(); render();
   }, subErr);
   db.collection('teams').onSnapshot(snap => applyColl('teams', normTeam, snap), subErr);
@@ -1647,7 +1722,7 @@ async function gateUnlock(form) {
     const c = e && e.code;
     ui.gateErr = c === 'auth/too-many-requests' ? 'Liian monta yritystä. Odota hetki ja yritä uudelleen.'
       : c === 'auth/network-request-failed' ? 'Ei yhteyttä. Tarkista verkkoyhteys ja yritä uudelleen.'
-      : c === 'auth/operation-not-allowed' ? 'Sivun salasanaa ei ole vielä otettu käyttöön.' : 'Väärä salasana.';
+      : c === 'auth/operation-not-allowed' ? 'Sivun salasanaa ei ole vielä otettu käyttöön.' : 'Väärä salasana.' + ABC_TIP();
     ui.focusId = 'gt-pw'; ui.selectOnFocus = true;
   }
   ui.gateBusy = false; render();
@@ -1665,7 +1740,7 @@ async function googleLogin() {
     if (!a || (a.pid !== 'ADMIN' && loaded.players && !state.players[a.pid])) {
       try { await fb.signOut(); } catch (e) { /* signed out anyway below */ }
       ui.fb = { ready: true, user: null, email: '', pid: '', lvl: '' };
-      ui.loginErr = 'Google-tilille ' + email + ' ei ole annettu tunnusta. Pyydä ADMINia lisäämään se.';
+      ui.loginErr = 'Google-tilille ' + email + ' ei ole annettu tunnusta. Pyydä Valvomoa lisäämään se.';
       // the Google account took the place of the site password on this device, so the page locks again
       if (GATED && ui.gate === 'open') { try { sessionStorage.setItem('anarit.gerr', ui.loginErr); } catch (e) { /* shown below */ } location.reload(); return; }
       if (GATED) ui.gate = 'locked';
@@ -1685,7 +1760,7 @@ async function googleLogin() {
 }
 // The level an admin-made Google account gets in the database: ADMIN and the Admin role are 'admin', every other role 'mod'.
 const accLevel = pid => pid === 'ADMIN' || (state.users[pid] && roleOf(state.users[pid]).admin) ? 'admin' : 'mod';
-const accDoc = pid => Object.assign({ pid, lvl: accLevel(pid) }, isSuper(pid) ? { sup: true } : {});
+const accDoc = pid => ({ pid, lvl: accLevel(pid) });
 const accEmails = pid => Object.keys(ui.access).filter(e => ui.access[e] && ui.access[e].pid === pid).sort();
 function syncAccLevel(pid) {
   if (!fb) return;
@@ -1750,9 +1825,9 @@ function restoreBackup(d) {
   const before = { teams: ids('teams'), players: ids('players'), users: ids('users'), tournaments: ids('tournaments') };
   if (pics) before.photos = ids('photos');
   const each = (o, f) => { const out = {}; for (const id in (o || {})) out[id] = f(o[id]); return out; };
-  const sup = state.config.superSecs;
+  const sup = state.config.superSecs, adm = state.config.adminRole, roles = state.config.roles;
   state.config = normConfig(d.config);
-  if (!can('main')) state.config.superSecs = sup;   // only ADMIN changes what the Superadmin role sees
+  if (!can('main')) { state.config.superSecs = sup; state.config.adminRole = adm; state.config.roles = roles; }   // only Valvomo changes the roles
   state.teams = each(d.teams, normTeam); state.players = each(d.players, normPlayer); state.users = each(d.users, normUser); state.tournaments = each(d.tournaments, normTour);
   if (pics) {
     for (const k of Object.keys(photos)) delete photos[k];
@@ -1834,15 +1909,21 @@ function addTeam(form) {
   ui.team = id; ui.teamTab = 'muokkaa'; ui.teamErr = null; ui.focusId = can('admin') ? 'ap-' + id : null;   // a new team opens on its settings, ready for players
   render();
 }
-// Everyone gets their profile from an admin, and with it an account they sign in to with their name. It starts with view-only rights and no password.
-function newAccount(id, pwReq) {
-  state.users[id] = normUser({ role: state.config.roles.some(x => x.id === 'katsoja') ? 'katsoja' : '', pwReq: !!pwReq });
+// Everyone gets their profile from an admin, and with it an account they sign in to with their name. It starts with view-only rights
+// and no password, unless the new user form chose a role and a password for it.
+function newAccount(id, pwReq, role) {
+  state.users[id] = normUser({ role: role || (state.config.roles.some(x => x.id === 'katsoja') ? 'katsoja' : ''), pwReq: !!pwReq });
   persist('users/' + id);
 }
+// A role by its id: the Admin role is kept apart from the roles made in the settings, and only ADMIN changes it.
+const roleById = id => id === 'admin' ? (can('main') ? state.config.adminRole : null) : state.config.roles.find(x => x.id === id);
+const roleKey = id => id === 'admin' ? 'adminRole' : 'roles';
+// The roles an account can be given: Ei oikeuksia, Merkitsijä, Mod and Admin (and a role of an earlier version while it is there).
+const roleChoices = () => state.config.roles.map(x => [x.id, x.name]).concat([['admin', 'Admin']]);
 // A name is what its owner signs in with, so every profile needs one of its own, and ADMIN belongs to the main account.
 function nameTaken(name, except) {
   const lower = String(name).trim().toLocaleLowerCase('fi');
-  if (lower === 'admin') return 'Nimi ADMIN on varattu pääkäyttäjälle. Anna eri nimi.';
+  if (lower === 'admin' || lower === MAIN.toLocaleLowerCase('fi')) return 'Nimi ' + MAIN + ' on varattu pääkäyttäjälle. Anna eri nimi.';
   const k = Object.keys(state.players).find(id => id !== except && state.players[id].name.trim().toLocaleLowerCase('fi') === lower);
   return k ? 'Profiili ' + state.players[k].name + ' on jo olemassa. Anna eri nimi.' : '';
 }
@@ -1872,7 +1953,8 @@ function addProfile(form) {
   const sub = kind === 'pelaaja' && !!ui.newSub;
   state.players[id] = Object.assign({ name, kind, teamId: kind === 'pelaaja' && !sub && sel && state.teams[sel.value] ? sel.value : '', order: nowMs() }, sub ? { sub: true } : {});
   persist('players/' + id);
-  newAccount(id, ui.newPw);
+  const rsel = form.querySelector('#np-role'), role = rsel && can('set:tunnukset') && roleChoices().some(x => x[0] === rsel.value) ? rsel.value : '';
+  newAccount(id, ui.newPw, role);
   input.value = '';
   ui.player = id; ui.playerTab = kind === 'katsoja' ? 'muokkaa' : 'tulokset'; ui.playerErr = null; ui.newPl = true; ui.newSub = false; ui.newPw = false;
   render();
@@ -1960,7 +2042,7 @@ function addTour(form) {
   persist('tournaments/' + id);
   setActiveT(id);   // the newest tournament is the one being played
   input.value = '';
-  ui.tour = id; ui.tourTab = 'turnaus'; ui.tourErr = null; ui.newMatch = false;
+  ui.tour = id; ui.tourTab = 'ottelut'; ui.tourErr = null; ui.newMatch = false;
   render();
 }
 function addMatch(form) {
@@ -2245,8 +2327,8 @@ function toggleFull() {
 function loginName(form) {
   const v = (form.querySelector('input').value || '').trim().toLocaleLowerCase('fi');
   if (!v) { ui.loginErr = 'Kirjoita käyttäjänimi.'; ui.focusId = 'lg-name'; render(); return; }
-  const id = v === 'admin' ? 'ADMIN' : (Object.keys(state.users).find(k => k !== 'ADMIN' && state.users[k].on && state.players[k] && state.players[k].name.trim().toLocaleLowerCase('fi') === v) || '');
-  if (!id) { ui.loginErr = 'Tällä nimellä ei löytynyt tunnusta. Tarkista nimi tai pyydä ADMINia luomaan sinulle tunnus.'; ui.focusId = 'lg-name'; render(); return; }
+  const id = v === 'admin' || v === MAIN.toLocaleLowerCase('fi') ? 'ADMIN' : (Object.keys(state.users).find(k => k !== 'ADMIN' && state.users[k].on && state.players[k] && state.players[k].name.trim().toLocaleLowerCase('fi') === v) || '');
+  if (!id) { ui.loginErr = 'Tällä nimellä ei löytynyt tunnusta. Tarkista nimi tai pyydä Valvomoa luomaan sinulle tunnus.'; ui.focusId = 'lg-name'; render(); return; }
   const u = state.users[id];
   if (NET && (id === 'ADMIN' || u.g)) { ui.login = { id, g: true }; ui.loginErr = null; render(); return; }   // admins and Mods sign in with Google
   if (id !== 'ADMIN' && !u.hash && u.pwReq) { ui.login = { id, create: true }; ui.loginErr = null; ui.focusId = 'lg-new'; render(); return; }   // a password is required: he makes it now
@@ -2271,8 +2353,8 @@ function loginCreate(form) {
 }
 // An account written by someone who may not change accounts (a player making his own password) sends only the fields it changes,
 // since that is all the database lets him change.
-function saveUser(id, keys) {
-  if (ui.backend !== 'db' || !NET || can('set:tunnukset')) { persist('users/' + id); return; }
+function saveUser(id, keys, part) {
+  if (ui.backend !== 'db' || !NET || (!part && can('set:tunnukset'))) { persist('users/' + id); return; }
   const u = state.users[id], body = {};
   keys.forEach(k => { body[k] = u[k]; });
   db.doc('users/' + id).update(body).catch(e => { const c = e && e.code; ui.err = c === 'denied' ? 'refused' : c === 'quota_exceeded' ? 'quota' : 'save'; if (c === 'denied') revertDoc('users/' + id); render(); });
@@ -2282,7 +2364,7 @@ function loginPw(form) {
   if (!u || !u.hash) { ui.login = null; render(); return; }
   hashPw(u.salt, input.value || '', u.hash.slice(0, 2)).then(h => {
     if (h === u.hash) { setSession(L.id, u.hash); ui.login = null; ui.loginErr = null; ui.loginOpen = false; }
-    else { ui.loginErr = 'Väärä salasana.'; ui.focusId = 'lg-pw'; input.value = ''; }
+    else { ui.loginErr = 'Väärä salasana.' + ABC_TIP(); ui.focusId = 'lg-pw'; input.value = ''; }
     render();
   });
 }
@@ -2364,7 +2446,7 @@ function confirmed(key) {
   else if (k === 'del-match') { const part = id.split('|'), T = state.tournaments[part[0]]; if (T && T.matches[part[1]] && !T.matches[part[1]].auto) { logAct(part[0], part[1], 'm', 'poisti ottelun'); const before = tourSnap(T); delete T.matches[part[1]]; syncBracket(T); persistTour(part[0], before); } }
 }
 function act(a, d) {
-  if (ui.readOnly && ['tab', 'subtab', 'open', 'open-match', 'close-match', 'copy-link', 'vm-back', 'vm-tour', 'vm-filter', 'vm-more', 'tp-toggle', 'show-prev', 'show-next', 'show-pause', 'show-full', 'logout', 'login-back', 'own-open', 'card', 'card-back', 'lt-toggle', 'tb-all', 'mc-toggle', 'err-home', 'home-all', 'ad-cancel', 'login-open', 'login-close', 'g-login'].indexOf(a) < 0) return;
+  if (ui.readOnly && ['tab', 'subtab', 'open', 'open-match', 'close-match', 'copy-link', 'vm-back', 'vm-tour', 'vm-filter', 'vm-more', 'tp-toggle', 'show-prev', 'show-next', 'show-pause', 'show-full', 'logout', 'login-back', 'own-open', 'card', 'card-back', 'lt-toggle', 'tb-all', 'mc-toggle', 'err-home', 'home-all', 'ad-cancel', 'login-open', 'login-close', 'g-login', 'kb-abc'].indexOf(a) < 0) return;
   if (!mayAct(a, d)) return;
   switch (a) {
     case 'logout':
@@ -2373,6 +2455,13 @@ function act(a, d) {
     case 'login-open': ui.loginOpen = true; ui.login = null; ui.loginErr = null; ui.focusId = 'lg-name'; ui.toTop = true; break;
     case 'login-close': ui.loginOpen = false; ui.login = null; ui.loginErr = null; break;
     case 'g-login': googleLogin(); return;
+    case 'kb-abc': {
+      // A phone keeps the keyboard it opened for a field even when the field changes, so the password fields are made anew
+      // (what was typed in them kept) and the one beside the button gets the focus: the new keyboard opens right away.
+      ui.abc = !ui.abc; lsSet('anarit.abc', ui.abc ? '1' : '0');
+      ui.kbCarry = Array.from(app.querySelectorAll('input[type="password"]')).map(x => { const v = [x.id, x.value]; x.remove(); return v; });
+      ui.focusId = d.for || null; break;
+    }   // the keyboard changes when the field is focused again
     case 'copy-link': try { navigator.clipboard.writeText(SELF_URL).then(() => { ui.copied = true; render(); }, () => { /* the address bar still has it */ }); } catch (e) { /* no clipboard */ } return;
     case 'backup': downloadBackup(); break;
     case 'auto-now': autoBackup(true); return;
@@ -2386,15 +2475,11 @@ function act(a, d) {
       u.on = on; persist('users/' + d.id); ui.pwMsg = null;
       break;
     }
-    case 'add-role': {
-      const id = 'r' + uid();
-      state.config.roles.push({ id, name: 'Uusi rooli', tabs: ['kaynnissa'], rights: [], secs: ALL_SECS.slice(), self: false, goal: '' });
-      persistConf(['roles']); ui.roleOpen = id; ui.focusId = 'rn-' + id; ui.selectOnFocus = true;
-      break;
-    }
     case 'ad-edit': ui.adEdit = +d.i; ui.focusId = 'adt-' + (+d.i); break;
     case 'ad-cancel': ui.adEdit = null; break;
-    case 'ad-clear': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i] = { title: '', text: '', link: '' }; state.config.ads = a; persistConf(['ads']); } ui.adEdit = null; break; }
+    case 'ad-clear': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i] = { title: '', text: '', link: '', hidden: a[i].hidden }; state.config.ads = a; persistConf(['ads']); } ui.adEdit = null; break; }
+    case 'ad-vis': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i].hidden = !a[i].hidden; state.config.ads = a; persistConf(['ads']); } break; }
+    case 'home-vis': state.config.homeHidden = !state.config.homeHidden; persistConf(['homeHidden']); break;
     case 'home-board': {   // Kokonaistilanne opens over Etusivu and closes back to it
       ui.homeBoard = d.v === '1'; ui.cards = []; ui.toTop = true; ui.focusId = ui.homeBoard ? 'tt-back' : 'hpp-all';
       try { history.replaceState(null, '', ui.homeBoard ? '#tulostaulu' : '#etusivu'); } catch (e) { /* hash is optional */ }
@@ -2403,7 +2488,6 @@ function act(a, d) {
     case 'home-all': ui.homeAll = Object.assign({}, ui.homeAll, { [d.w]: !(ui.homeAll || {})[d.w] }); break;
     case 'err-home': ui.cards = []; ui.own = false; ui.tour = null; ui.tourMatch = null; ui.liveMatch = null; ui.team = null; ui.player = null; ui.show = null; setTab('etusivu'); break;
     case 'role-open': ui.roleOpen = ui.roleOpen === d.id ? null : d.id; ui.confirm = null; break;
-    case 'role-goal': { const r = state.config.roles.find(x => x.id === d.id); if (r) { r.goal = d.v === 'own' || d.v === 'all' ? d.v : ''; persistConf(['roles']); } break; }
     case 'acct-open': if (state.players[d.id]) { setTab('pelaajat'); ui.player = d.id; ui.playerTab = 'tunnus'; ui.toTop = true; } break;
     case 'tab':
       if (allowedTabs().indexOf(d.tab) < 0) break;
@@ -2419,6 +2503,7 @@ function act(a, d) {
       break;
     case 'subtab':
       if (d.scope === 'team') ui.teamTab = d.tab; else if (d.scope === 'tour') ui.tourTab = d.tab; else if (d.scope === 'live') ui.liveTab = d.tab;
+      if (d.scope === 'tour' || d.scope === 'live') ui.revealTab = true;
       else if (d.scope === 'card') { const c = topCard(); if (c) c.tab = ['muokkaa', 'tunnus'].indexOf(d.tab) >= 0 ? d.tab : 'kortti'; }
       else ui.playerTab = d.tab;
       if (d.scope === 'tour') ui.tourMatch = null;
@@ -2472,7 +2557,6 @@ function act(a, d) {
     }
     case 'save-field': saveFields(d.for); return;
     case 'cancel-field': cancelFields(d.for); break;
-    case 'acct-self': { const u = state.users[d.id]; if (u && state.players[d.id]) { u.self = d.v === '1'; persist('users/' + d.id); ui.pwMsg = null; } break; }
     case 'own-open': { const m = me(), had = !!(ui.cards && ui.cards.length); ui.cards = []; ui.own = (had || !ui.own) && !!m && m.id !== 'ADMIN' && !!state.players[m.id]; ui.confirm = null; ui.photoErr = null; ui.nameErr = null; ui.toTop = true; break; }
     case 'card': {
       const k = d.kind === 't' || d.kind === 'tr' ? d.kind : 'p', st = ui.cards || (ui.cards = []), top = st[st.length - 1];
@@ -2519,7 +2603,8 @@ function act(a, d) {
     case 'b-cancel': { const id = ui.bEdit; ui.bEdit = null; if (id) ui.focusId = 'pb-' + id; break; }
     case 'b-reset': if (canBadge(d.id)) { const p = state.players[d.id]; if (p && p.badge) { delete p.badge; persist('players/' + d.id); } ui.bEdit = null; ui.focusId = 'pb-' + d.id; } break;
     // Salasana on: the player makes his password at the next sign-in. Off: any password goes and the name is enough.
-    case 'acct-pwreq': { const u = state.users[d.id]; if (u && d.id !== 'ADMIN') { if (u.pwReq || u.hash) { u.pwReq = false; u.salt = ''; u.hash = ''; } else u.pwReq = true; persist('users/' + d.id); } break; }
+    // only the requirement and the password are written, so the switch works for whoever sees it, signed in with Google or by name
+    case 'acct-pwreq': { const u = state.users[d.id]; if (u && d.id !== 'ADMIN') { const off = !!(u.pwReq || u.hash); if (off) { u.pwReq = false; u.salt = ''; u.hash = ''; } else u.pwReq = true; saveUser(d.id, off ? ['pwReq', 'salt', 'hash'] : ['pwReq'], true); } break; }
     case 'qa-mode': ui.qaMode = !ui.qaMode; ui.qa = null; break;
     case 'qa-open': {
       if (!state.teams[d.id] || !qaAt) break;
@@ -2583,31 +2668,30 @@ function field(f, d, el) {
     case 'title': state.config.title = v.trim(); state.config.titleOwn = true; persistConf(['title', 'titleOwn']); break;
     case 'acct-role': { const u = state.users[d.id]; if (u && (el.value === '' || el.value === 'admin' || (el.value === 'super' && can('main')) || state.config.roles.some(x => x.id === el.value))) { u.role = el.value; persist('users/' + d.id); ui.pwMsg = null; if (NET) syncAccLevel(d.id); } break; }
     case 'restore': readBackup(el.files && el.files[0]); try { el.value = ''; } catch (e) { /* some browsers lock the field */ } return;
-    case 'super-sec': { const x = d.sec; if (SUPER_PARTS.indexOf(x) >= 0 && can('main')) { const a = state.config.superSecs.filter(y => y !== x); if (el.checked) a.push(x); state.config.superSecs = SUPER_PARTS.filter(y => a.indexOf(y) >= 0); persistConf(['superSecs']); } break; }
     case 'role-name': { const r = state.config.roles.find(x => x.id === d.id); if (r && v) { r.name = v.slice(0, 20); persistConf(['roles']); } break; }
-    case 'role-self': { const r = state.config.roles.find(x => x.id === d.id); if (r) { r.self = !!el.checked; persistConf(['roles']); } break; }
     case 'role-rgroup': case 'acct-rgroup': {
-      const o = f === 'role-rgroup' ? state.config.roles.find(x => x.id === d.id) : state.users[d.id], parts = GROUP_PARTS[d.group];
+      const o = f === 'role-rgroup' ? roleById(d.id) : state.users[d.id], parts = GROUP_PARTS[d.group];
       if (!o || !parts) break;
-      o.rights = el.checked ? expandRights(o.rights.concat(parts)) : o.rights.filter(x => parts.indexOf(x) < 0);
-      if (f === 'role-rgroup') persistConf(['roles']); else { persist('users/' + d.id); ui.pwMsg = null; }
+      o.rights = el.checked ? expandRights(o.rights.concat(parts)) : o.rights.filter(x => parts.indexOf(x) < 0 && !parts.some(p => LIMIT_OF[p] === x));
+      if (f === 'role-rgroup') persistConf([roleKey(d.id)]); else { persist('users/' + d.id); ui.pwMsg = null; }
       break;
     }
     case 'role-sec': case 'acct-sec': {
-      const o = f === 'role-sec' ? state.config.roles.find(x => x.id === d.id) : state.users[d.id];
+      const o = f === 'role-sec' ? roleById(d.id) : state.users[d.id];
       if (!o || ALL_SECS.indexOf(d.sec) < 0) break;
       const cur = normSecs(o.secs), i = cur.indexOf(d.sec);
       if (el.checked && i < 0) cur.push(d.sec); else if (!el.checked && i >= 0) cur.splice(i, 1);
       o.secs = ALL_SECS.filter(x => cur.indexOf(x) >= 0);
-      if (f === 'role-sec') persistConf(['roles']); else { persist('users/' + d.id); ui.pwMsg = null; }
+      if (f === 'role-sec') persistConf([roleKey(d.id)]); else { persist('users/' + d.id); ui.pwMsg = null; }
       break;
     }
     case 'role-tab': case 'role-right': {
-      const r = state.config.roles.find(x => x.id === d.id), key = f === 'role-tab' ? 'tabs' : 'rights', val = f === 'role-tab' ? d.tab : d.right;
+      const r = roleById(d.id), key = f === 'role-tab' ? 'tabs' : 'rights', val = f === 'role-tab' ? d.tab : d.right;
       if (!r || !val) break;
       const i = r[key].indexOf(val);
       if (el.checked && i < 0) r[key].push(val); else if (!el.checked && i >= 0) r[key].splice(i, 1);
-      persistConf(['roles']);
+      if (key === 'tabs') r.tabs = USER_TABS.filter(t => r.tabs.indexOf(t) >= 0); else r.rights = expandRights(r.rights);
+      persistConf([roleKey(d.id)]);
       break;
     }
     case 'acct-tab': case 'acct-right': {
@@ -2615,6 +2699,7 @@ function field(f, d, el) {
       if (!u || !val) break;
       const i = u[key].indexOf(val);
       if (el.checked && i < 0) u[key].push(val); else if (!el.checked && i >= 0) u[key].splice(i, 1);
+      if (key === 'rights') u.rights = expandRights(u.rights);
       persist('users/' + d.id); ui.pwMsg = null;
       break;
     }
@@ -2694,22 +2779,24 @@ function topBar(tab, tabs) {
 }
 // The tab row fades out at an edge where more tabs are hidden, so it reads as something that scrolls.
 function tabFade() {
-  const x = app.querySelector('.tabsx');
-  if (!x) return;
-  const l = x.scrollLeft > 2, r = x.scrollLeft + x.clientWidth < x.scrollWidth - 2;
-  x.parentNode.classList.toggle('fl', l); x.parentNode.classList.toggle('fr', r);
+  app.querySelectorAll('.tabsx').forEach(x => {
+    const l = x.scrollLeft > 2, r = x.scrollLeft + x.clientWidth < x.scrollWidth - 2;
+    x.parentNode.classList.toggle('fl', l); x.parentNode.classList.toggle('fr', r);
+  });
 }
 // Brings the open tab into the row's view without moving the page up or down.
 function revealTab() {
-  const x = app.querySelector('.tabsx'), t = x && x.querySelector('[aria-current="page"]');
-  if (!t) return;
-  const a = t.offsetLeft, b = a + t.offsetWidth;
-  if (a < x.scrollLeft + 24) x.scrollLeft = Math.max(0, a - 24);
-  else if (b > x.scrollLeft + x.clientWidth - 24) x.scrollLeft = b - x.clientWidth + 24;
+  app.querySelectorAll('.tabsx').forEach(x => {
+    const t = x.querySelector('[aria-current="page"], [aria-pressed="true"]');
+    if (!t) return;
+    const a = t.offsetLeft, b = a + t.offsetWidth;
+    if (a < x.scrollLeft + 24) x.scrollLeft = Math.max(0, a - 24);
+    else if (b > x.scrollLeft + x.clientWidth - 24) x.scrollLeft = b - x.clientWidth + 24;
+  });
 }
 // The login page asks one question: who are you? Accounts that have a password are then asked for it; the rest go straight in.
 function loginView() {
-  const L = ui.login, u = L && state.users[L.id], who = L ? (L.id === 'ADMIN' ? 'ADMIN' : (state.players[L.id] ? state.players[L.id].name : '')) : '';
+  const L = ui.login, u = L && state.users[L.id], who = L ? (L.id === 'ADMIN' ? MAIN : (state.players[L.id] ? state.players[L.id].name : '')) : '';
   const err = ui.loginErr ? `<p class="err" id="lg-err" role="alert" data-k="lg-err">${esc(ui.loginErr)}</p>` : '', bad = ui.loginErr ? ' aria-invalid="true" aria-describedby="lg-err"' : '';
   const gBtn = label => `<button class="btn${L ? ' primary' : ''}" type="button" id="lg-google" data-act="g-login"${ui.gBusy ? ' disabled' : ''}>${ui.gBusy ? 'Odotetaan Googlea…' : label}</button>`;
   const form = NET && L && L.g
@@ -2721,23 +2808,28 @@ function loginView() {
     : L.create
     ? `<form class="tset pform lgf" data-k="lg-new" data-form="login-create" novalidate><h2 class="pfh">Hei ${esc(who)}</h2><p class="hint" data-k="lg-newh">Luo itsellesi salasana. Sivu kysyy sitä jatkossa, kun kirjaudut.</p>` +
       `<input type="text" name="username" autocomplete="username" value="${esc(who)}" hidden>` +
-      `<label class="f"><span>Uusi salasana</span><input id="lg-new" data-free type="password" maxlength="64" autocomplete="new-password"${bad}></label>` +
-      `<label class="f"><span>Sama uudelleen</span><input id="lg-new2" data-free type="password" maxlength="64" autocomplete="new-password" enterkeyhint="go"${bad}></label>${err}` +
+      `<label class="f"><span>Uusi salasana</span><span class="pwrow"><input id="lg-new" aria-label="Uusi salasana" data-free type="password" maxlength="64" autocomplete="new-password"${pwKb()}${bad}>${kbBtn('lg-new')}</span></label>` +
+      `<label class="f"><span>Sama uudelleen</span><input id="lg-new2" data-free type="password" maxlength="64" autocomplete="new-password" enterkeyhint="go"${pwKb()}${bad}></label>${err}` +
       `<div class="rowbtns" data-k="lg-go"><button class="btn primary" type="submit" id="lg-create">Luo salasana</button><button class="btn" type="button" id="lg-back" data-act="login-back">Takaisin</button></div></form>`
-    : `<form class="tset pform lgf" data-k="lg-pw" data-form="login-pw" novalidate><h2 class="pfh">Hei ${esc(who)}</h2><label class="f"><span>Salasana</span><input id="lg-pw" data-free type="password" maxlength="64" autocomplete="current-password" enterkeyhint="go"${bad}></label>${err}` +
+    : `<form class="tset pform lgf" data-k="lg-pw" data-form="login-pw" novalidate><h2 class="pfh">Hei ${esc(who)}</h2><label class="f"><span>Salasana</span><span class="pwrow"><input id="lg-pw" aria-label="Salasana" data-free type="password" maxlength="64" autocomplete="current-password" enterkeyhint="go"${pwKb()}${bad}>${kbBtn('lg-pw')}</span></label>${err}` +
       `<div class="rowbtns" data-k="lg-go"><button class="btn primary" type="submit" id="lg-in">Kirjaudu</button><button class="btn" type="button" id="lg-back" data-act="login-back">Takaisin</button></div>` +
-      (L.id === 'ADMIN' && ui.owner ? `<div class="f" data-k="lg-reset"><p class="hint">Olet tämän sivun omistaja, joten voit nollata unohtuneen ADMIN-salasanan. Kirjautuminen poistuu silloin käytöstä, kunnes asetat uuden.</p><div>${twice('lg-reset', 'reset-admin:1', 'Nollaa ADMIN-salasana')}</div></div>` : '') + `</form>`;
+      (L.id === 'ADMIN' && ui.owner ? `<div class="f" data-k="lg-reset"><p class="hint">Olet tämän sivun omistaja, joten voit nollata Valvomon unohtuneen salasanan. Kirjautuminen poistuu silloin käytöstä, kunnes asetat uuden.</p><div>${twice('lg-reset', 'reset-admin:1', 'Nollaa Valvomon salasana')}</div></div>` : '') + `</form>`;
   const s = syncInfo();
   return `<header class="top" data-k="top"><div class="brand">${brandH1()}<div class="who" data-k="who">${syncTag(s)}</div></div></header><main id="v-login" class="stack">` +
     (NET ? `<div data-k="lg-close"><button class="btn back" id="lg-close" data-act="login-close">Takaisin etusivulle</button></div>` : '') + `${form}</main>`;
 }
+// Passwords are typed on the phone's number pad; ABC brings back the whole keyboard for a password with letters in it
+// (remembered on the device), and 123 the number pad again.
+const ABC_TIP = () => ui.abc ? '' : ' Jos salasanassa on kirjaimia, paina ABC.';
+const pwKb = () => ui.abc ? ' inputmode="text"' : ' inputmode="numeric" pattern="[0-9]*"';
+const kbBtn = forId => `<button type="button" class="btn kbt" id="kb-${forId}" data-act="kb-abc" data-for="${forId}" aria-label="${ui.abc ? 'Näytä numeronäppäimistö' : 'Näytä kirjaimet'}">${ui.abc ? '123' : 'ABC'}</button>`;
 // The lock: the shared site password, and under it the Google sign-in for the admin.
 function gateView() {
   const err = ui.gateErr ? `<p class="err" id="gt-err" role="alert" data-k="gt-err">${esc(ui.gateErr)}</p>` : '', bad = ui.gateErr ? ' aria-invalid="true" aria-describedby="gt-err"' : '';
   const gErr = ui.loginErr ? `<p class="err" role="alert" data-k="gt-gerr">${esc(ui.loginErr)}</p>` : '';
   return `<header class="top" data-k="top"><div class="brand">${brandH1()}</div></header><main id="v-gate" class="stack">` +
     `<form class="tset pform lgf" data-k="gt-form" data-form="gate" novalidate><input type="text" name="username" autocomplete="username" value="${esc(state.config.title || 'Änärit')}" hidden>` +
-    `<label class="f"><span>Sivun salasana</span><input id="gt-pw" data-free type="password" maxlength="64" autocomplete="current-password" enterkeyhint="go"${bad}></label>${err}` +
+    `<label class="f"><span>Sivun salasana</span><span class="pwrow"><input id="gt-pw" aria-label="Sivun salasana" data-free type="password" maxlength="64" autocomplete="current-password" enterkeyhint="go"${pwKb()}${bad}>${kbBtn('gt-pw')}</span></label>${err}` +
     `<div data-k="gt-go"><button class="btn primary" type="submit" id="gt-go"${ui.gateBusy ? ' disabled' : ''}>${ui.gateBusy ? 'Avataan…' : 'Avaa'}</button></div>` +
     `<div class="f lgg" data-k="gt-gl">${inAppNote()}${gErr}<div><button class="btn" type="button" id="lg-google" data-act="g-login"${ui.gBusy ? ' disabled' : ''}>${ui.gBusy ? 'Odotetaan Googlea…' : 'Kirjaudu Google-tilillä'}</button></div></div></form></main>`;
 }
@@ -2818,9 +2910,9 @@ function liveTable(T) {
   const ab = (short, title) => `<th scope="col"><abbr title="${title}">${short}</abbr></th>`;
   // the scoring table shows the top ten places until it is opened in full, so the page under it stays near
   const cut = !ui.tbAll && pr.filter(r => r.rank > 10).length > 0, shown = cut ? pr.filter(r => r.rank <= 10) : pr;
-  return `<div class="cols2" data-k="tb-cols"><div data-k="tb-c1"><h4 class="sub" data-k="tb-h1">Sarjataulukko</h4><div class="tscroll" data-k="tb-teams"><table class="tbl"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Joukkue</th>${ab('O', 'Pelatut ottelut')}${ab('V', 'Voitot')}${ties ? ab('T', 'Tasapelit') : ''}${ab('H', 'Häviöt')}${ab('M', 'Tehdyt ja päästetyt maalit')}${ab('P', 'Pisteet')}</tr></thead><tbody>` +
+  return `<div class="cols2" data-k="tb-cols"><div data-k="tb-c1"><h3 class="sub" data-k="tb-h1">Sarjataulukko</h3><div class="tscroll" data-k="tb-teams"><table class="tbl"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Joukkue</th>${ab('O', 'Pelatut ottelut')}${ab('V', 'Voitot')}${ties ? ab('T', 'Tasapelit') : ''}${ab('H', 'Häviöt')}${ab('M', 'Tehdyt ja päästetyt maalit')}${ab('P', 'Pisteet')}</tr></thead><tbody>` +
     tr.map(r => `<tr data-k="tbt-${esc(r.t.id)}" class="crow" ${cardAttrs('t', r.t.id, 'tbt-' + r.t.id)}><td class="l rk">${r.rank}.</td><th class="l" scope="row">${cardName('t', r.t, 'tbt-' + r.t.id)}</th><td>${r.s.o}</td><td>${r.s.v}</td>${ties ? `<td>${r.s.t}</td>` : ''}<td>${r.s.h}</td><td>${r.s.gf}–${r.s.ga}</td><td class="p"><span data-bump>${fmt(r.pts)}</span></td></tr>`).join('') + `</tbody></table></div>` +
-    `</div><div data-k="tb-c2"><h4 class="sub" data-k="tb-h2">Pistepörssi</h4>` + (pr.length ? `<div class="tscroll" data-k="tb-players"><table class="tbl"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Pelaaja</th>${pst.map(x => ab(esc(x.short), esc(x.name))).join('')}${ab('P', 'Pisteet')}</tr></thead><tbody>` +
+    `</div><div data-k="tb-c2"><h3 class="sub" data-k="tb-h2">Pistepörssi</h3>` + (pr.length ? `<div class="tscroll" data-k="tb-players"><table class="tbl"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Pelaaja</th>${pst.map(x => ab(esc(x.short), esc(x.name))).join('')}${ab('P', 'Pisteet')}</tr></thead><tbody>` +
       shown.map(r => `<tr data-k="tbp-${esc(r.q.id)}" class="crow" ${cardAttrs('p', r.q.id, 'tbp-' + r.q.id)}><td class="l rk">${r.rank}.</td><th class="l" scope="row">${cardName('p', r.q, 'tbp-' + r.q.id, esc(tTeamText(T, r.q)))}</th>${pst.map(x => `<td>${r.c[x.id] || 0}</td>`).join('')}<td class="p"><span data-bump>${fmt(r.pts)}</span></td></tr>`).join('') + `</tbody></table></div>` +
       (cut || ui.tbAll && pr.some(r => r.rank > 10) ? `<div data-k="tb-all"><button class="btn sm" id="tb-all" data-act="tb-all" aria-expanded="${!cut}">${cut ? 'Näytä kaikki ' + pr.length : 'Näytä vain kärki'}</button></div>` : '')
       : `<p class="hint" data-k="tb-nop">Turnauksen joukkueissa ei ole vielä pelaajia.</p>`) + `</div></div>` +
@@ -3020,12 +3112,17 @@ function newProfile(ts) {
     `<div class="f" data-k="np-kf"><div>${plToggle('np-pl', k === 'pelaaja', 'new-kind', '', 'Luo uusi pelaaja')}</div><p class="hint">${k === 'pelaaja' ? PL_HINT_ON : 'Pelkkä käyttäjä. ' + PL_HINT_OFF}</p></div>` +
     (k === 'pelaaja' ? `<div class="f subsw" data-k="np-sf"><div>${plToggle('np-sub', !!ui.newSub, 'new-sub', '', 'Varapelaaja')}</div>${ui.newSub ? `<p class="hint">${SUB_HINT}</p>` : ''}</div>` : '') +
     (k === 'pelaaja' && !ui.newSub ? `<label class="f" data-k="np-tf"><span>Joukkue</span><select id="np-team" data-free>${teamOptions(ts, '')}</select></label>` : '') +
+    // the role, for whoever may change accounts; it starts from view-only rights
+    (can('set:tunnukset') ? `<label class="f" data-k="np-rf"><span>Rooli</span><select id="np-role" data-free>${roleChoices().map(x => `<option value="${esc(x[0])}"${x[0] === 'katsoja' ? ' selected' : ''}>${esc(x[1])}</option>`).join('')}</select></label>` : '') +
     `<div class="f" data-k="np-pwf"><div>${plToggle('np-pw', !!ui.newPw, 'new-pw', '', 'Salasana')}</div>${ui.newPw ? `<p class="hint">Hän luo salasanan ensimmäisellä kirjautumisella.</p>` : ''}</div>` +
     (ui.playerErr ? `<p class="err" id="np-err" role="alert" data-k="np-err">${esc(ui.playerErr)}</p>` : '') +
     `<div data-k="np-go"><button class="btn primary" type="submit" id="np-add">Luo käyttäjä</button></div></form>`;
 }
 const tabNames = tabs => USER_TABS.filter(t => tabs.indexOf(t) >= 0).map(t => t === 'kaynnissa' ? 'turnauksen välilehti' : TAB_LABEL[t]).join(', ') || 'ei välilehtiä';
-const rightNames = rights => RIGHT_GROUPS.map(g => { const n = g[2].filter(x => rights.indexOf(x[0]) >= 0).length; return n ? g[1].toLowerCase() + (n < g[2].length ? ' (' + n + '/' + g[2].length + ')' : '') : ''; }).filter(Boolean).join(', ') || 'vain katselu';
+// a group named when all of it is chosen, the one right itself when only one is, else the group with how many of its rights
+const rightNames = rights => RIGHT_GROUPS.map(g => { const on = g[2].filter(x => rights.indexOf(x[0]) >= 0), n = on.length, own = g[2].some(x => LIMIT_OF[x[0]] && rights.indexOf(LIMIT_OF[x[0]]) >= 0);
+  return !n ? '' : n === 1 && g[2].length > 1 ? on[0][1].replace(/^./, c => c.toLowerCase()) + (LIMIT_OF[on[0][0]] && rights.indexOf(LIMIT_OF[on[0][0]]) >= 0 ? ' vain omissa otteluissa' : '')
+    : g[1].toLowerCase() + (n < g[2].length ? ' (' + n + '/' + g[2].length + ')' : '') + (own ? ' osin vain omissa otteluissa' : ''); }).filter(Boolean).join(', ') || 'vain katselu';
 const secNames = secs => secs.length === ALL_SECS.length ? 'kaikki' : SECS.filter(x => secs.indexOf(x[0]) >= 0).map(x => x[1]).join(', ') || 'ei yhtään';
 // Tick boxes for tabs and rights, used both for a role and for an account with its own settings.
 function permBoxes(scope, rawId, o) {
@@ -3035,18 +3132,15 @@ function permBoxes(scope, rawId, o) {
     `</div>`;
   h += `<div class="f" data-k="pb-secs"><span>Turnauksen osiot</span><div class="chks">${SECS.map(x => box('pbs-' + x[0], scope + 's-' + id + '-' + x[0], scope + '-sec', `data-sec="${x[0]}"`, secs.indexOf(x[0]) >= 0, x[1])).join('')}</div>` +
     `</div>`;
+  // a group is a tick box that turns all of its rights on or off; each right is a switch, and recording, starting and the breaks
+  // have "only own matches" under them while they are on
+  const sw = (k, fid, val, on, label, cls) => `<label class="chk rtg${cls ? ' ' + cls : ''}" data-k="${k}"><input type="checkbox" role="switch" id="${fid}" data-field="${scope}-right" data-id="${id}" data-right="${val}"${on ? ' checked' : ''}><span>${label}</span></label>`;
   h += `<div class="f" data-k="pb-rights"><span>Oikeudet</span>` + RIGHT_GROUPS.map(g => {
     const n = g[2].filter(x => rights.indexOf(x[0]) >= 0).length;
     return `<div class="rgrp" data-k="pbg-${g[0]}">` + box('pbgh-' + g[0], scope + 'g-' + id + '-' + g[0], scope + '-rgroup', `data-group="${g[0]}"`, n === g[2].length, `<b>${g[1]}</b>${n && n < g[2].length ? ` <small class="muted">${n}/${g[2].length}</small>` : ''}`, 'rgh') +
-      `<div class="chks rsub">${g[2].map(x => box('pbr-' + x[0], scope + 'r-' + id + '-' + x[0], scope + '-right', `data-right="${x[0]}"`, rights.indexOf(x[0]) >= 0, x[1])).join('')}</div></div>`;
+      `<div class="chks rsub">${g[2].map(x => sw('pbr-' + x[0], scope + 'r-' + id + '-' + x[0], x[0], rights.indexOf(x[0]) >= 0, x[1]) +
+        (LIMIT_OF[x[0]] && rights.indexOf(x[0]) >= 0 ? sw('pbl-' + x[0], scope + 'r-' + id + '-' + LIMIT_OF[x[0]], LIMIT_OF[x[0]], rights.indexOf(LIMIT_OF[x[0]]) >= 0, 'Vain omat ottelut', 'rlim') : '')).join('')}</div></div>`;
   }).join('') + `</div>`;
-  if (scope === 'role') {
-    const goal = o.goal || '';
-    h += `<div class="f" data-k="pb-own"><span>Omat asiat</span><div class="chks">${box('pbo-self', 'roles-' + id + '-self', 'role-self', '', !!o.self, 'Saa muokata omaa nimeään, kuvaansa ja väriään')}</div>` +
-      `<span id="rog-${id}">Saa kirjata maalin otteluun, jossa on itse mukana</span><div class="seg" role="group" aria-labelledby="rog-${id}">` +
-      [['', 'Ei'], ['own', 'Vain omat'], ['all', 'Myös muiden']].map(x => `<button id="rog${x[0] || '0'}-${id}" data-act="role-goal" data-id="${id}" data-v="${x[0]}" aria-pressed="${goal === x[0]}">${x[1]}</button>`).join('') + `</div>` +
-      `<p class="hint">Koskee kaikkia tämän roolin pelaajia. Kirjattua maalia ei voi muokata eikä poistaa.</p></div>`;
-  }
   return h;
 }
 // The account settings of one player, seen by admins only.
@@ -3063,24 +3157,16 @@ function acctBody(pid) {
   let h = `<div class="f" data-k="ac-on"><span id="acl-${id}">Käyttäjätunnus</span><div class="seg" role="group" aria-labelledby="acl-${id}"><button id="ac0-${id}" data-act="acct" data-id="${id}" data-on="0" aria-pressed="${!on}">Ei käytössä</button><button id="ac1-${id}" data-act="acct" data-id="${id}" data-on="1" aria-pressed="${on}">Käytössä</button></div>` +
     `<p class="hint">${on ? 'Kirjautuu nimellä ' + esc(q.name) + '.' : 'Ei voi kirjautua.'}</p></div>`;
   if (!on) return h;
-  const roles = state.config.roles, r = roleOf(u), rights = hasRights(u), gone = !!u.role && u.role !== 'admin' && u.role !== 'super' && !roles.some(x => x.id === u.role), k = kindOf(q);
-  const seg = (lab, btns) => `<div class="seg" role="group" aria-labelledby="${lab}">${btns.map(b => `<button id="${b[0]}-${id}" data-act="acct-goal" data-id="${id}" data-v="${b[1]}" aria-pressed="${b[2]}">${b[3]}</button>`).join('')}</div>`;
-  h += `<h3 class="sub sect" data-k="ac-ph">${k === 'pelaaja' ? 'Pelaaja' : 'Oma profiili'}</h3>`;
-  const rr = u.role && u.role !== 'admin' && u.role !== 'super' ? state.config.roles.find(x => x.id === u.role) : null;
-  if (rr && rr.self) h += `<p class="hint" data-k="ac-self">Rooli ${esc(rr.name)} sallii kaikille oman nimen, kuvan ja värin muokkaamisen.</p>`;
-  else h += `<div class="f" data-k="ac-self"><span id="acf-${id}">Saa muokata omaa nimeään, kuvaansa ja väriään</span><div class="seg" role="group" aria-labelledby="acf-${id}"><button id="acf0-${id}" data-act="acct-self" data-id="${id}" data-v="0" aria-pressed="${!u.self}">Ei</button><button id="acf1-${id}" data-act="acct-self" data-id="${id}" data-v="1" aria-pressed="${!!u.self}">Kyllä</button></div>` +
-    `</div>`;
-  if (k === 'katsoja') h += `<p class="hint" data-k="ac-pk">Vain pelaaja voi kirjata omia maaleja.</p>`;
-  else if (rr && rr.goal) h += `<p class="hint" data-k="ac-goal">Rooli ${esc(rr.name)} sallii kirjata ${rr.goal === 'all' ? 'kenen tahansa maalin' : 'oman maalin'} ottelussa, jossa hän on itse mukana.</p>`;
-  else h += `<div class="f" data-k="ac-goal"><span id="acg-${id}">Saa kirjata maalin käynnissä olevaan otteluun, jossa on itse mukana</span>${seg('acg-' + id, [['acg0', '', !u.goal, 'Ei'], ['acg1', u.goal || 'own', !!u.goal, 'Kyllä']])}` +
-      `</div>` +
-    (u.goal ? `<div class="f" data-k="ac-gs"><span id="acs-${id}">Kenen maalit hän saa kirjata</span>${seg('acs-' + id, [['acs-own', 'own', u.goal === 'own', 'Vain omat'], ['acs-all', 'all', u.goal === 'all', 'Myös muiden']])}` +
-      `<p class="hint">Kirjattua maalia hän ei voi muokata eikä poistaa.</p></div>` : '');
+  const roles = state.config.roles, r = roleOf(u), rights = hasRights(u), gone = !!u.role && u.role !== 'admin' && !roles.some(x => x.id === u.role), k = kindOf(q);
+  // the same Pelaaja switch as when the user is made; what he may record in his own matches comes with his role
+  const t = state.teams[q.teamId];
+  h += `<div class="f sectl" data-k="ac-pl"><div>${plToggle('acpl-' + id, k === 'pelaaja', 'kind', ` data-id="${id}"`, 'Pelaaja')}</div>` +
+    `<p class="hint">${k === 'pelaaja' ? (t ? 'Pois kytkettynä hän poistuu joukkueesta.' : PL_HINT_ON) : PL_HINT_OFF}</p></div>`;
   h += `<h3 class="sub sect" data-k="ac-ah">Rooli</h3>`;
   h += `<label class="f" data-k="ac-role"><span>Rooli</span><select id="acro-${id}" data-field="acct-role" data-id="${id}">${roles.map(x => `<option value="${esc(x.id)}"${u.role === x.id ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}` +
-    `<option value="admin"${u.role === 'admin' ? ' selected' : ''}>Admin (kaikki oikeudet)</option>${can('main') ? `<option value="super"${u.role === 'super' ? ' selected' : ''}>Superadmin</option>` : ''}${!u.role ? '<option value="" selected>Mukautettu (vanha)</option>' : ''}${gone ? `<option value="${esc(u.role)}" selected>Poistettu rooli</option>` : ''}</select></label>${saveBar('acro-' + pid, 'Tallenna rooli')}`;
+    `<option value="admin"${u.role === 'admin' ? ' selected' : ''}>Admin</option>${!u.role ? '<option value="" selected>Mukautettu (vanha)</option>' : ''}${gone ? `<option value="${esc(u.role)}" selected>Poistettu rooli</option>` : ''}</select></label>${saveBar('acro-' + pid, 'Tallenna rooli')}`;
   if (!u.role) h += permBoxes('acct', pid, u);
-  else h += `<p class="hint" data-k="ac-sum">${r.sup ? 'Kaikki Adminin oikeudet ja asetuksista: ' + esc(superNames()) + '.' : r.admin ? 'Kaikki välilehdet ja oikeudet. Asetuksista vain Yleiset.' : gone ? 'Rooli on poistettu, joten tunnus pääsee vain katsomaan. Valitse uusi rooli.' : 'Välilehdet: ' + esc(tabNames(r.tabs)) + '. Oikeudet: ' + esc(rightNames(r.rights)) + '.'}</p>`;
+  else h += `<p class="hint" data-k="ac-sum">${r.admin ? adminSummary() + '.' : gone ? 'Rooli on poistettu, joten tunnus pääsee vain katsomaan. Valitse uusi rooli.' : 'Välilehdet: ' + esc(tabNames(r.tabs)) + '. ' + esc(roleLine(r).replace(/^./, x => x.toUpperCase())) + '.'}</p>`;
   if (NET) {
     const mails = accEmails(pid);
     h += mails.length ? `<p class="hint" data-k="ac-g">Kirjautuu Google-tilillä ${esc(mails.join(', '))}.</p>`
@@ -3091,7 +3177,7 @@ function acctBody(pid) {
   const req = !!(u.pwReq || u.hash);
   h += `<div class="f" data-k="ac-pw"><div>${plToggle('acpw-' + id, req, 'acct-pwreq', ` data-id="${id}"`, 'Salasana')}</div>` +
     `<p class="hint" data-k="ac-pwh">${!req ? 'Kirjautuu pelkällä nimellä.' : u.hash ? 'Salasana on luotu. Pois kytkettynä se poistuu.' : 'Hän luo salasanan seuraavalla kirjautumisella.'}</p>` +
-    (!req && (rights || u.goal) ? `<p class="warnmsg" data-k="ac-pww">Ilman salasanaa kuka tahansa tällä nimellä saa tunnuksen oikeudet.</p>` : '') + `</div>`;
+    (!req && (rights || r.goal) ? `<p class="warnmsg" data-k="ac-pww">Ilman salasanaa kuka tahansa tällä nimellä saa tunnuksen oikeudet.</p>` : '') + `</div>`;
   return h;
 }
 function nameField(pid, p) {
@@ -3119,7 +3205,7 @@ function viewOwn() {
     (k === 'katsoja' || !st.length ? '' : `<h3 class="sub sect" data-k="own-h2">Omat tilastot</h3>${statTable('p', p, st)}`) +
     `<h3 class="sub sect" data-k="own-h3">Omat tiedot</h3>${info}` +
     (canEdit ? nameField(u.id, p) + photoField('p-' + u.id) + colorField('p', u.id, COLOR[p.color] ? p.color : '')
-      : `<p class="hint" data-k="own-ro">${ui.readOnly ? 'Katselutilassa tietoja ei voi muuttaa.' : 'Nimen, kuvan ja värin vaihtaa admin.'}</p>`) +
+      : ui.readOnly ? `<p class="hint" data-k="own-ro">Katselutilassa tietoja ei voi muuttaa.</p>` : '') +
     `</div></div></section></main>`;
 }
 // A profile opened in Pelaajat is the same card as from the tables. Whoever may change it gets Asetukset (name, kind, team,
@@ -3412,20 +3498,56 @@ function mChip(m, plain) {
   return `<span class="chip">${m.time ? 'klo ' + m.time : 'Tulossa'}</span>`;
 }
 const sideAv = x => x.team ? teamAv(x.team, 'sm') : '<span class="av sm none" aria-hidden="true"></span>';
-// Each real match in the bracket is a button that opens that match's own page.
-function bracket(T, scope) {
-  const rs = rounds(T);
+// The bracket as a picture: a box for each team, two to a match, and lines joining each match to the one its winner goes on to.
+// Each match takes up the height of the matches feeding it, so it sits halfway between them and the lines meet it in the middle
+// (the room above and below a match is its margin, not padding, so that the heights follow the number of matches exactly).
+// A side not decided yet is an empty box; a coming match shows when it starts, a running one its clock, a played one the score.
+// The final is last, the bronze match under it. In the page each match opens its own page; the big screen draws the same, larger.
+const ROUNDS_HEAD = n => n === 2 ? 'Välierät' : n <= 4 ? 'Puolivälierät' : n <= 8 ? 'Neljännesvälierät' : 'Alkukierros';
+function bracketView(T, scope, big) {
+  const rs = rounds(T), R = rs.length, tid = esc(T.id);
   if (!rs[0].length) return '';
-  const box = id => {
-    if (!T.matches[id]) return '';
-    const m = Object.assign({ id }, T.matches[id]), h = sideInfo(T, m.home), a = sideInfo(T, m.away), o = outcome(T, m, 0), st = mStatus(m), bye = isBye(m), show = st !== 'new' && !bye;
-    const r = (x, n) => `<span class="bxr${o && x.id && o.w === x.id ? ' win' : ''}">${sideAv(x)}<span class="mname${x.id ? '' : ' tbd'}">${esc(x.name)}</span>${show ? `<b>${n}</b>` : ''}</span>`;
-    const inner = `<span class="bxh"><span>${esc(matchLabel(T, m))}</span>${mChip(m)}</span>${r(h, m.hs)}${r(a, m.as)}`;
-    return bye ? `<div class="bx" data-k="bx-${esc(id)}">${inner}</div>`
-      : `<button class="bx${st === 'live' ? ' live' : ''}" id="bx-${scope}-${esc(id)}" data-act="open-match" data-scope="${scope}" data-tour="${esc(T.id)}" data-id="${esc(id)}">${inner}</button>`;
+  const w = {};
+  rs.forEach((ids, r) => ids.forEach((id, i) => { w[id] = r ? (w[rs[r - 1][2 * i]] || 0) + (w[rs[r - 1][2 * i + 1]] || 0) || 1 : 1; }));
+  const pct = x => Math.round(x * 10000) / 100 + '%';
+  const finId = rs[R - 1][0], champ = finId && T.matches[finId] ? outcome(T, T.matches[finId], 0) : null;
+  const status = m => {
+    const st = mStatus(m);
+    if (isBye(m)) return 'Vapaakierros';
+    if (st === 'live') return m.pausedAt ? 'Keskeytetty' : onBreak(m) ? 'Erätauko ' + downClock(m.breakUntil) : 'Käynnissä ' + mClock(m);
+    if (st === 'done') return 'Päättynyt';
+    return m.time ? 'klo ' + esc(m.time) : '';
   };
-  return `<div class="bracket${rs.length > 2 ? ' many' : ''}" data-k="bracket" aria-label="Turnauskaavio">${rs.map((ids, r) => `<div class="bcol" data-k="bcol-${r}"><h3 class="sub">${roundName(ids.length)}</h3><div class="bcm">${ids.map(box).join('')}${r === rs.length - 1 ? box('bronze') : ''}</div></div>`).join('')}</div>`;
+  // one team's box: empty while the side is still to be decided, "Ei vastustajaa" on a free pass
+  const box = (m, sd, x, n, o, shown, fin) => {
+    const pend = !x.team && !!sd && !!(sd.w || sd.l), none = !sd;
+    const win = !!o && !!x.id && o.w === x.id, lose = !!o && !!x.id && o.l === x.id && !isBye(m);
+    const cls = 'bkt' + (win ? ' win' : '') + (win && fin ? ' champ' : '') + (lose ? ' lose' : '') + (pend ? ' tbd' : '') + (none ? ' none' : '');
+    if (pend) return `<span class="${cls}"><span class="vh">${esc(x.name)}</span></span>`;
+    return `<span class="${cls}">${x.team ? teamAv(x.team, 'sm') : ''}<span class="bkn">${esc(none ? 'Ei vastustajaa' : x.name)}</span>${shown && !none ? `<b class="bks">${n}</b>` : ''}</span>`;
+  };
+  // one match: its line above (name, start time or clock) and its two boxes
+  const card = id => {
+    const m = Object.assign({ id }, T.matches[id]), h = sideInfo(T, m.home), a = sideInfo(T, m.away), o = outcome(T, m, 0), st = mStatus(m), bye = isBye(m);
+    const shown = st !== 'new' && !bye, fin = id === finId, s = status(m), meta = esc(matchLabel(T, m)) + (s ? ' · ' + s : '');
+    const inner = (`<span class="bkmeta${st === 'live' ? ' on' : ''}${fin || id === 'bronze' ? ' big' : ''}">${meta}</span>`) + box(m, m.home, h, m.hs, o, shown, fin) + box(m, m.away, a, m.as, o, shown, fin);
+    const cls = 'bkp bx' + (st === 'live' ? ' live' : '');
+    return big || bye ? `<div class="${cls}" data-k="${big ? 'sbx' : 'bx'}-${esc(id)}">${inner}</div>`
+      : `<button class="${cls}" id="bx-${scope}-${esc(id)}" data-act="open-match" data-scope="${scope}" data-tour="${tid}" data-id="${esc(id)}">${inner}</button>`;
+  };
+  const bronze = T.matches.bronze ? `<div class="bkz" data-k="bkz">${card('bronze')}</div>` : '';
+  const slot = (id, r, i) => {
+    const a = r ? w[rs[r - 1][2 * i]] || 0 : 0, b = r ? w[rs[r - 1][2 * i + 1]] || 0 : 0, two = a > 0 && b > 0;
+    const cls = 'bkm' + (r > 0 ? ' from' : '') + (r < R - 1 ? ' to' : '') + (two ? ' join' : '');
+    const st = `flex-grow:${w[id]}` + (two ? `;--t:${pct(a / 2 / (a + b))};--b:${pct(b / 2 / (a + b))}` : '');
+    if (!T.matches[id]) return `<div class="${cls}" data-k="bkm-${esc(id)}" style="${st}"></div>`;
+    return `<div class="${cls}" data-k="bkm-${esc(id)}" style="${st}"><div class="bkw">${card(id)}${r === R - 1 ? bronze : ''}</div></div>`;
+  };
+  return `<div class="bracket${big ? ' big' : ''}${bronze && R <= 2 ? ' zpad' : ''}" data-k="bracket" role="group" aria-label="Turnauskaavio" style="--cols:${R}">` +
+    rs.map((ids, r) => `<div class="bkh" data-k="bkh-${r}" style="grid-column:${r + 1}">${r < R - 1 ? ROUNDS_HEAD(ids.length) : ''}</div>`).join('') +
+    rs.map((ids, r) => `<div class="bkc" data-k="bkc-${r}" style="grid-column:${r + 1}">${ids.map((id, i) => slot(id, r, i)).join('')}</div>`).join('') + `</div>`;
 }
+function bracket(T, scope) { return bracketView(T, scope, false); }
 
 /* ----- tournaments tab: list, create, profile ----- */
 // A tournament's state: 'done' once the final has a winner, 'live' while a match is on, 'on' when some are played, 'new' before any.
@@ -3481,9 +3603,10 @@ function matchControls(T, m) {
   const tid = esc(T.id), mid = esc(m.id), st = mStatus(m), h = sideInfo(T, m.home), a = sideInfo(T, m.away);
   const ready = !!(h.team && a.team), d = `data-tour="${tid}" data-id="${mid}"`;
   if (isBye(m)) return `<p class="hint" data-k="mc-bye">Vapaakierros. ${esc((m.home ? h : a).name)} jatkaa suoraan seuraavalle kierrokselle.</p>`;
-  if (!can('ajat')) return '';
+  const K = canMatch('kulku', T, m), P = canMatch('tauot', T, m), A = can('aika');
+  if (!K && !P && !A) return '';
   const key = a2 => a2 + ':' + T.id + '|' + m.id, two = (id, a2, label, armedLabel, tone, off) => twice(id + '-' + m.id, key(a2), label, false, armedLabel, tone || 'plain', off);
-  const K = can('kulku'), P = can('tauot'), A = can('aika'), box = (k, cls, inner) => inner ? `<div class="${cls}" data-k="${k}">${inner}</div>` : '';
+  const box = (k, cls, inner) => inner ? `<div class="${cls}" data-k="${k}">${inner}</div>` : '';
   if (st === 'new') return box('mc-new', 'mctl', (A ? `<label class="f"><span>Alkamisaika</span><input type="time" id="mt-${mid}" data-field="m-time" ${d} value="${esc(m.time)}"></label>` : '') + (K ? two('mst', 'm-start', 'Aloita ottelu', 'Vahvista aloitus', 'primary', !ready) : '') + (A ? saveBar('mt-' + m.id, 'Tallenna alkamisaika') : '')) +
     (ready || !K ? '' : `<p class="hint" data-k="mc-wait">Ottelun voi aloittaa, kun molemmat joukkueet ovat selvillä.</p>`);
   const end = K ? two('men', 'm-end', 'Päätä ottelu', 'Vahvista päätös') : '';
@@ -3504,7 +3627,7 @@ function matchTime(T, m) {
 function matchCard(T, m, scope, os) {
   const tid = esc(T.id), mid = esc(m.id), st = mStatus(m), bye = isBye(m), h = sideInfo(T, m.home), a = sideInfo(T, m.away), d = `data-tour="${tid}" data-id="${mid}"`, kirj = scope === 'kirj';
   const row = (x, side, n) => `<div class="mrow" data-k="mr-${side}">${sideAv(x)}<span class="mname${x.id ? '' : ' tbd'}">${esc(x.name)}</span>${bye || st === 'new' ? '' : `<b class="mnum" data-bump>${n}</b>`}</div>`;
-  const scoring = kirj && can('kirj') && st === 'live' && !!h.team && !!a.team, open = scoring ? entryForm(T, m) : '';
+  const scoring = kirj && (can('kirj') || ownAll(T.id, m.id)) && st === 'live' && !!h.team && !!a.team, open = scoring ? entryForm(T, m) : '';
   const entries = !scoring ? '' : open || goalButtons(T, m, 'mg', 'gn-' + m.id) + noteButtons(T, m, 'nn-' + m.id);
   const undoGoal = scoring && can('kmuok') && !open && (m.ev || []).some(e => e.k === 'g') ? twice('ug-' + m.id, 'undo-goal:' + T.id + '|' + m.id, 'Peru viimeisin maali') : '';
   const del = !kirj && !m.auto && can('ottelu') ? twice('md-' + m.id, 'del-match:' + T.id + '|' + m.id, 'Poista ottelu') : '';
@@ -3674,7 +3797,7 @@ function logRows(list, where) {
 }
 const logWait = () => ui.backend === 'db' && !ui.logsReady ? (ui.logsErr ? 'Lokia ei saatu ladattua. Lataa sivu uudelleen.' : 'Ladataan lokia…') : '';
 function matchProfile(T, mid, scope) {
-  const m = Object.assign({ id: mid }, T.matches[mid]), st = mStatus(m), h = sideInfo(T, m.home), a = sideInfo(T, m.away), canT = can('ajat'), canR = can('kirj'), canE = can('kmuok');
+  const m = Object.assign({ id: mid }, T.matches[mid]), st = mStatus(m), h = sideInfo(T, m.home), a = sideInfo(T, m.away), ctl = matchControls(T, m), canR = can('kirj'), canE = can('kmuok');
   const open = entryForm(T, m);
   const pt = pauseTotal(m);
   const line = st === 'new' ? (m.time ? 'Alkaa klo ' + m.time : 'Ei vielä aloitettu') : st === 'live' ? liveLine(m) : 'Päättynyt · kesto ' + clock(playMs(m, m.endedAt)) + (pt ? ' · keskeytykset ' + clock(pt) : '');
@@ -3686,8 +3809,8 @@ function matchProfile(T, mid, scope) {
   return `<div data-k="mp-back">${back}</div>` +
     `<section class="hero" data-k="mp-hero"><span class="hm"><span class="hml">${esc(matchLabel(T, m))}</span><span class="hmr"><span class="hmt">${esc(h.name)}</span><span class="hms"><b data-bump>${m.hs}</b><i>–</i><b data-bump>${m.as}</b></span><span class="hmt">${esc(a.name)}</span></span>${st === 'live' ? heroState(m) : `<span class="hmc" data-k="hmc">${line}</span>`}</span></section>` +
     `<div class="mpgrid" data-k="mp-grid"><div class="mpmain" data-k="mp-main">` +
-    (canT ? `<div class="mcard" data-k="mp-ctl">${matchControls(T, m)}</div>` : '') +
-    (entry ? (open || (bar ? '' : goalButtons(T, m, 'mp-goal', 'gn')) + (canR ? noteButtons(T, m, 'nn') : '') + goalNote(m)) : '') +
+    (ctl ? `<div class="mcard" data-k="mp-ctl">${ctl}</div>` : '') +
+    (entry ? (open || (bar ? '' : goalButtons(T, m, 'mp-goal', 'gn')) + (canR || ownAll(T.id, m.id) ? noteButtons(T, m, 'nn') : '') + goalNote(m)) : '') +
     (canE && dupCount(m) ? `<p class="warnmsg" data-k="mp-dup">Ottelussa on ${dupCount(m) === 1 ? 'tuplakirjaus' : dupCount(m) + ' tuplakirjausta'}: sama maali kirjattiin kahdesti. Tuplaa ei lasketa tulokseen. Jos se olikin eri maali, paina historiassa Laske mukaan, muuten Poista.</p>` : '') +
     `<h3 class="sub" data-k="mp-ph">Pelaajat</h3>${matchRoster(T, m, 'h')}${matchRoster(T, m, 'a')}</div>` +
     `<div class="mpside" data-k="mp-side"><h3 class="sub" data-k="mp-hh">Historia</h3>${matchHistory(T, m, canE)}</div></div>` +
@@ -3758,7 +3881,7 @@ function tourTeamsBlock(T) {
     };
     // anyone not playing for this team in the tournament: its own players taken out, and the rest with where they are now
     const cand = realPlayers().filter(q => tTeam(T, q.id) !== tid || out_(T, q.id)).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
-    const where = q => { const tt = tTeam(T, q.id); return q.teamId === tid && tt === tid ? 'poistettu turnauksesta' : tt && ids.indexOf(tt) >= 0 ? 'nyt ' + state.teams[tt].name : state.teams[q.teamId] ? state.teams[q.teamId].name : 'ei joukkuetta'; };
+    const where = q => { const tt = tTeam(T, q.id); return q.teamId === tid && tt === tid ? 'poistettu turnauksesta' : tt && ids.indexOf(tt) >= 0 ? state.teams[tt].name : state.teams[q.teamId] ? state.teams[q.teamId].name : 'vapaa pelaaja'; };
     return `<li class="accl on" data-k="tj-${tk}">${head}<div class="accp" id="tjp-${id}-${tk}" data-k="tjp-${tk}">` +
       (ps.length ? `<ul class="mlist tlist" data-k="tpgl-${tk}">${ps.map(row).join('')}</ul>` : `<p class="hint" data-k="tjp-none">Ei pelaajia.</p>`) +
       (cand.length ? `<label class="f" data-k="tra"><span>Lisää pelaaja joukkueeseen</span><select id="tra-${id}-${tk}" data-field="tour-roster-add" data-id="${id}" data-team="${tk}"><option value="">Valitse pelaaja…</option>${cand.map(q => `<option value="${esc(q.id)}">${esc(q.name)} (${esc(where(q))})</option>`).join('')}</select></label>` +
@@ -3779,7 +3902,7 @@ function tourPlayersBlock(T) {
       `<span class="hact">${twiceIcon('tpd-' + T.id + '-' + pid, 'tour-player-del:' + T.id + '|' + pid, ICON.del, 'Poista ' + q.name + ' turnauksesta')}</span></li>`; };
   return `<p class="hint" data-k="tsub-hint">Tuuraaja voi pelata turnauksen otteluissa minkä tahansa joukkueen riveissä.</p>` +
     (subs.length ? `<ul class="mlist tlist" data-k="tsub-list">${subs.map(row).join('')}</ul>` : '') +
-    (cand.length ? `<label class="f" data-k="tpl-add"><span>Lisää tuuraaja turnaukseen</span><select id="tpa-${id}" data-field="tour-player-add" data-id="${id}"><option value="">Valitse pelaaja…</option>${cand.map(q => `<option value="${esc(q.id)}">${esc(q.name)}${state.teams[q.teamId] ? ' (' + esc(state.teams[q.teamId].name) + (out_(T, q.id) ? ', poistettu turnauksesta' : '') + ')' : ' (ei joukkuetta)'}</option>`).join('')}</select></label>` : '');
+    (cand.length ? `<label class="f" data-k="tpl-add"><span>Lisää tuuraaja turnaukseen</span><select id="tpa-${id}" data-field="tour-player-add" data-id="${id}"><option value="">Valitse pelaaja…</option>${cand.map(q => `<option value="${esc(q.id)}">${esc(q.name)}${state.teams[q.teamId] ? ' (' + esc(state.teams[q.teamId].name) + (out_(T, q.id) ? ', poistettu turnauksesta' : '') + ')' : ' (vapaa pelaaja)'}</option>`).join('')}</select></label>` : '');
 }
 const out_ = (T, pid) => (T.out || []).indexOf(pid) >= 0;
 function showLink(T, short) {
@@ -3788,55 +3911,47 @@ function showLink(T, short) {
     `<p class="hint">${short ? 'Isolle näytölle.' : 'Aukeaa uuteen välilehteen. Siirrä se isolle näytölle ja paina Koko näyttö.'}</p></div>`;
 }
 // One tournament's page. The tournament tab shows the one being played (scope 'live'); a tournament opened from the Turnaukset list
-// (scope 'tour') looks the same. Turnaus holds its sections together on one page; Valvomo and Asetukset are for those who run it,
-// and the page opens on Valvomo for them. A played tournament opens on its Yhteenveto.
+// (scope 'tour') looks the same. Its sections are pages of their own under a row of section tabs: Valvomo and Asetukset for those
+// who run it, and a played tournament opens on its Yhteenveto. A player opens on his own matches when he has any.
+const TOUR_SECS = [['omat', 'Sinun pelisi'], ['kaavio', 'Kaavio'], ['taulukko', 'Tulostaulu'], ['ottelut', 'Ottelut'], ['joukkueet', 'Joukkueet']];
+const secNone = (k, text) => `<p class="tnone" data-k="${k}">${text}</p>`;
 function tourPage(T, scope) {
   const tour = scope === 'tour', edit = can('tasetus') || can('turnaus'), newM = can('ottelu'), canK = can('tulokset') || can('ajat'), pid = ownPid();
-  const over = tourState(T) === 'done';   // once the final is played, the page opens on the tournament's summary
-  const secs = (pid ? ['omat'] : []).concat(['ottelut', 'kaavio', 'taulukko', 'joukkueet']).filter(canSec);
-  const tabs = (over ? [['yhteenveto', 'Yhteenveto']] : []).concat((canK || vmAllowed()) && canSec('valvomo') ? [['valvomo', 'Valvomo']] : [], secs.length ? [['turnaus', 'Turnaus']] : [], edit ? [['muokkaa', 'Asetukset']] : []);
-  if (!tabs.length) return (tour ? backBtn('tour', 'Kaikki turnaukset') : '') + `<div class="lhead" data-k="lhead"><h2 class="sec">${esc(T.name)}</h2><span class="muted">${tourMeta(T)}</span></div><p class="hint" data-k="lv-nosec">Turnauksen osioita ei ole valittu näkyviin. Pyydä ADMINia lisäämään niitä roolillesi.</p>`;
-  // the sections were tabs of their own before; a link to one of them opens the page they are on now
-  const cur0 = tour ? ui.tourTab : ui.liveTab, cur = cur0 !== 'valvomo' && ALL_SECS.indexOf(cur0) >= 0 ? 'turnaus' : cur0;
-  const tab = tabs.some(x => x[0] === cur) ? cur : tabs[0][0];
+  const over = tourState(T) === 'done';
+  const tabs = (over ? [['yhteenveto', 'Yhteenveto']] : []).concat((canK || vmAllowed()) && canSec('valvomo') ? [['valvomo', 'Valvomo']] : [],
+    TOUR_SECS.filter(x => canSec(x[0]) && (x[0] !== 'omat' || pid)), edit ? [['muokkaa', 'Asetukset']] : []);
+  if (!tabs.length) return (tour ? backBtn('tour', 'Kaikki turnaukset') : '') + `<div class="lhead" data-k="lhead"><h2 class="sec">${esc(T.name)}</h2><span class="muted">${tourMeta(T)}</span></div><p class="hint" data-k="lv-nosec">Turnauksen osioita ei ole valittu näkyviin. Pyydä Valvomoa lisäämään niitä roolillesi.</p>`;
+  // the page opens on the first section with something in it: a player without matches skips Sinun pelisi, and a tournament without matches its Kaavio
+  const ms = matchList(T).filter(m => !isBye(m)), teams = tourTeamIds(T).length > 0;
+  const has = { omat: !!pid && ms.some(m => playSide(T, m, pid)), kaavio: ms.length > 0, ottelut: ms.length > 0 || newM, taulukko: teams, joukkueet: teams };
+  const first = tabs.find(x => has[x[0]] !== false) || tabs[0];
+  const cur = tour ? ui.tourTab : ui.liveTab, tab = tabs.some(x => x[0] === cur) ? cur : first[0];
   const om = tour ? ui.tourMatch : ui.liveMatch, open = om && T.matches[om] && !isBye(T.matches[om]) ? om : '';
   const mine = open ? null : myMatch(T);
+  const NO_M = 'Ei vielä otteluita', NO_T = 'Ei vielä joukkueita';
   const body = open ? matchProfile(T, open, scope)
     : tab === 'valvomo' ? vmTour(T, scope)
     : tab === 'yhteenveto' ? tourSummary(T)
-    : tab === 'turnaus' ? tourAll(T, scope, secs, pid, newM)
+    : tab === 'kaavio' ? bracket(T, scope) || secNone('lv-nob', NO_M)
+    : tab === 'taulukko' ? (t => t ? tourKpis(T) + t : secNone('tb-none', NO_T))(liveTable(T))
+    : tab === 'omat' ? liveOwn(T, pid, scope) || secNone('om-none', NO_M)
+    : tab === 'ottelut' ? (newM ? matchesHead(T) : '') + (liveMatches(T, scope) || secNone('lt-none', NO_M))
+    : tab === 'joukkueet' ? liveTeams(T) || secNone('lj-none', NO_T)
     : tourSettings(T);
   // in Valvomo the running matches are right there as cards, so the scoreboard strips for them are left out
-  // in the tournament's settings the scoreboards shrink to a line each, so the work starts near the top
-  const manage = edit && tab === 'muokkaa';
+  // where the tournament is run (its matches and settings) the scoreboards shrink to a line each, so the work starts near the top
+  const manage = (newM && tab === 'ottelut') || (edit && tab === 'muokkaa');
   // in Valvomo one's own match stays on top, and its goal buttons are on its card there for whoever records results
   const vm = tab === 'valvomo';
-  const top = open ? '' : manage ? heroLines(T, mine, scope) : (mine ? myHero(T, mine, sideTeam(T, mySide(T, mine, me().id) === 'a' ? mine.away : mine.home), scope) + (vm && can('kirj') ? '' : myGoal(T, mine)) : '') + (vm ? '' : liveHero(T, mine, scope));
+  const top = open ? '' : manage ? heroLines(T, mine, scope) : (mine ? myHero(T, mine, sideTeam(T, mySide(T, mine, me().id) === 'a' ? mine.away : mine.home), scope) + (vm && (can('kirj') || ownAll(T.id, mine.id)) ? '' : myGoal(T, mine)) : '') + (vm ? '' : liveHero(T, mine, scope));
   const act = activeTour(), chip = tour ? tourChip(tourState(T), !!act && act.id === T.id) : '';
   return (tour ? backBtn('tour', 'Kaikki turnaukset') : '') + `<div class="lhead" data-k="lhead"><h2 class="sec">${esc(T.name)}</h2><span class="muted">${tourMeta(T)}</span>${chip}</div>` + top +
-    (tabs.length > 1 ? subtabs(tour ? 'tour' : 'live', tabs, open ? '' : tab) : '') + `<div class="pbody" data-k="${tour ? 'tub' : 'lv'}-${open ? 'm-' + esc(open) : tab}">${body}</div>` +
+    (tabs.length > 1 ? secTabs(tour ? 'tour' : 'live', tabs, open ? '' : tab) : '') + `<div class="pbody" data-k="${tour ? 'tub' : 'lv'}-${open ? 'm-' + esc(open) : tab}">${body}</div>` +
     (tour && !edit && !open ? `<h3 class="sub sect" data-k="tu-sh">Esitys isolle näytölle</h3>${showLink(T, true)}` : '');
 }
-// Turnaus: the tournament's sections together. On a computer they are boxes: Sinun pelisi and Joukkueet beside Ottelut on top, then
-// Kaavio and Tulostaulu the full width. On a phone they come one after another under their headings. A section with nothing in it yet
-// is only a small box at the end.
-function tourAll(T, scope, secs, pid, newM) {
-  const NAME = { omat: 'Sinun pelisi', ottelut: 'Ottelut', kaavio: 'Kaavio', taulukko: 'Tulostaulu', joukkueet: 'Joukkueet' };
-  const NONE = { omat: 'Ei vielä otteluita', ottelut: 'Ei vielä otteluita', kaavio: 'Ei vielä otteluita', taulukko: 'Ei vielä joukkueita', joukkueet: 'Ei vielä joukkueita' };
-  const has = k => secs.indexOf(k) >= 0, out = {};
-  if (has('omat')) out.omat = liveOwn(T, pid, scope);
-  if (has('ottelut')) out.ottelut = newM ? matchesHead(T) + (liveMatches(T, scope) || `<p class="hint" data-k="lt-none">Ei vielä otteluita.</p>`) : liveMatches(T, scope);
-  if (has('kaavio')) out.kaavio = bracket(T, scope);
-  if (has('taulukko')) { const tb = liveTable(T); out.taulukko = tb ? tourKpis(T) + tb : ''; }
-  if (has('joukkueet')) out.joukkueet = liveTeams(T);
-  const box = k => `<section class="tbox tx-${k}" id="tx-${k}" data-k="tx-${k}" aria-labelledby="txh-${k}"><h3 class="sec tbh" id="txh-${k}">${NAME[k]}</h3>${out[k]}</section>`;
-  const full = k => has(k) && !!out[k], left = ['omat', 'joukkueet'].filter(full), right = ['ottelut'].filter(full);
-  const nils = secs.filter(k => !out[k]);
-  return `<div class="tpage" data-k="tx">` +
-    (left.length || right.length ? `<div class="ttop${left.length && right.length ? ' two' : ''}" data-k="tx-top">` +
-      (left.length && right.length ? `<div class="tcol" data-k="tx-l">${left.map(box).join('')}</div><div class="tcol" data-k="tx-r">${right.map(box).join('')}</div>` : `<div class="tcol" data-k="tx-1">${left.concat(right).map(box).join('')}</div>`) + `</div>` : '') +
-    ['kaavio', 'taulukko'].filter(full).map(box).join('') +
-    (nils.length ? `<div class="tnils" data-k="tx-nils">${nils.map(k => `<div class="tnil" data-k="txn-${k}"><h3 class="sec">${NAME[k]}</h3><span>${NONE[k]}</span></div>`).join('')}</div>` : '') + `</div>`;
+// The tournament's sections as one row of tabs that scrolls sideways on a phone, like the views at the top.
+function secTabs(scope, tabs, cur) {
+  return `<nav class="tabs stabs" data-k="sub-${scope}" aria-label="Turnauksen osiot"><div class="tabsx" data-k="sub-${scope}-x">${tabs.map(x => `<button class="stab" id="sub-${scope}-${x[0]}" data-act="subtab" data-scope="${scope}" data-tab="${x[0]}" aria-pressed="${x[0] === cur}">${x[1]}</button>`).join('')}</div></nav>`;
 }
 // The viewer's own match and the running ones as one line each: who plays, the score and the clock. A line opens its match.
 function heroLines(T, mine, scope) {
@@ -3899,8 +4014,9 @@ function countdown(m) {
 function myGoal(T, m) {
   if (!m.startedAt || m.endedAt || !(can('kirj') || ownLive(T.id, m.id))) return '';
   if (!sideInfo(T, m.home).team || !sideInfo(T, m.away).team) return '';
-  if (ui.goal && ui.goal.tid === T.id && ui.goal.mid === m.id) return goalForm(T, m);
-  return goalButtons(T, m, 'my-goal', 'myg') + goalNote(m);
+  const open = entryForm(T, m);
+  if (open) return open;
+  return goalButtons(T, m, 'my-goal', 'myg') + (can('kirj') || ownAll(T.id, m.id) ? noteButtons(T, m, 'myn') : '') + goalNote(m);
 }
 // The other matches being played right now. With `skip` (the viewer's own match, shown above) only the rest are listed and nothing else.
 function liveHero(T, skip, scope) {
@@ -3956,7 +4072,7 @@ function liveExtras(T, by) {
   const tids = tourTeamIds(T), ps = (T.extra || []).filter(id => state.players[id] && kindOf(state.players[id]) === 'pelaaja' && tids.indexOf(tTeam(T, id)) < 0)
     .map(id => by[id] || { q: Object.assign({ id }, state.players[id]), c: {}, pts: 0, rank: 0 });
   if (!ps.length) return '';
-  return `<h4 class="sub sect" data-k="lj-xh">Erikseen lisätyt pelaajat</h4><ul class="mlist" data-k="lj-x">${ps.map(x => `<li data-k="ljx-${esc(x.q.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', x.q.id, 'ljx-' + x.q.id)}><span class="mtime">${x.rank ? x.rank + '.' : '–'}</span>${playerAv(x.q, 'sm')}<span class="itxt"><b>${esc(x.q.name)}</b><small>Tuuraa otteluissa</small></span><span class="mres">${fmt(x.pts)} <small>p</small></span></button></li>`).join('')}</ul>`;
+  return `<h3 class="sub sect" data-k="lj-xh">Erikseen lisätyt pelaajat</h3><ul class="mlist" data-k="lj-x">${ps.map(x => `<li data-k="ljx-${esc(x.q.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', x.q.id, 'ljx-' + x.q.id)}><span class="mtime">${x.rank ? x.rank + '.' : '–'}</span>${playerAv(x.q, 'sm')}<span class="itxt"><b>${esc(x.q.name)}</b><small>Tuuraa otteluissa</small></span><span class="mres">${fmt(x.pts)} <small>p</small></span></button></li>`).join('')}</ul>`;
 }
 // The side a profile played or plays on in a match: the side he stood in for (even if he was later taken out), or else his own team's.
 function playSide(T, m, pid) {
@@ -3999,10 +4115,10 @@ function liveOwn(T, pid, scope) {
   };
   const many = (n, one, more) => `<span><b>${n}</b>${n === 1 ? one : more}</span>`;
   return `<p class="omsum" data-k="om-sum">${many(by.done.length, 'pelattu', 'pelattua')}${many(by.live.length, 'käynnissä', 'käynnissä')}${many(by.new.length, 'tulossa', 'tulossa')}</p>` +
-    `<h4 class="sub sect" data-k="om-h-now">${by.live.length ? 'Käynnissä nyt' : 'Seuraava pelisi'}</h4>` +
+    `<h3 class="sub sect" data-k="om-h-now">${by.live.length ? 'Käynnissä nyt' : 'Seuraava pelisi'}</h3>` +
     (top.length ? `<ul class="mlist oml" data-k="om-now">${top.map(row).join('')}</ul>`
       : `<p class="hint" data-k="om-nonext">${more ? 'Ei peliä nyt käynnissä eikä tulossa.' : 'Kaikki pelisi on pelattu.'}</p>`) +
-    [['done', 'Pelatut', by.done], ['new', 'Tulevat', rest]].filter(g => g[2].length).map(g => `<h4 class="sub sect" data-k="om-h-${g[0]}">${g[1]}</h4><ul class="mlist oml" data-k="om-${g[0]}">${g[2].map(row).join('')}</ul>`).join('') +
+    [['done', 'Pelatut', by.done], ['new', 'Tulevat', rest]].filter(g => g[2].length).map(g => `<h3 class="sub sect" data-k="om-h-${g[0]}">${g[1]}</h3><ul class="mlist oml" data-k="om-${g[0]}">${g[2].map(row).join('')}</ul>`).join('') +
     '';
 }
 function viewLive() {
@@ -4082,61 +4198,6 @@ function vmTour(T, scope) {
     `<section class="vmside" data-k="vm-side" aria-label="Muutosvirta">${vmFeed(T, scope)}</section></div></div>`;
 }
 
-/* ----- who has the page open: every device says so now and then, and the Tila tab lists the ones heard from lately ----- */
-const DEV = (() => { let d = lsGet('anarit.dev'); if (!d || !/^[a-z0-9]{4,12}$/.test(d)) { d = uid(); lsSet('anarit.dev', d); } return d; })();
-// The kind of device and browser, read from what the browser says about itself. Nothing else about the device is sent.
-function devName() {
-  const u = navigator.userAgent || '';
-  const os = /iPhone/.test(u) ? 'iPhone' : /iPad/.test(u) ? 'iPad' : /Android/.test(u) ? 'Android' : /Windows/.test(u) ? 'Windows' : /Macintosh|Mac OS X/.test(u) ? 'Mac' : /CrOS/.test(u) ? 'Chromebook' : /Linux/.test(u) ? 'Linux' : 'Laite';
-  const br = /FBAN|FBAV|FB_IAB|Instagram|; wv\)/.test(u) ? 'sovelluksen selain' : /Edg\//.test(u) ? 'Edge' : /OPR\//.test(u) ? 'Opera' : /SamsungBrowser/.test(u) ? 'Samsung' : /CriOS|Chrome\//.test(u) ? 'Chrome' : /FxiOS|Firefox\//.test(u) ? 'Firefox' : /Safari\//.test(u) ? 'Safari' : '';
-  return (os + (br ? ' · ' + br : '')).slice(0, 50);
-}
-let presAt = 0, presKey = '';
-// Says "open here" at most every minute and a half, and right away when the person or the view changes. A hidden page says nothing.
-function beat(force) {
-  if (!db || ui.backend !== 'db' || !ui.ready || ui.readOnly) return;
-  if (document.visibilityState === 'hidden') return;
-  const m = me(), body = { at: nowMs(), n: m && !m.guest ? String(m.name).slice(0, 30) : '', pid: m && !m.guest ? String(m.id).slice(0, 30) : '', tab: (showOn() ? 'esitys' : ui.tab).slice(0, 20), dev: devName() };
-  const key = body.n + '|' + body.tab;
-  if (!force && key === presKey && body.at - presAt < 90000) return;
-  presAt = body.at; presKey = key;
-  db.doc('presence/' + DEV).set(body).catch(() => { /* the list is only a help */ });
-}
-function leave() {
-  if (!db || ui.backend !== 'db' || ui.readOnly || !presAt) return;
-  presAt = 0; presKey = '';
-  db.doc('presence/' + DEV).set({ at: 0, n: '', pid: '', tab: '', dev: devName() }).catch(() => { /* gone anyway */ });
-}
-let presLive = false, presStop = null, presSwept = false, presRetry = 0;
-// The list is followed only while someone who may see it has the Tila tab open. Everyone who opened the site may read it.
-// A refused or broken listen is tried again after half a minute, not at once, so it never spins against the database.
-function needPresence(on) {
-  if (on && !presLive && db && ui.backend === 'db' && nowMs() >= presRetry) {
-    presLive = true;
-    const u = db.collection('presence').onSnapshot(snap => {
-      const o = {}, now = nowMs(), old = [];
-      for (const d of snap.docs) { const x = d.data() || {}; const at = +x.at || 0; o[d.id] = { at, n: String(x.n || ''), pid: String(x.pid || ''), tab: String(x.tab || ''), dev: String(x.dev || '') }; if (now - at > 6 * 3600000) old.push(d.id); }
-      ui.pres = o; ui.presErr = false;
-      if (!presSwept && can('admin') && old.length) { presSwept = true; old.forEach(id => db.doc('presence/' + id).delete().catch(() => { /* swept next time */ })); }   // devices not heard from for hours drop off the list
-      render();
-    }, () => { ui.presErr = true; presLive = false; presStop = null; presRetry = nowMs() + 30000; render(); });
-    presStop = typeof u === 'function' ? u : null;
-  } else if (!on && presLive && presStop) { try { presStop(); } catch (e) { /* stopped */ } presLive = false; presStop = null; }
-}
-function vmDevices() {
-  if (ui.backend !== 'db') return `<p class="hint" data-k="vd-local">Laiteluettelo toimii, kun tiedot tallentuvat yhteiseen tallennukseen.</p>`;
-  if (ui.presErr) return `<p class="hint" data-k="vd-no">Laiteluetteloa ei saatu luettua. Sivu yrittää uudelleen puolen minuutin päästä.</p>`;
-  if (!ui.pres) return `<p class="hint" data-k="vd-wait">Haetaan laitteita…</p>`;
-  const now = nowMs(), on = Object.keys(ui.pres).map(id => Object.assign({ id }, ui.pres[id])).filter(x => now - x.at < 3 * 60000)
-    .sort((a, b) => (!a.n - !b.n) || a.n.localeCompare(b.n, 'fi') || (b.at - a.at));
-  const named = on.filter(x => x.n).length, ago = x => now - x.at < 60000 ? 'nyt' : Math.floor((now - x.at) / 60000) + ' min sitten';
-  return `<p class="omsum" data-k="vd-sum"><span><b>${on.length}</b>${on.length === 1 ? 'laite' : 'laitetta'}</span><span><b>${named}</b>kirjautunutta</span><span><b>${on.length - named}</b>vierasta</span></p>` +
-    (on.length ? `<ul class="mlist" data-k="vd-l">${on.map(x => {
-      const q = x.pid && state.players[x.pid] ? Object.assign({ id: x.pid }, state.players[x.pid]) : null, view = x.tab === 'esitys' ? 'Esitys isolla näytöllä' : TAB_LABEL[x.tab] || '';
-      return `<li data-k="vd-${esc(x.id)}">${q ? playerAv(q, 'sm') : `<span class="av sm none" aria-hidden="true"></span>`}<span class="itxt"><b>${esc(x.n || (x.pid === 'ADMIN' ? 'ADMIN' : 'Vieras'))}${x.id === DEV ? ' <small class="me2">· tämä laite</small>' : ''}</b><small>${esc(x.dev)}${view ? ' · ' + esc(view) : ''}</small></span><span class="chip${now - x.at < 60000 ? ' live' : ''}">${ago(x)}</span></li>`;
-    }).join('')}</ul>` : `<p class="hint" data-k="vd-none">Sivu ei ole juuri nyt auki millään laitteella.</p>`) +
-    `<p class="hint" data-k="vd-how">Sivu auki viimeisen kolmen minuutin aikana.</p>`;
-}
 // The site's own state: saving, the connection, the phone's clock and the latest automatic backup.
 function vmSite() {
   const s = syncInfo(), rows = [['Tallennus', s[1], s[0]]];
@@ -4149,16 +4210,16 @@ function vmSite() {
   } else rows.push(['Tallennuspaikka', ui.backend === 'local' ? 'Vain tämän laitteen selain' : 'Tämä sivu (Claude)', 'off']);
   return `<dl class="info vmsite" data-k="vs">${rows.map(r => `<div data-k="vs-${esc(r[0])}"><dt>${r[0]}</dt><dd><span class="sync" data-s="${r[2]}"><span class="stx">${esc(r[1])}</span></span></dd></div>`).join('')}</dl>`;
 }
-// The Tila tab: the tournaments at a glance, each leading to its own Valvomo, the site's state and the devices.
+// The Tila tab: the tournaments at a glance, each leading to its own Valvomo, and the site's state.
 function viewControl() {
   const ts = toursSorted(), at = activeTour();
   const tours = ts.length ? `<ul class="mlist" data-k="vt-l">${ts.map(T => {
     const c = vmCount(T), st = tourState(T);
     return `<li data-k="vt-${esc(T.id)}"><button class="lrowb crd" id="vto-${esc(T.id)}" data-act="vm-tour" data-tour="${esc(T.id)}"><span class="itxt"><b>${esc(T.name)}</b><small>Pelattu ${c.done}/${c.all}${c.live ? ' · ' + c.live + ' käynnissä' : ''}${c.alerts.length ? ' · ' + c.alerts.length + (c.alerts.length === 1 ? ' huomio' : ' huomiota') : ''}</small></span>${tourChip(st, !!at && at.id === T.id)}</button></li>`;
   }).join('')}</ul>` : `<p class="hint" data-k="vt-none">Ei vielä turnauksia.</p>`;
-  return `<main id="v-valvomo" class="stack vmwrap"><div class="lhead" data-k="vm-head"><h2 class="sec">Tila</h2><span class="muted">Sivusto, laitteet ja turnaukset</span></div>` +
-    `<div class="cols2" data-k="vo"><div data-k="vo-1"><h3 class="sub sect" data-k="vo-th">Turnaukset</h3>${tours}<h3 class="sub sect" data-k="vo-sh">Sivuston tila</h3>${vmSite()}</div>` +
-    `<div data-k="vo-2"><h3 class="sub sect" data-k="vo-dh">Laitteet nyt</h3>${vmDevices()}</div></div></main>`;
+  return `<main id="v-valvomo" class="stack vmwrap"><div class="lhead" data-k="vm-head"><h2 class="sec">Tila</h2><span class="muted">Turnaukset ja sivuston tila</span></div>` +
+    `<div class="cols2" data-k="vo"><div data-k="vo-1"><h3 class="sub sect" data-k="vo-th">Turnaukset</h3>${tours}</div>` +
+    `<div data-k="vo-2"><h3 class="sub sect" data-k="vo-sh">Sivuston tila</h3>${vmSite()}</div></div></main>`;
 }
 /* ----- big-screen show: slides ----- */
 // The teams of a tournament: those added to it in its settings, and any that play in its matches.
@@ -4193,16 +4254,7 @@ function showNow(T, ms, live) {
   if (next) return `<div class="sn"><div class="sn-m"><div class="sn-l">Seuraavaksi${next.time ? ' klo ' + next.time : ''} · ${esc(matchLabel(T, next))}</div><div class="sn-r">${side(sideInfo(T, next.home))}<div class="sn-s"><i>vs</i></div>${side(sideInfo(T, next.away))}</div></div></div>`;
   return `<div class="sn"><div class="sn-m"><div class="sn-w">${esc(T.name)}</div><div class="sn-c">${ms.length ? 'Kaikki ottelut on pelattu.' : 'Otteluita ei ole vielä luotu.'}</div></div></div>`;
 }
-function showBracket(T) {
-  const rs = rounds(T), n = rs[0].length;
-  const box = id => {
-    if (!T.matches[id]) return '';
-    const m = Object.assign({ id }, T.matches[id]), h = sideInfo(T, m.home), a = sideInfo(T, m.away), o = outcome(T, m, 0), st = mStatus(m), show = st !== 'new' && !isBye(m);
-    const r = (x, g) => `<span class="sb-r${o && x.id && o.w === x.id ? ' win' : ''}${x.id ? '' : ' tbd'}">${x.team ? teamAv(x.team, 'sm') : ''}<span>${esc(x.name)}</span>${show ? `<b>${g}</b>` : ''}</span>`;
-    return `<div class="sb-x${st === 'live' ? ' live' : ''}" data-k="sbx-${esc(id)}">${id === 'bronze' ? '<span class="sb-l">Pronssiottelu</span>' : ''}${r(h, m.hs)}${r(a, m.as)}</div>`;
-  };
-  return `<div class="sb${n <= 2 ? '' : n <= 4 ? ' s4' : n <= 8 ? ' s8' : ' s16'}">${rs.map((ids, r) => `<div class="sb-c" data-k="sbc-${r}"><div class="sb-h">${roundName(ids.length)}</div><div class="sb-m">${ids.map(box).join('')}${r === rs.length - 1 ? box('bronze') : ''}</div></div>`).join('')}</div>`;
-}
+const showBracket = T => bracketView(T, 'show', true);
 // A long list is laid out as two or three tables side by side so the text can stay large.
 function showCols(heads, rows, key, narrow) {
   const n = rows.length, cols = n <= 10 ? 1 : n <= 24 ? 2 : 3, per = Math.ceil(n / cols), parts = [];
@@ -4295,17 +4347,22 @@ function viewLog() {
 // and a part opens in its place with a way back.
 const SET_PARTS = [['pisteet', 'Pistelajit'], ['roolit', 'Roolit'], ['tunnukset', 'Käyttäjätunnukset'], ['kirjautuminen', 'Kirjautuminen'],
   ['yleiset', 'Yleiset'], ['varmuuskopiot', 'Varmuuskopiot'], ['loki', 'Loki'], ['nollaus', 'Tietojen nollaus']];
-// Yleiset is every admin's; the rest only the main account ADMIN sees
+// Yleiset is every admin's, and the parts of ADMIN_PARTS; Roolit and Tietojen nollaus only Valvomo's
 const setParts = () => SET_PARTS.filter(x => (x[0] !== 'varmuuskopiot' || NET) && (x[0] === 'yleiset' || can('set:' + x[0])));
 const partName = k => (SET_PARTS.find(x => x[0] === k) || [k, k])[1];
-const superNames = () => { const a = state.config.superSecs.filter(x => x !== 'varmuuskopiot' || NET).map(partName); return a.length ? a.join(', ') : 'ei mitään'; };
+// What the Admin role gives, in a few words.
+function adminSummary() {
+  const A = state.config.adminRole, full = A.tabs.length === USER_TABS.length && A.rights.length === RIGHTS.length;
+  return (full ? 'Kaikki välilehdet ja oikeudet' : 'Välilehdet: ' + tabNames(A.tabs) + '. Oikeudet: ' + rightNames(A.rights)) +
+    (A.secs.length < ALL_SECS.length ? ' · osiot: ' + secNames(A.secs) : '') + ' · asetuksista kaikki paitsi Roolit ja nollaus';
+}
 const accountList = () => Object.keys(state.users).filter(id => id !== 'ADMIN' && state.users[id].on && state.players[id]).map(id => Object.assign({ id }, state.players[id])).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
 function setSub(k) {
   const n = (x, one, many) => x + ' ' + (x === 1 ? one : many);
   if (k === 'pisteet') return n(state.config.stats.length, 'pistelaji', 'pistelajia');
-  if (k === 'roolit') return n(state.config.roles.length + 2, 'rooli', 'roolia');   // with Admin and Superadmin
+  if (k === 'roolit') return n(state.config.roles.length + 1, 'rooli', 'roolia');   // with Admin
   if (k === 'tunnukset') return n(accountList().length, 'tunnus', 'tunnusta');
-  if (k === 'kirjautuminen') return NET ? (GATED ? 'Sivun salasana ja Google-tilit' : 'Google-tilit') : authOn() ? 'ADMIN-salasana käytössä' : 'Ei käytössä';
+  if (k === 'kirjautuminen') return NET ? (GATED ? 'Sivun salasana ja Google-tilit' : 'Google-tilit') : authOn() ? 'Valvomon salasana käytössä' : 'Ei käytössä';
   if (k === 'yleiset') return 'Otsikko ja tallennus';
   if (k === 'varmuuskopiot') return 'Lataa, palauta ja automaattiset';
   if (k === 'loki') return 'Kuka teki mitä ja milloin';
@@ -4315,7 +4372,7 @@ function viewSettings() {
   const parts = setParts(), cur = parts.some(x => x[0] === ui.setView) ? ui.setView : '', show = cur || parts[0][0];
   const nav = `<nav class="setnav" aria-label="Asetukset" data-k="set-nav"><h2 class="sec" data-k="setn-h">Asetukset</h2><ul class="setm" data-k="setm">` +
     parts.map(x => `<li data-k="setm-${x[0]}"><button class="setmi${x[0] === 'nollaus' ? ' dz' : ''}" id="setm-${x[0]}" data-act="setview" data-v="${x[0]}"${x[0] === show ? ' aria-current="page"' : ''}><b>${x[1]}</b><small>${esc(setSub(x[0]))}</small></button></li>`).join('') + `</ul>` +
-    ((hid => hid.length ? `<p class="hint" data-k="setn-main">Muut asetukset näkyvät pääkäyttäjälle.</p>` : '')(SET_PARTS.filter(x => (x[0] !== 'varmuuskopiot' || NET) && !parts.some(y => y[0] === x[0])).map(x => x[1]))) + `</nav>`;
+    ((hid => hid.length ? `<p class="hint" data-k="setn-main">Muut asetukset näkyvät Valvomolle.</p>` : '')(SET_PARTS.filter(x => (x[0] !== 'varmuuskopiot' || NET) && !parts.some(y => y[0] === x[0])).map(x => x[1]))) + `</nav>`;
   const body = show === 'roolit' ? rolesPart() : show === 'tunnukset' ? accountsPart() : show === 'kirjautuminen' ? loginPart() : show === 'yleiset' ? generalPart()
     : show === 'varmuuskopiot' ? `<section class="set" data-k="bk-part"><h2 class="sec">Varmuuskopiot</h2>${backupBlock()}</section>` : show === 'loki' ? viewLog() : show === 'nollaus' ? resetPart() : show === 'pisteet' ? statsPart() : generalPart();
   return `<main id="v-asetukset" class="setw${cur ? ' open' : ''}">` + nav +
@@ -4341,31 +4398,37 @@ function resetPart() {
     `<p class="hint" data-k="rs-some">Turnaukset ja ottelut jäävät paikalleen.</p>` +
     `<div class="rowbtns" data-k="rs-someb">${ask('clear', 'clear-all', 'Poista joukkueet ja pelaajat')}</div></section>`;
 }
+// The roles: Admin, Mod, Merkitsijä and Ei oikeuksia, from the most rights down. Valvomo opens one to change what it gives; none is removed.
+// A role made by hand in an earlier version is listed after them and can still be removed.
 function rolesBlock(noHead) {
-  const used = id => Object.keys(state.users).filter(k => k !== 'ADMIN' && state.users[k].on && state.players[k] && state.users[k].role === id).length;
+  const used = id => Object.keys(state.users).filter(k => k !== 'ADMIN' && state.users[k].on && state.players[k] && (state.users[k].role === id || (id === 'admin' && state.users[k].role === 'super'))).length;
   const count = n => n + (n === 1 ? ' käyttäjä' : ' käyttäjää');
-  return (noHead ? '' : `<h3 class="sub" data-k="ro-h">Roolit</h3>`) + `<div class="roles" data-k="roles">` +
-    `<div class="rrow" data-k="role-admin"><span class="itxt"><b>Admin</b><small>Kaikki välilehdet ja oikeudet, asetuksista Yleiset · ADMIN ja ${count(used('admin'))}</small></span></div>` +
-    (ui.roleOpen === 'super' && can('main') ? `<div class="tset" data-k="role-super"><h3 class="sub" data-k="rs-h">Superadmin</h3>` +
-      `<p class="hint" data-k="rs-hint">Kaikki Adminin oikeudet ja nämä asetukset. Roolin antaa vain ADMIN.</p>` +
-      `<div class="f" data-k="rs-secs"><span>Asetukset, jotka Superadmin näkee</span><div class="chks">${SUPER_PARTS.filter(x => x !== 'varmuuskopiot' || NET).map(x => `<label class="chk" data-k="rs-${x}"><input type="checkbox" id="rs-${x}" data-field="super-sec" data-sec="${x}"${state.config.superSecs.indexOf(x) >= 0 ? ' checked' : ''}><span>${partName(x)}</span></label>`).join('')}</div></div>` +
-      `<div class="rowbtns" data-k="rs-btns"><button class="btn primary" id="rdone-super" data-act="role-open" data-id="super">Valmis</button></div></div>`
-      : `<div class="rrow" data-k="role-super"><span class="itxt"><b>Superadmin</b><small>Kuten Admin, ja asetuksista lisäksi: ${esc(superNames())} · ${count(used('super'))} · antaa vain ADMIN</small></span>${can('main') ? `<button class="btn" id="redit-super" data-act="role-open" data-id="super">Muokkaa</button>` : ''}</div>`) +
-    state.config.roles.map(r => {
-      const id = esc(r.id);
-      if (ui.roleOpen === r.id) return `<div class="tset" data-k="role-${id}"><label class="f"><span>Roolin nimi</span><input id="rn-${id}" data-field="role-name" data-id="${id}" value="${esc(r.name)}" maxlength="20" autocomplete="off"></label>${saveBar('rn-' + r.id)}` + permBoxes('role', r.id, r) +
-        `<div class="rowbtns" data-k="role-btns"><button class="btn primary" id="rdone-${id}" data-act="role-open" data-id="${id}">Valmis</button>${twice('rdel-' + r.id, 'del-role:' + r.id, 'Poista rooli')}</div></div>`;
-      return `<div class="rrow" data-k="role-${id}"><span class="itxt"><b>${esc(r.name)}</b><small>${esc(rightNames(r.rights))}${(r.secs || ALL_SECS).length < ALL_SECS.length ? ' · osiot: ' + esc(secNames(r.secs)) : ''}${r.self || r.goal ? ' · omat asiat' : ''} · ${count(used(r.id))}</small></span><button class="btn" id="redit-${id}" data-act="role-open" data-id="${id}">Muokkaa</button></div>`;
-    }).join('') + `</div><div data-k="role-add"><button class="btn" id="add-role" data-act="add-role">Lisää rooli</button></div>`;
+  const edit = id => can('main') ? `<button class="btn" id="redit-${esc(id)}" data-act="role-open" data-id="${esc(id)}">Muokkaa</button>` : '';
+  const done = id => `<button class="btn primary" id="rdone-${esc(id)}" data-act="role-open" data-id="${esc(id)}">Valmis</button>`;
+  const row = (id, name, small) => `<div class="rrow" data-k="role-${esc(id)}"><span class="itxt"><b>${esc(name)}</b><small>${small}</small></span>${edit(id)}</div>`;
+  const admin = ui.roleOpen === 'admin' && can('main') ? `<div class="tset" data-k="role-admin"><h3 class="sub" data-k="ra-h">Admin</h3>` +
+      `<p class="hint" data-k="ra-hint">Asetuksista Admin näkee kaiken paitsi Roolit ja Tietojen nollauksen. Valvomoa tämä ei rajoita.</p>` + permBoxes('role', 'admin', state.config.adminRole) +
+      `<div class="rowbtns" data-k="ra-btns">${done('admin')}</div></div>`
+    : row('admin', 'Admin', esc(adminSummary()) + ' · ' + count(used('admin')));
+  const others = state.config.roles.slice().sort((a, b) => (BUILTIN[b.id] ? ['katsoja', 'merk', 'mod'].indexOf(b.id) + 1 : -1) - (BUILTIN[a.id] ? ['katsoja', 'merk', 'mod'].indexOf(a.id) + 1 : -1)).map(r => {
+    const id = esc(r.id), made = !BUILTIN[r.id];
+    if (ui.roleOpen === r.id && can('main')) return `<div class="tset" data-k="role-${id}">` + (made ? `<label class="f"><span>Roolin nimi</span><input id="rn-${id}" data-field="role-name" data-id="${id}" value="${esc(r.name)}" maxlength="20" autocomplete="off"></label>${saveBar('rn-' + r.id)}` : `<h3 class="sub" data-k="rh-${id}">${esc(r.name)}</h3>`) +
+      permBoxes('role', r.id, r) + `<div class="rowbtns" data-k="role-btns">${done(r.id)}${made ? twice('rdel-' + r.id, 'del-role:' + r.id, 'Poista rooli') : ''}</div></div>`;
+    return row(r.id, r.name, esc(roleLine(r)) + ' · ' + count(used(r.id)));
+  }).join('');
+  return (noHead ? '' : `<h3 class="sub" data-k="ro-h">Roolit</h3>`) + `<div class="roles" data-k="roles">` + admin + others + `</div>`;
 }
+// What a role other than Admin gives, in a few words.
+const goalWords = g => g === 'all' ? 'kirjaa maalit ja jäähyt omissa otteluissaan' : g === 'own' ? 'kirjaa omat maalinsa omissa otteluissaan' : '';
+const roleLine = r => [r.rights.length ? rightNames(r.rights) : '', goalWords(r.goal), (r.secs || ALL_SECS).length < ALL_SECS.length ? 'osiot: ' + secNames(r.secs) : ''].filter(Boolean).join(' · ') || 'vain katselu';
 // The site password the friends open the page with. Set here the first time; changing it needs the current one.
 function viewPwBlock() {
   const m = ui.vpMsg;
   return `<h3 class="sub" data-k="vp-h">Sivun salasana</h3><form class="tset" data-k="vp-form" data-form="view-pw" novalidate>` +
     `<p class="hint" data-k="vp-hint">Kaverit avaavat sivun tällä. Vaihdon jälkeen muut laitteet kysyvät uutta tunnin sisällä.</p>` +
     `<input type="text" name="username" autocomplete="username" value="${esc(state.config.title || 'Änärit')}" hidden>` +
-    `<label class="f"><span>Nykyinen sivun salasana</span><input id="vp-old" data-free type="password" maxlength="64" autocomplete="current-password" placeholder="Jätä tyhjäksi ensimmäisellä kerralla"></label>` +
-    `<label class="f"><span>Uusi sivun salasana</span><input id="vp-new" data-free type="password" maxlength="64" autocomplete="new-password"></label>` +
+    `<label class="f"><span>Nykyinen sivun salasana</span><span class="pwrow"><input id="vp-old" aria-label="Nykyinen sivun salasana" data-free type="password" maxlength="64" autocomplete="current-password" placeholder="Jätä tyhjäksi ensimmäisellä kerralla"${pwKb()}>${kbBtn('vp-old')}</span></label>` +
+    `<label class="f"><span>Uusi sivun salasana</span><input id="vp-new" data-free type="password" maxlength="64" autocomplete="new-password"${pwKb()}></label>` +
     `<div class="rowbtns"><button class="btn primary" type="submit" id="vp-go"${ui.vpBusy ? ' disabled' : ''}>${ui.vpBusy ? 'Tallennetaan…' : 'Tallenna sivun salasana'}</button></div>` +
     (m ? `<p class="${m.ok ? 'okmsg' : 'err'}" role="status" data-k="vp-msg">${esc(m.text)}</p>` : '') + `</form>`;
 }
@@ -4391,13 +4454,13 @@ async function saveViewPw(form) {
 }
 // The Google accounts that may sign in, each tied to ADMIN or to a player's profile. Only admins see the addresses.
 function googleBlock() {
-  const list = Object.keys(ui.access).sort(), who = pid => pid === 'ADMIN' ? 'ADMIN' : state.players[pid] ? state.players[pid].name : 'Poistettu profiili';
+  const list = Object.keys(ui.access).sort(), who = pid => pid === 'ADMIN' ? MAIN : state.players[pid] ? state.players[pid].name : 'Poistettu profiili';
   const ps = Object.keys(state.players).map(id => Object.assign({ id }, state.players[id])).filter(q => (kindOf(q) !== 'katsoja' || (state.users[q.id] && state.users[q.id].on)) && !acctLocked(q.id)).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
   const msg = ui.accMsg;
   return `<h3 class="sub" data-k="ga-h">Google-tilit</h3><p class="hint" data-k="ga-hint">Asetusten muuttaminen vaatii Google-tilin. Modit pärjäävät ilman.</p>` +
-    (list.length ? `<ul class="mlist" data-k="ga-list">${list.map((e, i) => { const a = ui.access[e]; return `<li data-k="ga-${i}"><span class="itxt"><b>${esc(e)}</b><small>${esc(who(a.pid))} · ${a.lvl === 'admin' ? (a.sup ? 'Superadmin' : 'admin') : 'Mod'}${e === ui.fb.email ? ' · sinä' : ''}</small></span>${e === ui.fb.email || acctLocked(a.pid) ? '' : twice('gad-' + i, 'del-acc:' + e, 'Poista', true)}</li>`; }).join('')}</ul>` : `<p class="hint" data-k="ga-none">Ei vielä Google-tilejä.</p>`) +
+    (list.length ? `<ul class="mlist" data-k="ga-list">${list.map((e, i) => { const a = ui.access[e]; return `<li data-k="ga-${i}"><span class="itxt"><b>${esc(e)}</b><small>${esc(who(a.pid))} · ${a.lvl === 'admin' ? 'admin' : 'Mod'}${e === ui.fb.email ? ' · sinä' : ''}</small></span>${e === ui.fb.email || acctLocked(a.pid) ? '' : twice('gad-' + i, 'del-acc:' + e, 'Poista', true)}</li>`; }).join('')}</ul>` : `<p class="hint" data-k="ga-none">Ei vielä Google-tilejä.</p>`) +
     `<form class="tset" data-k="ga-form" data-form="add-acc" novalidate><label class="f"><span>Google-tilin sähköposti</span><input id="ga-email" data-free type="email" autocomplete="off" inputmode="email" placeholder="nimi@gmail.com" maxlength="120"></label>` +
-    `<label class="f"><span>Kenen tunnus</span><select id="ga-pid" data-free>${can('main') ? '<option value="ADMIN">ADMIN</option>' : ''}${ps.map(q => `<option value="${esc(q.id)}">${esc(q.name)}</option>`).join('')}</select></label>` +
+    `<label class="f"><span>Kenen tunnus</span><select id="ga-pid" data-free>${can('main') ? '<option value="ADMIN">Valvomo</option>' : ''}${ps.map(q => `<option value="${esc(q.id)}">${esc(q.name)}</option>`).join('')}</select></label>` +
     `<div class="rowbtns"><button class="btn primary" type="submit" id="ga-add">Lisää Google-tili</button></div>` + (msg ? `<p class="${msg.ok ? 'okmsg' : 'err'}" role="status" data-k="ga-msg">${esc(msg.text)}</p>` : '') + `</form>`;
 }
 function backupBlock() {
@@ -4416,12 +4479,12 @@ function autoBlock() {
     `<div class="rowbtns" data-k="ab-btns"><button class="btn" id="ab-now" data-act="auto-now"${ui.autoBusy ? ' disabled' : ''}>${ui.autoBusy ? 'Tallennetaan…' : 'Tee varmuuskopio nyt'}</button></div>` +
     (msg ? `<p class="${msg.ok ? 'okmsg' : 'err'}" role="status" data-k="ab-msg">${esc(msg.text)}</p>` : '') +
     (L.length ? `<ul class="mlist" data-k="ab-list">${L.map(x => { const t = new Date(x.at), nn = Array.isArray(x.n) ? x.n : [0, 0, 0];
-      return `<li data-k="ab-${esc(x.id)}"><span class="lgt"><b>${t.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })}</b><small>${t.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric' })}</small></span><span class="itxt"><b>${nn[0]} joukkuetta · ${nn[1]} profiilia · ${nn[2]} turnausta</b><small>${x.by ? 'Tallensi ' + esc(x.by) + ' · ' : ''}${Math.max(1, Math.round((x.size || 0) / 1024))} kt</small></span><button class="btn sm" id="ab-pick-${esc(x.id)}" data-act="auto-pick" data-id="${esc(x.id)}">Palauta…</button></li>`; }).join('')}</ul>`
+      return `<li data-k="ab-${esc(x.id)}"><span class="lgt"><b>${t.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })}</b><small>${t.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric' })}</small></span><span class="itxt"><b>${nn[0]} joukkuetta · ${nn[1]} profiilia · ${nn[2]} turnausta</b><small>${x.by ? 'Tallensi ' + esc(x.by === 'ADMIN' ? MAIN : x.by) + ' · ' : ''}${Math.max(1, Math.round((x.size || 0) / 1024))} kt</small></span><button class="btn sm" id="ab-pick-${esc(x.id)}" data-act="auto-pick" data-id="${esc(x.id)}">Palauta…</button></li>`; }).join('')}</ul>`
       : ui.autoList ? `<p class="hint" data-k="ab-none">Ei vielä automaattisia varmuuskopioita.</p>` : '');
 }
 function accountsPart() {
   const list = accountList();
-  const what = (u, q) => (kindOf(q) === 'pelaaja' ? 'Pelaaja · ' : '') + roleOf(u).name + (kindOf(q) === 'katsoja' ? '' : u.goal === 'own' ? ' · kirjaa omat maalinsa' : u.goal === 'all' ? ' · kirjaa maaleja' : '') + (NET && u.g ? ' · Google-tili' : u.hash ? '' : u.pwReq ? ' · salasana luomatta' : ' · ei salasanaa');
+  const what = (u, q) => (kindOf(q) === 'pelaaja' ? 'Pelaaja · ' : '') + roleOf(u).name + (kindOf(q) === 'katsoja' || u.role ? '' : u.goal === 'own' ? ' · kirjaa omat maalinsa' : u.goal === 'all' ? ' · kirjaa maaleja' : '') + (NET && u.g ? ' · Google-tili' : u.hash ? '' : u.pwReq ? ' · salasana luomatta' : ' · ei salasanaa');
   return `<section class="set" data-k="ac-part"><h2 class="sec">Käyttäjätunnukset</h2>` +
     `<p class="hint" data-k="pw-hint">Salasana on kevyt lukko kavereiden kesken. Älä käytä samaa kuin muualla.</p>` +
     (list.length ? `<ul class="slist" data-k="acl" aria-label="Tunnukset ja roolit">${list.map(q => `<li data-k="acli-${esc(q.id)}"><button class="item" id="aco-${esc(q.id)}" data-act="acct-open" data-id="${esc(q.id)}">${playerAv(q)}<span class="itxt"><b>${esc(q.name)}</b><small>${esc(what(state.users[q.id], q))}</small></span></button></li>`).join('')}</ul>`
@@ -4431,8 +4494,8 @@ function loginPart() {
   if (NET) return `<section class="set" data-k="li-part"><h2 class="sec">Kirjautuminen</h2>` + (GATED ? viewPwBlock() : '') + googleBlock() + `</section>`;
   const on = authOn(), msg = ui.pwMsg && ui.pwMsg.id === 'ADMIN' ? ui.pwMsg : null;
   return `<section class="set" data-k="li-part"><h2 class="sec">Kirjautuminen</h2>` +
-    `<p class="hint">${on ? 'Kirjautuminen on käytössä. Pääkäyttäjän tunnus on ADMIN, ja sillä saa tehdä kaiken.' : 'Kirjautuminen ei ole vielä käytössä, joten jokainen sivun avaava voi muokata kaikkea. Se tulee käyttöön, kun asetat ADMIN-tunnukselle salasanan.'}</p>` +
-    `<form class="f a-title" data-k="adm-pw" data-form="set-pw" data-id="ADMIN" novalidate><span>${on ? 'Vaihda ADMIN-salasana' : 'ADMIN-salasana'}</span><div class="addp" data-k="adm-row"><input id="pw-ADMIN" data-free type="password" autocomplete="new-password" placeholder="${on ? 'Uusi salasana' : 'Salasana'}" aria-label="ADMIN-salasana" maxlength="64"><button class="btn primary" type="submit" id="pwb-ADMIN">${on ? 'Vaihda salasana' : 'Ota kirjautuminen käyttöön'}</button></div>` +
+    `<p class="hint">${on ? 'Kirjautuminen on käytössä. Pääkäyttäjän tunnus on Valvomo, ja sillä saa tehdä kaiken.' : 'Kirjautuminen ei ole vielä käytössä, joten jokainen sivun avaava voi muokata kaikkea. Se tulee käyttöön, kun asetat Valvomo-tunnukselle salasanan.'}</p>` +
+    `<form class="f a-title" data-k="adm-pw" data-form="set-pw" data-id="ADMIN" novalidate><span>${on ? 'Vaihda Valvomon salasana' : 'Valvomon salasana'}</span><div class="addp" data-k="adm-row"><span class="pwrow"><input id="pw-ADMIN" data-free type="password" autocomplete="new-password" placeholder="${on ? 'Uusi salasana' : 'Salasana'}" aria-label="Valvomon salasana" maxlength="64"${pwKb()}>${kbBtn('pw-ADMIN')}</span><button class="btn primary" type="submit" id="pwb-ADMIN">${on ? 'Vaihda salasana' : 'Ota kirjautuminen käyttöön'}</button></div>` +
     (msg ? `<p class="${msg.ok ? 'okmsg' : 'err'}" role="status" data-k="adm-msg">${esc(msg.text)}</p>` : '') + `</form>` +
     `<p class="hint">Salasana on kevyt lukko kavereiden kesken. Älä käytä samaa kuin muualla.</p>` +
     (on ? `<div class="rowbtns" data-k="auth-off">${twice('auth-off', 'auth-off:1', 'Poista kirjautuminen käytöstä')}</div>` : '') + `</section>`;
@@ -4445,7 +4508,7 @@ function saveAd(form) {
   let link = val('adl-' + i);
   if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
   if (link && !/^https?:\/\/[^\s"'<>]+$/.test(link)) { ui.adErr = 'Linkki ei ole kelvollinen nettiosoite.'; render(); return; }
-  a[i] = { title: val('adt-' + i).slice(0, 60), text: val('adx-' + i).slice(0, 400), link: link.slice(0, 300) };
+  a[i] = { title: val('adt-' + i).slice(0, 60), text: val('adx-' + i).slice(0, 400), link: link.slice(0, 300), hidden: a[i].hidden };
   state.config.ads = a; persistConf(['ads']); ui.adEdit = null; ui.adErr = null; render();
 }
 function adSlot(i, cls) {
@@ -4458,9 +4521,12 @@ function adSlot(i, cls) {
       (ui.adErr ? `<p class="err" role="alert" data-k="${id}-err">${esc(ui.adErr)}</p>` : '') +
       `<div class="rowbtns"><button class="btn primary" type="submit" id="ads-${i}">Tallenna</button><button class="btn" type="button" id="adc-${i}" data-act="ad-cancel">Peru</button>${a.title || a.text ? `<button class="btn danger" type="button" id="adz-${i}" data-act="ad-clear" data-i="${i}">Tyhjennä paikka</button>` : ''}</div></form>`;
   }
-  const edit = adm ? `<button class="btn sm adedit" id="ade-${i}" data-act="ad-edit" data-i="${i}">${a.title || a.text ? 'Muokkaa' : 'Lisää sisältö'}</button>` : '';
-  if (!a.title && !a.text) return `<section class="ad empty ${cls || ''}" data-k="${id}" aria-label="Vapaa mainospaikka"><span class="adtag">Mainospaikka</span><b>Tämä paikka on vapaana</b>${edit}</section>`;
-  return `<section class="ad full ${cls || ''}" data-k="${id}">${a.title ? `<h3 class="adh">${esc(a.title)}</h3>` : ''}${a.text ? `<p class="adp">${esc(a.text)}</p>` : ''}` +
+  if (a.hidden && !adm) return '';   // hidden from everyone but the admins
+  const edit = adm ? `<div class="adbtns" data-k="${id}-b"><button class="btn sm adedit" id="ade-${i}" data-act="ad-edit" data-i="${i}">${a.title || a.text ? 'Muokkaa' : 'Lisää sisältö'}</button>` +
+    `<button class="btn sm" id="adv-${i}" data-act="ad-vis" data-i="${i}">${a.hidden ? 'Näytä kaikille' : 'Piilota muilta'}</button></div>` : '';
+  const hid = a.hidden ? ' hid' : '', tag = a.hidden ? `<span class="adhid" data-k="${id}-hid">Piilotettu muilta, näkyy vain adminille</span>` : '';
+  if (!a.title && !a.text) return `<section class="ad empty${hid} ${cls || ''}" data-k="${id}" aria-label="Vapaa mainospaikka">${tag}<span class="adtag">Mainospaikka</span><b>Tämä paikka on vapaana</b>${edit}</section>`;
+  return `<section class="ad full${hid} ${cls || ''}" data-k="${id}">${tag}${a.title ? `<h3 class="adh">${esc(a.title)}</h3>` : ''}${a.text ? `<p class="adp">${esc(a.text)}</p>` : ''}` +
     (a.link ? `<a class="btn sm adlink" id="adg-${i}" href="${esc(a.link)}" target="_blank" rel="noopener noreferrer">Lue lisää</a>` : '') + edit + `</section>`;
 }
 // The tournament the front page counts down to: one being played now, else the nearest start ahead, else the one marked to be played.
@@ -4513,10 +4579,18 @@ function homeLists() {
       : `<p class="hint" data-k="h${w}-none">${none}</p>`) + `</section>`;
   return `<div class="hgrid" data-k="h-lists">${list('pl', 'Pelaajat', ps, pRow, 'Pelaajia ei ole vielä lisätty.')}${list('jo', 'Joukkueet', ts, tRow, 'Joukkueita ei ole vielä lisätty.')}</div>`;
 }
+// For an admin, a line on top says whether the others see Etusivu, with a button to hide it from them or show it again.
+function homeVis() {
+  if (!can('admin')) return '';
+  const off = !!state.config.homeHidden;
+  return `<div class="hvis${off ? ' off' : ''}" data-k="h-vis"><span>${off ? '<b>Etusivu on piilotettu muilta.</b> Vain adminit näkevät sen.' : 'Etusivu näkyy kaikille.'}</span>` +
+    `<button class="btn sm" id="home-vis" data-act="home-vis">${off ? 'Näytä kaikille' : 'Piilota muilta'}</button></div>`;
+}
 function viewHome() {
-  return `<main id="v-etusivu" class="stack home">` + adSlot(0, 'wide') +
+  const low = adSlot(1) + adSlot(2);
+  return `<main id="v-etusivu" class="stack home">` + homeVis() + adSlot(0, 'wide') +
     `<div class="hgrid" data-k="h-top">${homeCountdown()}${homeBoard()}</div>` + homeLists() +
-    `<div class="hgrid ads2" data-k="h-ads">${adSlot(1)}${adSlot(2)}</div></main>`;
+    (low ? `<div class="hgrid ads2" data-k="h-ads">${low}</div>` : '') + `</main>`;
 }
 // If drawing a view ever fails (say, data left behind by a removed team), the page says so and stays usable rather than freezing.
 function safeView() {
@@ -4548,7 +4622,8 @@ function view() {
   if (ui.err === 'refused') h += `<div class="note" data-k="n-ref"><span>Viimeisintä muutosta ei tallennettu.</span></div>`;
   if (card) return h + viewCard(card);
   if (own) return h + viewOwn();
-  if (!tab) return h + `<div class="empty" data-k="notabs"><strong>Ei näkymiä</strong><span>Tunnuksellesi ei ole valittu yhtään välilehteä. Pyydä ADMINia lisäämään niitä.</span></div>`;
+  if (!tab && me().guest) return h + `<div class="empty" data-k="notabs-g"><strong>Etusivu ei ole nyt näkyvissä</strong><span>Kirjaudu sisään, niin näet turnaukset ja tulokset.</span></div>`;
+  if (!tab) return h + `<div class="empty" data-k="notabs"><strong>Ei näkymiä</strong><span>Tunnuksellesi ei ole valittu yhtään välilehteä. Pyydä Valvomoa lisäämään niitä.</span></div>`;
   return h + (tab === 'etusivu' ? (ui.homeBoard ? viewBoard() : viewHome()) : tab === 'joukkueet' ? viewTeams() : tab === 'pelaajat' ? viewPlayers() : tab === 'turnaukset' ? viewTours() : tab === 'kaynnissa' ? viewLive() : tab === 'valvomo' ? viewControl() : viewSettings());
 }
 
@@ -4611,8 +4686,6 @@ function render() {
   for (const id in ui.pend) { const el = document.getElementById(id); if (!el || !fieldDiffers(el)) { delete ui.pend[id]; gone = true; } }
   if (gone) { const t2 = document.createElement('div'); t2.innerHTML = safeView(); morphKids(app, t2); }
   if (ui.ready && ui.backend === 'db' && !logSub && (can('admin') || (vmAllowed() && logReader()))) needLogs();
-  needPresence(ui.ready && !showOn() && ui.tab === 'valvomo' && vmAllowed());
-  beat();
   if (showOn()) fitShow();
   const pics = app.querySelectorAll('img[data-ph]');
   for (let i = 0; i < pics.length; i++) { const want = photos[pics[i].getAttribute('data-ph')] || ''; if ((pics[i].getAttribute('src') || '') !== want) { if (want) pics[i].setAttribute('src', want); else pics[i].removeAttribute('src'); } }
@@ -4630,7 +4703,9 @@ function render() {
   }
   if (ui.ready && !ui.tabShown) { ui.tabShown = true; ui.revealTab = true; }
   if (ui.revealTab) { ui.revealTab = false; revealTab(); }
+  if (ui.rolesOld && ui.ready && can('main')) { ui.rolesOld = false; persistConf(['roles', 'adminRole', 'rolesV']); }
   tabFade();
+  if (ui.kbCarry) { ui.kbCarry.forEach(x => { const e = document.getElementById(x[0]); if (e && !e.value) e.value = x[1]; }); ui.kbCarry = null; }
   if (ui.focusId) {
     const el = document.getElementById(ui.focusId);
     if (el) { el.focus(); if (ui.selectOnFocus && el.select) el.select(); }
@@ -4705,11 +4780,10 @@ document.addEventListener('keydown', e => {
 });
 window.addEventListener('resize', () => { if (showOn()) render(); else tabFade(); });
 app.addEventListener('scroll', e => { if (e.target && e.target.classList && e.target.classList.contains('tabsx')) tabFade(); }, true);
-document.addEventListener('visibilitychange', () => { if (showOn() && document.visibilityState === 'visible') keepAwake(); if (document.visibilityState !== 'hidden') beat(true); });
-window.addEventListener('pagehide', () => leave());
+document.addEventListener('visibilitychange', () => { if (showOn() && document.visibilityState === 'visible') keepAwake(); });
 
 // Running clocks tick on their own once a second; a countdown reaching zero repaints so the break controls come back.
-let vmTick = 0, vmTick2 = 0;
+let vmTick = 0;
 setInterval(() => {
   if (showOn()) {
     const T = showTour();
@@ -4723,7 +4797,6 @@ setInterval(() => {
   }
   // Valvomo looks again every half minute, so a match turning late or an interruption growing long shows up by itself
   if (app.querySelector('.vmwrap') && (vmTick = (vmTick + 1) % 30) === 0) { render(); return; }
-  if (!showOn() && (vmTick2 = (vmTick2 + 1) % 30) === 0) beat();
   const els = app.querySelectorAll('[data-clk]');
   if (!els.length) return;
   const now = nowMs(); let over = false;
