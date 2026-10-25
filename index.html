@@ -905,6 +905,7 @@ html.showing body::before{background-image:linear-gradient(180deg,rgba(5,9,14,.5
 .nhlc small.ok{color:var(--ok);font-weight:700}
 .nhlc.on{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--sheet));box-shadow:0 0 0 1px var(--ok) inset}
 .nhlc:disabled{opacity:.5}
+.tjed{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 @media (max-width:600px){.nhlg{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* a team badge in place of the round initials */
 .av.bdg{background:transparent;box-shadow:none!important;overflow:visible}
@@ -1456,7 +1457,7 @@ const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'n
   'nhl-open': 'joukkue', 'nhl-close': 'joukkue', 'nhl-pick': 'joukkue', 'nhl-all': 'joukkue', 'nhl-add': 'joukkue', 'tmdel-mode': 'joukkue', 'tmdel-pick': 'joukkue', 'tmdel-all': 'joukkue',
   'wiz-open': 'ottelu', 'wiz-close': 'ottelu', 'wiz-pick': 'ottelu', 'wiz-pool': 'ottelu', 'wiz-out': 'ottelu', 'wiz-shuffle': 'ottelu', 'wiz-clear': 'ottelu', 'wiz-next': 'ottelu', 'wiz-back': 'ottelu', 'wiz-cons': 'ottelu', 'wiz-gap': 'ottelu', 'wiz-save': 'ottelu',
   'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
-  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'pl-new-go': 'admin', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
+  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'tj-open': 'tasetus', 'tj-pick': 'tasetus', 'tj-all': 'tasetus', 'tj-add': 'tasetus', 'pl-new-go': 'admin', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
 const FIELD_NEED = { 'rp-q': 'kokoonpano', 'wiz-pname': 'ottelu', 'wiz-first': 'ottelu', 'wiz-time': 'ottelu', 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'tour-match': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
   'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
@@ -2376,7 +2377,7 @@ async function autoPick(id) {
 /* ---------- actions ---------- */
 function setTab(tab) {
   if (!TABS.includes(tab)) return;
-  ui.tab = tab; ui.rp = null; ui.nhlMsg = null; ui.tmDel = null; ui.nhlPick = null; ui.wiz = null; ui.homeBoard = false; ui.qaMode = false; ui.qa = null; ui.tm = null; ui.bEdit = null; ui.own = false; ui.cards = []; ui.vmBack = false; ui.nameErr = null; ui.confirm = null; ui.playerErr = null; ui.teamErr = null; ui.photoErr = null; ui.tourErr = null; ui.matchErr = null; ui.goal = null; ui.note = null; ui.goalNote = null; ui.rosterErr = null; ui.revealTab = true;
+  ui.tab = tab; ui.rp = null; ui.nhlMsg = null; ui.tmDel = null; ui.nhlPick = null; ui.tjPick = null; ui.wiz = null; ui.homeBoard = false; ui.qaMode = false; ui.qa = null; ui.tm = null; ui.bEdit = null; ui.own = false; ui.cards = []; ui.vmBack = false; ui.nameErr = null; ui.confirm = null; ui.playerErr = null; ui.teamErr = null; ui.photoErr = null; ui.tourErr = null; ui.matchErr = null; ui.goal = null; ui.note = null; ui.goalNote = null; ui.rosterErr = null; ui.revealTab = true;
   lsSet(LS_TAB, tab);
   try { history.replaceState(null, '', '#' + tab); } catch (e) { /* hash is optional */ }
 }
@@ -3074,6 +3075,11 @@ function act(a, d) {
     case 'rp-save': rosterSave(); break;
     case 'night-share': nightShare(d.tour); break;
     case 'turn-ok': (ui.turnOk || (ui.turnOk = {}))[d.id] = 1; break;
+    case 'tj-open': if (state.tournaments[d.id]) { ui.tjPick = { tid: d.id, sel: {} }; ui.focusId = 'tjp-title'; } break;
+    case 'tj-close': ui.tjPick = null; ui.focusId = 'tj-open'; break;
+    case 'tj-pick': if (ui.tjPick && state.teams[d.id]) ui.tjPick.sel[d.id] = !ui.tjPick.sel[d.id]; break;
+    case 'tj-all': { const P = ui.tjPick, T = P && state.tournaments[P.tid]; if (T) { const ids = tourTeamIds(T), left = teamsSorted().filter(t => ids.indexOf(t.id) < 0), all = left.every(t => P.sel[t.id]); left.forEach(t => { P.sel[t.id] = !all; }); } break; }
+    case 'tj-add': { const P = ui.tjPick, T = P && state.tournaments[P.tid]; if (T) { const have = tourTeamIds(T), add = teamsSorted().map(t => t.id).filter(x => P.sel[x] && have.indexOf(x) < 0); if (add.length) { const before = tourSnap(T); T.teams = (T.teams || []).concat(add); persistTour(P.tid, before); } } ui.tjPick = null; ui.focusId = 'tj-open'; break; }
     case 'nhl-open': ui.nhlPick = {}; ui.nhlMsg = null; ui.focusId = 'nhl-title'; break;
     case 'nhl-close': ui.nhlPick = null; ui.focusId = 'tm-nhl'; break;
     case 'nhl-pick': { const x = NHL_TEAMS[+d.i]; if (ui.nhlPick && x) ui.nhlPick[x[0]] = !ui.nhlPick[x[0]]; break; }
@@ -4653,7 +4659,7 @@ function tourKpis(T) {
 // Ottelut for whoever may change the tournament: the same list as everyone sees, with a new match made on top of it.
 // A match itself is changed on its own page (start time, start, reset, removing it) and in Valvomo.
 function matchesHead(T) {
-  if (tourTeamIds(T).length < 2) return `<div class="note" data-k="mf-none"><span>Lisää turnaukseen ensin vähintään kaksi joukkuetta.</span>${can('tasetus') ? `<div class="rowbtns"><button class="btn" id="mf-toset" data-act="subtab" data-scope="${ui.tab === 'turnaukset' ? 'tour' : 'live'}" data-tab="muokkaa">Avaa asetukset</button></div>` : ''}</div>`;
+  if (tourTeamIds(T).length < 2) return `<div class="note" data-k="mf-none"><span>Lisää turnaukseen ensin vähintään kaksi joukkuetta.</span>${can('tasetus') ? `<div class="rowbtns"><button class="btn" id="mf-toset" data-act="subtab" data-scope="${ui.tab === 'turnaukset' ? 'tour' : 'live'}" data-tab="joukkueet">Lisää joukkueita</button></div>` : ''}</div>`;
   const wz = wizCan(T) ? `<button class="btn" id="wz-open" data-act="wiz-open" data-tour="${esc(T.id)}">${rounds(T)[0].length ? 'Muuta pareja kaaviolla' : 'Luo ottelut kaaviolla'}</button>` : '';
   return (ui.newMatch ? matchForm(T) : `<div class="rowbtns" data-k="nm-open"><button class="btn primary" id="nm-open" data-act="new-match">Uusi ottelu</button>${wz}<button class="btn" id="pz-new" data-act="pz-new">Lisää tauko</button></div>`) +
     (ui.pzEdit === 'new' ? pauseForm(T, null) : '') +
@@ -4840,7 +4846,7 @@ function tourSettings(T) {
     `<label class="f" data-k="tubf"><span>Erätauon oletuspituus</span><select id="tubs-${id}" data-field="tour-break" data-id="${id}">${BREAKS.map(b => `<option value="${b}"${b === T.breakMin ? ' selected' : ''}>${b} min</option>`).join('')}</select></label>${saveBar('tubs-' + T.id)}` +
     `<label class="f" data-k="tumf"><span>Ottelun oletuspituus</span><select id="tum-${id}" data-field="tour-match" data-id="${id}">${(MATCH_LENS.includes(T.matchMin || MATCH_DEF) ? MATCH_LENS : MATCH_LENS.concat([T.matchMin]).sort((a, b) => a - b)).map(b => `<option value="${b}"${b === (T.matchMin || MATCH_DEF) ? ' selected' : ''}>${b} min</option>`).join('')}</select></label>${saveBar('tum-' + T.id)}` +
     `<p class="hint" data-k="tum-h">Aika ottelun alusta seuraavan alkuun. Ottelut kaaviolla -työkalu laskee aloitusajat tällä.</p>` +
-    `<h3 class="sub sect" data-k="ts-hj">Joukkueet</h3>${tourTeamsBlock(T)}<h3 class="sub sect" data-k="ts-hpl">Tuuraajat</h3>${tourPlayersBlock(T)}` +
+    `<h3 class="sub sect" data-k="ts-hpl">Tuuraajat</h3>${tourPlayersBlock(T)}` +
     `<h3 class="sub sect" data-k="ts-h2">Kaavio</h3>` +
     `<div class="f" data-k="tuzf"><span id="tuz-${id}">Pronssiottelu</span><div class="seg" role="group" aria-labelledby="tuz-${id}"><button id="tuz0-${id}" data-act="tour-bronze" data-id="${id}" data-on="0" aria-pressed="${!T.bronze}">Ei</button><button id="tuz1-${id}" data-act="tour-bronze" data-id="${id}" data-on="1" aria-pressed="${!!T.bronze}">Kyllä</button></div><p class="hint">Välierien häviäjät pelaavat pronssista, kun kaaviossa on kaksi välierää.</p></div>` +
     `<h3 class="sub sect" data-k="ts-h3">Näkyvyys</h3>` +
@@ -4849,34 +4855,35 @@ function tourSettings(T) {
     (D ? `<h3 class="sub sect" data-k="ts-h5">Poista turnaus</h3><p class="hint" data-k="ts-del">Ottelut ja niiden pisteet poistuvat.</p>` +
     `<div class="rowbtns" data-k="tudw">${twice('tudp-' + T.id, 'del-tour:' + T.id, 'Poista turnaus')}</div>` : '');
 }
-// Asetukset: the teams in the tournament. Each opens to its players in this tournament, and a player can be put in it here
-// for this tournament alone; his own team stays as it is. A team can be taken out until it has matches.
-function tourTeamsBlock(T) {
-  const ids = tourTeamIds(T), others = teamsSorted().filter(t => ids.indexOf(t.id) < 0), id = esc(T.id), roster = T.roster || {}, open = ui.tpOpen || {};
-  const many = n => n + (n === 1 ? ' pelaaja' : ' pelaajaa');
-  const team = tid => {
-    const t = Object.assign({ id: tid }, state.teams[tid]), n = teamMatchCount(T, tid), ps = tourTeamPlayers(T, tid), key = T.id + '|' + tid, on = !!open[key], tk = esc(tid);
-    const gone = playersOf(tid).filter(q => out_(T, q.id) && !roster[q.id]).length;
-    const head = `<button type="button" class="acch" id="tpb-${id}-${tk}" data-act="tp-toggle" data-id="${esc(key)}" aria-expanded="${on}"${on ? ` aria-controls="tjp-${id}-${tk}"` : ''}>${teamAv(t, 'sm')}` +
-      `<span class="itxt"><b>${esc(t.name)}</b><small>${many(ps.length)} · ${n ? n + (n === 1 ? ' ottelu' : ' ottelua') : 'ei vielä otteluita'}${gone ? ' · ' + gone + ' poistettu turnauksesta' : ''}</small></span><span class="chev" aria-hidden="true"></span></button>`;
-    if (!on) return `<li class="accl" data-k="tj-${tk}">${head}</li>`;
-    const row = q => {
-      const moved = roster[q.id] === tid && q.teamId !== tid, own = state.teams[q.teamId];
-      return `<li data-k="tpl-${esc(q.id)}">${playerAv(q, 'sm')}<span class="itxt"><b>${esc(q.name)}</b>${moved ? `<small>Vain tässä turnauksessa · ${own ? 'oma joukkue ' + esc(own.name) : 'ei omaa joukkuetta'}</small>` : ''}</span>` +
-        `<span class="hact">${twiceIcon('tpd-' + T.id + '-' + q.id, 'tour-player-del:' + T.id + '|' + q.id, ICON.del, 'Poista ' + q.name + (moved ? ' joukkueesta' : ' turnauksesta'))}</span></li>`;
-    };
-    // anyone not playing for this team in the tournament: its own players taken out, and the rest with where they are now
-    const cand = realPlayers().filter(q => tTeam(T, q.id) !== tid || out_(T, q.id)).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
-    const where = q => { const tt = tTeam(T, q.id); return q.teamId === tid && tt === tid ? 'poistettu turnauksesta' : tt && ids.indexOf(tt) >= 0 ? state.teams[tt].name : state.teams[q.teamId] ? state.teams[q.teamId].name : 'vapaa pelaaja'; };
-    return `<li class="accl on" data-k="tj-${tk}">${head}<div class="accp" id="tjp-${id}-${tk}" data-k="tjp-${tk}">` +
-      (ps.length ? `<ul class="mlist tlist" data-k="tpgl-${tk}">${ps.map(row).join('')}</ul>` : `<p class="hint" data-k="tjp-none">Ei pelaajia.</p>`) +
-      (cand.length ? `<label class="f" data-k="tra"><span>Lisää pelaaja joukkueeseen</span><select id="tra-${id}-${tk}" data-field="tour-roster-add" data-id="${id}" data-team="${tk}"><option value="">Valitse pelaaja…</option>${cand.map(q => `<option value="${esc(q.id)}">${esc(q.name)} (${esc(where(q))})</option>`).join('')}</select></label>` +
-        `<p class="hint" data-k="tra-h">Koskee vain tätä turnausta. Pelaajan oma joukkue ei muutu.</p>` : '') +
-      (n ? '' : `<div class="rowbtns" data-k="tjd">${twice('tjd-' + T.id + '-' + tid, 'tour-team-del:' + T.id + '|' + tid, 'Poista joukkue turnauksesta')}</div>`) + `</div></li>`;
+// The teams in a tournament are added from its Joukkueet section, where each team also opens to its line-up for this tournament.
+// The teams in a tournament are added from its Joukkueet section, where each team also opens to its line-up for this tournament:
+// a player can be put in a team for this tournament alone (his own team stays as it is), and a team taken out until it has matches.
+function tourTeamEdit(T, tid) {
+  const ids = tourTeamIds(T), id = esc(T.id), roster = T.roster || {}, n = teamMatchCount(T, tid), ps = tourTeamPlayers(T, tid), tk = esc(tid);
+  const row = q => {
+    const moved = roster[q.id] === tid && q.teamId !== tid, own = state.teams[q.teamId];
+    return `<li data-k="tpl-${esc(q.id)}">${playerAv(q, 'sm')}<span class="itxt"><b>${esc(q.name)}</b>${moved ? `<small>Vain tässä turnauksessa · ${own ? 'oma joukkue ' + esc(own.name) : 'ei omaa joukkuetta'}</small>` : ''}</span>` +
+      `<span class="hact">${twiceIcon('tpd-' + T.id + '-' + q.id, 'tour-player-del:' + T.id + '|' + q.id, ICON.del, 'Poista ' + q.name + (moved ? ' joukkueesta' : ' turnauksesta'))}</span></li>`;
   };
-  return (ids.length ? `<p class="hint" data-k="tpl-hint">Mukana <b>${tourPlayerIds(T).length}</b> pelaajaa. Avaa joukkue nähdäksesi sen pelaajat.</p><ul class="acc" data-k="tj-list">${ids.map(team).join('')}</ul>` : `<p class="hint" data-k="tj-none">Turnauksessa ei ole vielä joukkueita.</p>`) +
-    (others.length ? `<div class="trow" data-k="tj-add"><label class="f a-pteam"><span>Lisää joukkue turnaukseen</span><select id="tja-${id}" data-field="tour-team-add" data-id="${id}"><option value="">Valitse joukkue…</option>${others.map(t => `<option value="${esc(t.id)}">${esc(t.name)}</option>`).join('')}</select></label>` +
-      (others.length > 1 ? `<button class="btn" id="tjall-${id}" data-act="tour-team-all" data-id="${id}">Lisää kaikki (${others.length})</button>` : '') + `</div>` : '');
+  const cand = realPlayers().filter(q => tTeam(T, q.id) !== tid || out_(T, q.id)).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+  const where = q => { const tt = tTeam(T, q.id); return q.teamId === tid && tt === tid ? 'poistettu turnauksesta' : tt && ids.indexOf(tt) >= 0 ? state.teams[tt].name : state.teams[q.teamId] ? state.teams[q.teamId].name : 'vapaa pelaaja'; };
+  return `<div class="tjed" data-k="tjed-${tk}"><h4 class="sub" data-k="tjed-h">Muokkaa kokoonpanoa</h4>` + (ps.length ? `<ul class="mlist tlist" data-k="tpgl-${tk}">${ps.map(row).join('')}</ul>` : '') +
+    (cand.length ? `<label class="f" data-k="tra"><span>Lisää pelaaja joukkueeseen</span><select id="tra-${id}-${tk}" data-field="tour-roster-add" data-id="${id}" data-team="${tk}"><option value="">Valitse pelaaja…</option>${cand.map(q => `<option value="${esc(q.id)}">${esc(q.name)} (${esc(where(q))})</option>`).join('')}</select></label>` +
+      `<p class="hint" data-k="tra-h">Koskee vain tätä turnausta. Pelaajan oma joukkue ei muutu.</p>` : '') +
+    (n ? '' : `<div class="rowbtns" data-k="tjd">${twice('tjd-' + T.id + '-' + tid, 'tour-team-del:' + T.id + '|' + tid, 'Poista joukkue turnauksesta')}</div>`) + `</div>`;
+}
+// The teams to add to a tournament: a window with every team and its badge, those in it already marked; tap the ones wanted and add them.
+function tjPickView() {
+  const P = ui.tjPick, T = P && state.tournaments[P.tid];
+  if (!T) return '';
+  const ids = tourTeamIds(T), left = teamsSorted().filter(t => ids.indexOf(t.id) < 0), n = left.filter(t => P.sel[t.id]).length;
+  const cell = t => { const there = ids.indexOf(t.id) >= 0, on = !!P.sel[t.id];
+    return `<button type="button" class="nhlc${on ? ' on' : ''}" id="tjp-${esc(t.id)}" data-act="tj-pick" data-id="${esc(t.id)}" aria-pressed="${on}"${there ? ' disabled' : ''}>${teamAv(t)}<span>${esc(t.name)}</span>${there ? '<small>Mukana</small>' : on ? '<small class="ok">✓ Valittu</small>' : `<small>${playersOf(t.id).filter(q => kindOf(q) === 'pelaaja').length} pelaajaa</small>`}</button>`; };
+  return `<div class="wiz" data-k="tjpick"><div class="wizp nhlp" role="dialog" aria-modal="true" aria-labelledby="tjp-title"><div class="wizh"><div><h2 class="sec" id="tjp-title" tabindex="-1">Joukkueet turnaukseen</h2><small class="muted">${esc(T.name)} · ${left.length ? 'valitse lisättävät' : 'kaikki joukkueet ovat jo mukana'}</small></div>` +
+    `<button type="button" class="btn sm" id="tjp-close" data-act="tj-close" aria-label="Sulje">✕</button></div>` +
+    `<div class="wizb">${teamsSorted().length ? `<div class="nhlg" data-k="tjp-g">${teamsSorted().map(cell).join('')}</div>` : '<p class="hint">Joukkueita ei ole vielä. Lisää ne Joukkueet ja pelaajat -sivulla.</p>'}</div>` +
+    `<div class="wizf"><button type="button" class="btn" id="tjp-all" data-act="tj-all"${left.length ? '' : ' disabled'}>${left.length && left.every(t => P.sel[t.id]) ? 'Tyhjennä' : 'Valitse kaikki'}</button><span class="wzsp"></span>` +
+    `<button type="button" class="btn" id="tjp-cancel" data-act="tj-close">Peru</button><button type="button" class="btn primary" id="tjp-add" data-act="tj-add"${n ? '' : ' disabled'}>Lisää${n ? ' (' + n + ')' : ''}</button></div></div></div>`;
 }
 // Asetukset: the players added to the tournament on their own, on none of its teams. They stand in in its matches.
 function tourPlayersBlock(T) {
@@ -5097,19 +5104,21 @@ function liveMatches(T, scope) {
 // Joukkueet, a section of the tournament tab: the teams in the order of the tournament's standings. Pressing a team opens its players
 // below it, with their place in the tournament's scoring table and their points from its matches; pressing it again closes them.
 function liveTeams(T) {
-  const S = tourStats(T), tr = tourTeamRows(T, S);
-  if (!tr.length) return '';
+  const S = tourStats(T), tr = tourTeamRows(T, S), ed = can('tasetus') && !ui.readOnly;
+  const bar = ed ? `<div class="listhead" data-k="lj-head"><button class="btn primary" id="tj-open" data-act="tj-open" data-id="${esc(T.id)}">Lisää joukkueita</button></div>` +
+    (tr.length ? `<p class="hint" data-k="tpl-hint">Mukana <b>${tourPlayerIds(T).length}</b> pelaajaa. Avaa joukkue muokataksesi sen kokoonpanoa tähän turnaukseen.</p>` : '') : '';
+  if (!tr.length) return bar ? bar + `<p class="hint" data-k="lj-none0">Turnauksessa ei ole vielä joukkueita.</p>` : '';
   const by = {}, open = ui.liveOpen || (ui.liveOpen = {});
   tourPlayerRows(T, S).forEach(r => { by[r.q.id] = r; });
   const many = (n, one, more) => n + ' ' + (n === 1 ? one : more);
-  return `<ul class="acc" data-k="lj">` + tr.map(r => {
+  return bar + `<ul class="acc" data-k="lj">` + tr.map(r => {
     const tid = r.t.id, id = esc(tid), on = !!open[tid];
     const ps = tourTeamPlayers(T, tid).map(q => by[q.id] || { q, c: {}, pts: 0, rank: 0 }).sort((x, y) => (x.rank || 1e9) - (y.rank || 1e9) || x.q.name.localeCompare(y.q.name, 'fi'));
     const what = c => state.config.stats.filter(x => appl(x, 'p') && c[x.id]).map(x => esc(x.name) + ' ' + c[x.id]).join(' · ') || 'Ei vielä pisteitä';
     const body = !on ? '' : `<div class="accp" id="ljp-${id}" data-k="ljp-${id}">` +
       (ps.length ? `<ul class="mlist" aria-label="${esc(r.t.name)}: pelaajat">${ps.map(x => `<li data-k="ljq-${esc(x.q.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', x.q.id, 'ljq-' + x.q.id)}><span class="mtime">${x.rank ? x.rank + '.' : '–'}</span>${playerAv(x.q, 'sm')}<span class="itxt"><b>${esc(x.q.name)}</b><small>${what(x.c)}</small></span><span class="mres">${fmt(x.pts)} <small>p</small></span></button></li>`).join('')}</ul>`
         : `<p class="hint" data-k="ljp-none">Joukkueessa ei ole pelaajia.</p>`) +
-      `<div data-k="ljp-card"><button type="button" class="btn sm" ${cardAttrs('t', tid, 'ljc-' + tid)}>Avaa joukkuekortti</button></div></div>`;
+      `<div data-k="ljp-card"><button type="button" class="btn sm" ${cardAttrs('t', tid, 'ljc-' + tid)}>Avaa joukkuekortti</button></div>` + (ed ? tourTeamEdit(T, tid) : '') + `</div>`;
     return `<li class="accl${on ? ' on' : ''}" data-k="lj-${id}"><button type="button" class="acch" id="ljb-${id}" data-act="lt-toggle" data-id="${id}" aria-expanded="${on}"${on ? ` aria-controls="ljp-${id}"` : ''}>` +
       `<span class="mtime">${r.rank}.</span>${teamAv(r.t)}<span class="itxt"><b>${esc(r.t.name)}</b><small>${many(ps.length, 'pelaaja', 'pelaajaa')} · voitot ${r.s.v} · häviöt ${r.s.h}</small></span><span class="mres">${fmt(r.pts)} <small>p</small></span><span class="chev" aria-hidden="true"></span></button>${body}</li>`;
   }).join('') + `</ul>` + liveExtras(T, by);
@@ -5783,7 +5792,7 @@ function viewHome() {
 }
 // If drawing a view ever fails (say, data left behind by a removed team), the page says so and stays usable rather than freezing.
 function safeView() {
-  try { const h = view() + turnView() + cheerView() + a2hsView() + nhlView() + rosterView(); ui.viewErr = null; return h; }
+  try { const h = view() + turnView() + cheerView() + a2hsView() + nhlView() + tjPickView() + rosterView(); ui.viewErr = null; return h; }
   catch (e) {
     try { console.error('[anarit] view failed:', e); } catch (x) { /* no console */ }
     ui.viewErr = String((e && e.message) || e).slice(0, 160);
@@ -6019,6 +6028,7 @@ window.addEventListener('storage', e => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && ui.navOpen) { ui.navOpen = false; ui.focusId = 'nav-open'; render(); return; }
   if (e.key === 'Escape' && ui.rp) { ui.rp = null; render(); return; }
+  if (e.key === 'Escape' && ui.tjPick) { ui.tjPick = null; ui.focusId = 'tj-open'; render(); return; }
   if (e.key === 'Escape' && ui.nhlPick) { ui.nhlPick = null; render(); return; }
   if (e.key === 'Escape' && ui.a2hs) { ui.a2hs = false; render(); return; }
   if (e.key === 'Escape' && ui.wiz) { ui.wiz = null; ui.focusId = 'wz-open'; render(); return; }
