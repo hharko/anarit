@@ -615,6 +615,29 @@ button.tchip:hover{border-color:var(--ink-2)}
 .navi small{font:600 11px/1 var(--f-body);letter-spacing:.08em;color:var(--ink-2);margin-bottom:3px}
 .navi span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .navi:hover{background:rgba(255,255,255,.06)}
+.navtr{display:flex;align-items:stretch;gap:4px}
+.navtr .navi{flex:1;min-width:0}
+.navx{flex:none;width:44px;border:0;border-radius:8px;background:none;color:var(--ink-2);font-size:18px;cursor:pointer;transition:transform .15s}
+.navx:hover{background:rgba(255,255,255,.06);color:var(--ink)}
+.navt.open .navx{transform:rotate(180deg)}
+.navsub{display:none;list-style:none;margin:4px 0 6px 12px;padding:4px 0 4px 10px;border-left:2px solid var(--line)}
+.navt.open .navsub{animation:navin .18s ease-out}
+.navt.open .navsub{display:block}
+@media (hover:hover) and (min-width:700px){
+  .navt{position:relative}
+  .navsub,.navt.open .navsub{display:block;position:absolute;right:calc(100% - 2px);top:0;width:260px;margin:0;padding:6px;border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:12px;background:var(--sheet);box-shadow:0 18px 40px rgba(0,0,0,.5);
+    opacity:0;visibility:hidden;transform:translateX(10px);pointer-events:none;transition:opacity .2s ease,transform .2s ease,visibility 0s linear .45s;transition-delay:.25s,.25s,.45s}
+  .navt:hover .navsub,.navt.open .navsub{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition-delay:.15s,.15s,0s}
+  .navt:hover .navx{transform:rotate(90deg);transition-delay:.15s}
+  .navt.open .navsub{transition-delay:0s,0s,0s}
+  .navt.shut .navsub,.navt.shut:hover .navsub{opacity:0;visibility:hidden;transform:translateX(10px);pointer-events:none;transition-delay:0s,0s,.2s}
+  .navt.shut .navx,.navt.shut:hover .navx{transform:none}
+}
+.navs{display:flex;flex-direction:column;align-items:flex-start;width:100%;min-height:44px;justify-content:center;padding:6px 12px;border:0;border-radius:8px;background:none;color:var(--ink);text-align:left;cursor:pointer;font:600 15px/1.2 var(--f-body)}
+.navs small{color:var(--ink-2);font-size:12px;font-weight:500}
+.navs:hover{background:rgba(255,255,255,.06)}
+.navs.on{background:rgba(90,162,255,.16);box-shadow:inset 3px 0 0 var(--blue)}
+.navs.new{color:var(--blue)}
 .navi[aria-current="page"]{background:var(--red);color:var(--on-red)}
 .navi[aria-current="page"] small{color:inherit;opacity:.8}
 .who{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto;min-width:0;font-size:14px;color:var(--ink-2)}
@@ -1755,7 +1778,9 @@ function arenaList(names, n) { const out = []; for (let i = 0; i < Math.max(1, M
 const arenaName = (T, n) => (T && T.arenas && T.arenas[n - 1]) || 'Areena ' + n;
 const arenaCount = T => T.arenas && T.arenas.length ? T.arenas.length : Math.max(1, ...Object.values(T.matches || {}).map(m => +m.arena || 0));
 // the arena in a list, when the tournament is played on more than one
-const arenaTxt = (T, m) => m.arena && !m.endedAt && (arenaCount(T) > 1 || Object.values(T.matches).some(x => x.arena > 1)) ? ' · ' + arenaName(T, m.arena) : '';
+const arenaShown = (T, m) => !!m.arena && (arenaCount(T) > 1 || Object.values(T.matches).some(x => x.arena > 1) || !!(T.arenas && T.arenas[m.arena - 1] && T.arenas[m.arena - 1] !== 'Areena ' + m.arena));
+const arenaTxt = (T, m) => arenaShown(T, m) && !m.endedAt ? ' · ' + arenaName(T, m.arena) : '';
+const arenaBit = (T, m) => arenaShown(T, m) ? ' · ' + esc(arenaName(T, m.arena)) : '';
 // a coming match or a break in time order, past midnight after the evening: its start as a moment, no time last
 const comeKey = m => (m.pz ? setAt({ time: m.time }) : dueAt(m)) || 9e15;
 const startTxt = m => m._sh ? hm(m._sh.at) : m.time;
@@ -3105,10 +3130,23 @@ function act(a, d) {
     case 'role-open': ui.roleOpen = ui.roleOpen === d.id ? null : d.id; ui.confirm = null; break;
     case 'acct-open': if (state.players[d.id]) { setTab('pelaajat'); ui.player = d.id; ui.playerTab = 'muokkaa'; ui.acctDd = d.id; ui.toTop = true; } break;
     case 'acct-dd': ui.acctDd = ui.acctDd === d.id ? null : d.id; ui.confirm = null; break;
-    case 'nav-open': ui.navOpen = !ui.navOpen; if (ui.navOpen) ui.focusId = 'tab-' + ui.tab; break;
-    case 'nav-close': ui.navOpen = false; ui.focusId = 'nav-open'; break;
+    case 'nav-open': ui.navOpen = !ui.navOpen; ui.navSub = false; if (ui.navOpen) ui.focusId = 'tab-etusivu'; break;
+    case 'nav-close': ui.navOpen = false; ui.navSub = false; ui.focusId = 'nav-open'; break;
+    case 'nav-sub': {
+      const hov = window.matchMedia && matchMedia('(hover:hover) and (min-width:700px)').matches;
+      // on a computer the arrow goes by what is on the screen: a list showing (opened by the pointer or the arrow) shuts, a hidden one opens
+      const sub = app.querySelector('[data-k="navsub"]'), shown = !!sub && +getComputedStyle(sub).opacity > 0.3;
+      ui.navSub = hov ? (shown ? 'shut' : true) : !ui.navSub; break;
+    }
+    case 'nav-tour': {   // a tournament from the menu: the one being played on its own tab, the others (and a new one) under Turnaukset
+      ui.navOpen = false; ui.navSub = false;
+      const at = activeTour(), tabs = allowedTabs();
+      if (d.tour && d.tour !== '__new' && at && at.id === d.tour && tabs.indexOf('kaynnissa') >= 0) { setTab('kaynnissa'); ui.liveMatch = null; }
+      else if (tabs.indexOf('turnaukset') >= 0) { setTab('turnaukset'); ui.tour = d.tour || null; ui.tourTab = ''; ui.tourMatch = null; ui.tourErr = null; if (d.tour === '__new') ui.focusId = 'nu-name'; }
+      ui.toTop = true; break;
+    }
     case 'tab':
-      ui.navOpen = false; ui.plFromTeams = false;
+      ui.navOpen = false; ui.navSub = false; ui.plFromTeams = false;
       if (allowedTabs().indexOf(d.tab) < 0) break;
       ui.adEdit = null;
       if (d.tab === ui.tab) { if (d.tab === 'etusivu') ui.homeBoard = false; if (d.tab === 'joukkueet') ui.team = null; if (d.tab === 'pelaajat') ui.player = null; if (d.tab === 'turnaukset') { ui.tour = null; ui.tourMatch = null; } if (d.tab === 'kaynnissa') ui.liveMatch = null; if (d.tab === 'asetukset') ui.setView = ''; }
@@ -3515,6 +3553,18 @@ function a2hsView() {
 const MENU_LABEL = { kaynnissa: 'Turnaukset', joukkueet: 'Joukkueet ja pelaajat', asetukset: 'Ylläpito' };
 const MENU_HOME = { turnaukset: 'kaynnissa', pelaajat: 'joukkueet', valvomo: 'asetukset' };
 const menuTabs = tabs => tabs.filter(t => !(MENU_HOME[t] && tabs.indexOf(MENU_HOME[t]) >= 0));
+// The tournament entry of the menu: the one being played, and beside it a list of every tournament and a new one. The list opens
+// when the pointer rests on the entry, or with the arrow on a phone.
+function navTours(t, tab, T, tabs) {
+  const cur = t === tab || MENU_HOME[tab] === t || tab === 'turnaukset' || tab === 'kaynnissa', open = ui.navSub === true, act = activeTour();
+  const list = toursSorted().map(x => `<li><button type="button" class="navs${(tab === 'kaynnissa' && act && act.id === x.id) || (tab === 'turnaukset' && ui.tour === x.id) ? ' on' : ''}" id="nvt-${esc(x.id)}" data-act="nav-tour" data-tour="${esc(x.id)}"><span>${esc(x.name)}</span><small>${esc(tourMeta(x))}</small></button></li>`).join('');
+  const main = t === 'kaynnissa' && T
+    ? `<button type="button" class="navi tt" id="tab-kaynnissa" data-act="tab" data-tab="kaynnissa"${cur ? ' aria-current="page"' : ''}><small>Turnaus</small><span>${esc(T.name)}</span></button>`
+    : `<button type="button" class="navi" id="tab-turnaukset" data-act="tab" data-tab="turnaukset"${cur ? ' aria-current="page"' : ''}><span>Turnaukset</span></button>`;
+  return `<li class="navt${ui.navSub === true ? ' open' : ui.navSub === 'shut' ? ' shut' : ''}" data-k="navt"><div class="navtr">${main}<button type="button" class="navx" id="nav-sub" data-act="nav-sub" aria-expanded="${open}" aria-label="Kaikki turnaukset">▾</button></div>` +
+    `<ul class="navsub" data-k="navsub">${list}${tabs.indexOf('turnaukset') >= 0 ? `<li><button type="button" class="navs" id="nvt-all" data-act="nav-tour" data-tour=""><span>Kaikki turnaukset</span></button></li>` : ''}` +
+    `${can('turnaus') ? `<li><button type="button" class="navs new" id="nvt-new" data-act="nav-tour" data-tour="__new"><span>+ Uusi turnaus</span></button></li>` : ''}</ul></li>`;
+}
 function topBar(tab, tabs) {
   const s = syncInfo(), T = activeTour(), m = me();
   const who = NET && m && m.guest ? `<button class="btn sm primary" id="login-open" data-act="login-open">Kirjaudu sisään</button>`
@@ -3525,7 +3575,7 @@ function topBar(tab, tabs) {
   const nav = tabs.length && navOn(tabs), menu = nav && !window.ANARIT_TABS;
   const tabLbl = t => t === 'kaynnissa' ? esc(T.name) : TAB_LABEL[t];
   const burger = menu ? `<button type="button" class="btn sm burg" id="nav-open" data-act="nav-open" aria-expanded="${!!ui.navOpen}" aria-controls="navm" aria-label="Valikko"><span class="burgi" aria-hidden="true"><i></i><i></i><i></i></span></button>` : '';
-  const panel = menu && ui.navOpen ? `<div class="navbg" data-k="navbg" data-act="nav-close" aria-hidden="true"></div><nav class="navm" id="navm" data-k="navm" aria-label="Näkymät"><ul>${menuTabs(tabs).map(t => `<li><button type="button" class="navi${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab || MENU_HOME[tab] === t ? ' aria-current="page"' : ''}>${t === 'kaynnissa' ? `<small>${esc(T.name)}</small>` : ''}<span>${MENU_LABEL[t] || TAB_LABEL[t]}</span></button></li>`).join('')}</ul></nav>` : '';
+  const panel = menu && ui.navOpen ? `<div class="navbg" data-k="navbg" data-act="nav-close" aria-hidden="true"></div><nav class="navm" id="navm" data-k="navm" aria-label="Näkymät"><ul>${menuTabs(tabs).map(t => t === 'kaynnissa' || (t === 'turnaukset' && tabs.indexOf('kaynnissa') < 0) ? navTours(t, tab, T, tabs) : `<li><button type="button" class="navi" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab || MENU_HOME[tab] === t ? ' aria-current="page"' : ''}><span>${MENU_LABEL[t] || TAB_LABEL[t]}</span></button></li>`).join('')}</ul></nav>` : '';
   return `<header class="top" data-k="top"><div class="brand">${brandHome(tabs)}<div class="who" data-k="who">${a2}${syncTag(s)}${who}${burger}</div></div>${panel}` +
     (nav && !menu ? `<nav class="tabs" data-k="tabs" aria-label="Näkymät"><div class="tabsx" data-k="tabsx">${tabs.map(t => `<button class="tab${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab ? ' aria-current="page"' : ''}${t === 'kaynnissa' ? ` title="${esc(T.name)}"` : ''}>${t === 'kaynnissa' ? `<span class="ttx">${esc(T.name)}</span>` : TAB_LABEL[t]}</button>`).join('')}</div></nav>` : '') + `</header>`;
 }
@@ -4712,7 +4762,7 @@ function matchBanner(T, m, h, a, st, line) {
   const side = (x, s) => `<div class="mbt mbt-${s}" data-k="mbt-${s}">${x.team ? teamAv(x.team, 'lg') : `<span class="av lg none" aria-hidden="true"></span>`}<b class="mbn">${esc(x.name)}</b></div>`;
   const win = st === 'done' && m.hs !== m.as ? (m.hs > m.as ? 'h' : 'a') : '';
   return `<section class="thero mban st-${st}${win ? ' win-' + win : ''}" data-k="mp-hero"><div class="thin">` +
-    `<p class="thk" data-k="mb-k">${st === 'live' ? '<span class="thdot" aria-hidden="true"></span>' : ''}${esc(T.name)} · ${esc(matchLabel(T, m))}${m.arena && arenaCount(T) > 1 ? ' · ' + esc(arenaName(T, m.arena)) : ''}</p>` +
+    `<p class="thk" data-k="mb-k">${st === 'live' ? '<span class="thdot" aria-hidden="true"></span>' : ''}${esc(T.name)} · ${esc(matchLabel(T, m))}${arenaBit(T, m)}</p>` +
     `<div class="mbrow">${side(h, 'h')}<div class="mbs" aria-label="Tilanne ${m.hs}–${m.as}"><b data-bump>${m.hs}</b><i>–</i><b data-bump>${m.as}</b></div>${side(a, 'a')}</div>` +
     (st === 'live' ? `<div class="mbst">${heroState(m)}</div>` : `<p class="hmc mbc" data-k="hmc">${line}</p>`) + `</div></section>`;
 }
@@ -4764,7 +4814,7 @@ function tourKpis(T) {
 // A match itself is changed on its own page (start time, start, reset, removing it) and in Valvomo.
 function matchesHead(T) {
   if (tourTeamIds(T).length < 2) return `<div class="note" data-k="mf-none"><span>Lisää turnaukseen ensin vähintään kaksi joukkuetta.</span>${can('tasetus') ? `<div class="rowbtns"><button class="btn" id="mf-toset" data-act="subtab" data-scope="${ui.tab === 'turnaukset' ? 'tour' : 'live'}" data-tab="joukkueet">Lisää joukkueita</button></div>` : ''}</div>`;
-  const wz = wizCan(T) ? `<button class="btn" id="wz-open" data-act="wiz-open" data-tour="${esc(T.id)}">${rounds(T)[0].length ? 'Muuta pareja kaaviolla' : 'Luo ottelut kaaviolla'}</button>` : '';
+  const wz = wizCan(T) ? `<button class="btn" id="wz-open" data-act="wiz-open" data-tour="${esc(T.id)}">${rounds(T)[0].length ? 'Muuta otteluita' : 'Luo ottelut kaaviolla'}</button>` : '';
   return (ui.newMatch ? matchForm(T) : `<div class="rowbtns" data-k="nm-open"><button class="btn primary" id="nm-open" data-act="new-match">Uusi ottelu</button>${wz}<button class="btn" id="pz-new" data-act="pz-new">Lisää tauko</button></div>`) +
     (ui.pzEdit === 'new' ? pauseForm(T, null) : '') +
     `<p class="hint" data-k="tm-how">Jatko-ottelut syntyvät kaavioon itsestään.</p>`;
@@ -5089,7 +5139,7 @@ function heroLines(T, mine, scope) {
   const state2 = m => !m.startedAt ? (dueAt(m) > nowMs() ? 'alkuun ' + downClock(dueAt(m)) : m.time ? 'klo ' + esc(startTxt(m)) : '') : m.pausedAt ? 'keskeytetty' : onBreak(m) ? 'erätauko' : mClock(m);
   const row = (m, lead) => `<button class="hl" id="hl-${esc(m.id)}" data-act="open-match" data-scope="${scope}" data-tour="${esc(T.id)}" data-id="${esc(m.id)}"><span class="hll">${lead}</span>` +
     `<span class="hln">${esc(sideInfo(T, m.home).name)} ${m.startedAt ? `<b>${m.hs}–${m.as}</b>` : '–'} ${esc(sideInfo(T, m.away).name)}</span><span class="hlc">${state2(m)}</span></button>`;
-  const rows = (mine ? [row(mine, mine.startedAt ? 'Sinun ottelusi' : 'Seuraava ottelusi')] : []).concat(live.map(m => row(m, 'Käynnissä · ' + esc(matchLabel(T, m)))));
+  const rows = (mine ? [row(mine, mine.startedAt ? 'Sinun ottelusi' : 'Seuraava ottelusi')] : []).concat(live.map(m => row(m, 'Käynnissä · ' + esc(matchLabel(T, m)) + arenaBit(T, m))));
   return rows.length ? `<section class="hero hlines" data-k="hlines" aria-label="Ottelut nyt">${rows.join('')}</section>` : '';
 }
 function viewTours() {
@@ -5129,7 +5179,7 @@ function myHero(T, m, tid, scope) {
   const h = sideInfo(T, m.home), a = sideInfo(T, m.away), live = !!m.startedAt;
   const team = x => `<span class="hmt${x.id === tid ? ' me' : ''}">${esc(x.name)}</span>`;
   return `<section class="hero mine" data-k="myhero" aria-label="Sinun ottelusi"><button class="hm" id="my-${esc(m.id)}" data-act="open-match" data-scope="${scope || 'live'}" data-tour="${esc(T.id)}" data-id="${esc(m.id)}">` +
-    `<span class="hml"><b>${live ? 'Sinun ottelusi' : 'Seuraava ottelusi'}</b> · ${esc(matchLabel(T, m))}</span>` +
+    `<span class="hml"><b>${live ? 'Sinun ottelusi' : 'Seuraava ottelusi'}</b> · ${esc(matchLabel(T, m))}${arenaBit(T, m)}</span>` +
     `<span class="hmr">${team(h)}<span class="hms${live ? '' : ' vs'}">${live ? `<b data-bump>${m.hs}</b><i>–</i><b data-bump>${m.as}</b>` : '<i>vs</i>'}</span>${team(a)}</span>` +
     (live ? heroState(m) : countdown(m)) + `</button></section>`;
 }
@@ -5153,14 +5203,14 @@ function liveHero(T, skip, scope) {
   const ms = matchList(T), live = ms.filter(m => mStatus(m) === 'live' && !(skip && m.id === skip.id));
   if (live.length) return `<section class="hero" data-k="hero" aria-label="${skip ? 'Muut käynnissä olevat ottelut' : 'Käynnissä olevat ottelut'}">${live.map(m => {
     const h = sideInfo(T, m.home), a = sideInfo(T, m.away);
-    return `<button class="hm" id="hm-${esc(m.id)}" data-act="open-match" data-scope="${scope || 'live'}" data-tour="${esc(T.id)}" data-id="${esc(m.id)}"><span class="hml">${esc(matchLabel(T, m))}</span><span class="hmr"><span class="hmt">${esc(h.name)}</span><span class="hms"><b data-bump>${m.hs}</b><i>–</i><b data-bump>${m.as}</b></span><span class="hmt">${esc(a.name)}</span></span>` +
+    return `<button class="hm" id="hm-${esc(m.id)}" data-act="open-match" data-scope="${scope || 'live'}" data-tour="${esc(T.id)}" data-id="${esc(m.id)}"><span class="hml">${esc(matchLabel(T, m))}${arenaBit(T, m)}</span><span class="hmr"><span class="hmt">${esc(h.name)}</span><span class="hms"><b data-bump>${m.hs}</b><i>–</i><b data-bump>${m.as}</b></span><span class="hmt">${esc(a.name)}</span></span>` +
       `${heroState(m)}</button>`;
   }).join('')}</section>`;
   if (skip) return '';
   const win = tourWinner(T);
   if (win) return win;
   const next = ms.filter(m => mStatus(m) === 'new' && !isBye(m)).sort((x, y) => (comeKey(x) - comeKey(y)) || byOrder(x, y))[0];
-  if (next) return `<section class="hero" data-k="hero"><div class="hm"><span class="hml">Seuraavaksi${next.time ? ' klo ' + next.time : ''} · ${esc(matchLabel(T, next))}</span><span class="hmn">${esc(sideInfo(T, next.home).name)} – ${esc(sideInfo(T, next.away).name)}</span></div></section>`;
+  if (next) return `<section class="hero" data-k="hero"><div class="hm"><span class="hml">Seuraavaksi${next.time ? ' klo ' + next.time : ''} · ${esc(matchLabel(T, next))}${arenaBit(T, next)}</span><span class="hmn">${esc(sideInfo(T, next.home).name)} – ${esc(sideInfo(T, next.away).name)}</span></div></section>`;
   return '';
 }
 const openRow = (T, m, inner, scope) => `<button class="lrowb" id="lr-${esc(m.id)}" data-act="open-match" data-scope="${scope || 'live'}" data-tour="${esc(T.id)}" data-id="${esc(m.id)}">${inner}</button>`;
@@ -5521,7 +5571,7 @@ function showNow(T, ms, live) {
   const rs = rounds(T), finId = rs[rs.length - 1][0], champ = finId && T.matches[finId] ? outcome(T, T.matches[finId], 0) : null;
   if (champ && champ.w && state.teams[champ.w]) return champView(T);
   const next = ms.filter(m => mStatus(m) === 'new').sort((x, y) => (comeKey(x) - comeKey(y)) || byOrder(x, y))[0];
-  if (next) return `<div class="sn"><div class="sn-m"><div class="sn-l">Seuraavaksi${next.time ? ' klo ' + startTxt(next) : ''} · ${esc(matchLabel(T, next))}</div><div class="sn-r">${side(sideInfo(T, next.home))}<div class="sn-s"><i>vs</i></div>${side(sideInfo(T, next.away))}</div></div></div>`;
+  if (next) return `<div class="sn"><div class="sn-m"><div class="sn-l">Seuraavaksi${next.time ? ' klo ' + startTxt(next) : ''} · ${esc(matchLabel(T, next))}${arenaBit(T, next)}</div><div class="sn-r">${side(sideInfo(T, next.home))}<div class="sn-s"><i>vs</i></div>${side(sideInfo(T, next.away))}</div></div></div>`;
   return `<div class="sn"><div class="sn-m"><div class="sn-w">${esc(T.name)}</div><div class="sn-c">${ms.length ? 'Kaikki ottelut on pelattu.' : 'Otteluita ei ole vielä luotu.'}</div></div></div>`;
 }
 const showBracket = T => bracketView(T, 'show', true);
@@ -6097,6 +6147,11 @@ app.addEventListener('pointermove', e => {
 });
 app.addEventListener('pointerup', e => { if (wzDrag && e.pointerId === wzDrag.id) wzEnd({ x: e.clientX, y: e.clientY }); });
 app.addEventListener('pointercancel', e => { if (wzDrag && e.pointerId === wzDrag.id) wzEnd(null); });
+app.addEventListener('mouseout', e => {
+  if (ui.navSub !== 'shut') return;
+  const t = app.querySelector('[data-k="navt"]');
+  if (t && !t.contains(e.relatedTarget)) { ui.navSub = false; const el = app.querySelector('[data-k="navt"]'); if (el) el.classList.remove('shut'); }
+});
 app.addEventListener('click', e => {
   if (wzNoClick) { wzNoClick = 0; return; }   // the end of a drag is no tap
   const b = e.target.closest && e.target.closest('[data-act]');
