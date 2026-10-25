@@ -1,4 +1,4 @@
-<!doctype html><html lang="fi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Änärien tulostaulu: turnaukset, ottelut ja pistepörssi."><meta name="theme-color" content="#0a1119"><link rel="icon" href="favicon-32.png" sizes="32x32"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-title" content="Änärit"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><script>window.ANARIT_FB = {"config": {"apiKey": "AIzaSyAQg8ltWfhnhxHRpgLfWd9KVCLn62Xr7H4", "authDomain": "anarit.firebaseapp.com", "projectId": "anarit", "storageBucket": "anarit.firebasestorage.app", "messagingSenderId": "965565392590", "appId": "1:965565392590:web:b5cb739d377b1b9f67529f"}};</script></head><body><title>Änärien tulostaulu</title>
+<!doctype html><html lang="fi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Änärien tulostaulu: turnaukset, ottelut ja pistepörssi."><meta name="theme-color" content="#0a1119"><link rel="icon" href="favicon-32.png" sizes="32x32"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-title" content="Änärit"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><script>window.ANARIT_FB = {"config": {"apiKey": "AIzaSyAQg8ltWfhnhxHRpgLfWd9KVCLn62Xr7H4", "authDomain": "anarit.firebaseapp.com", "projectId": "anarit", "storageBucket": "anarit.firebasestorage.app", "messagingSenderId": "965565392590", "appId": "1:965565392590:web:b5cb739d377b1b9f67529f"}, "vapid": "BMfI2vy_JXYoRZooJ5QDy7aU6hNgfFkxicyQ-mfQf6tX0GhNnwrE-otcfGQ_33XEOCi-5qfDpL40qN1z7_a5xkE"};</script></head><body><title>Änärien tulostaulu</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Saira+Condensed:wght@600;700;800&amp;display=swap">
 <style>
 /* Layout: team sheets laid on ice in one working column; the arena scoreboard is the single loud element and stays pinned above the buttons. */
@@ -802,6 +802,8 @@ html.showing body::before{background-image:linear-gradient(180deg,rgba(5,9,14,.5
 .show .sn-m.live .sn-l{color:var(--board-accent)}
 .show .sn-s{text-shadow:0 .05em .4em rgba(0,0,0,.6)}
 .sh-name{text-shadow:0 2px 14px rgba(0,0,0,.7)}
+.home .pubox{background:linear-gradient(180deg,rgba(116,168,245,.10),rgba(116,168,245,0) 120px),var(--sheet);border:1px solid rgba(116,168,245,.4);border-radius:14px;padding:14px 16px 16px}
+.pupref{display:flex;flex-direction:column;gap:8px}
 /* picking players */
 .rpp{width:min(560px,100%)}
 .rpl{max-height:none}
@@ -2067,6 +2069,16 @@ async function netInit(cfg) {
     access: email => S.getDoc(accRef(email)).then(d => (d.exists() ? d.data() : null)),
     setAccess: (email, a) => S.setDoc(accRef(email), a).catch(fail),
     delAccess: email => S.deleteDoc(accRef(email)).catch(fail),
+    // notifications: this phone's address for them, made with the site's public key, and kept in push/<address> with whose phone
+    // it is and what he wants; the server functions read them (nobody else can)
+    pushToken: async vapid => {
+      const M = await import(base + 'firebase-messaging.js');
+      if (!(await M.isSupported())) { const x = new Error('unsupported'); x.code = 'unsupported'; throw x; }
+      const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+      return M.getToken(M.getMessaging(app), { vapidKey: vapid, serviceWorkerRegistration: reg });
+    },
+    pushSave: (token, d) => S.setDoc(S.doc(fs, 'push', token), d).catch(fail),
+    pushDel: token => S.deleteDoc(S.doc(fs, 'push', token)).catch(fail),
     watchAccess: (ok, bad) => S.onSnapshot(S.collection(fs, 'access'), q => { const o = {}; q.docs.forEach(d => { o[d.id] = d.data(); }); ok(o); }, bad)
   };
 }
@@ -2967,6 +2979,10 @@ function act(a, d) {
     case 'wiz-open': wizOpen(d.tour); break;
     case 'wiz-close': ui.wiz = null; ui.focusId = 'wz-open'; break;
     case 'a2hs': a2hsGo(); break;
+    case 'push-on': pushOn(); break;
+    case 'push-off': pushOff(); break;
+    case 'push-pref': pushPref(d.id); break;
+    case 'push-ask-no': lsSet('anarit.pushask', 'no'); break;
     case 'rp-open': if (state.teams[d.id]) { const sel = {}; realPlayers().forEach(p => { if (p.teamId === d.id) sel[p.id] = true; }); ui.rp = { tid: d.id, sel, q: '' }; ui.focusId = 'rp-title'; } break;
     case 'rp-pick': if (ui.rp && state.players[d.id]) ui.rp.sel[d.id] = !ui.rp.sel[d.id]; break;
     case 'rp-close': if (ui.rp) { ui.focusId = 'rp-open-' + ui.rp.tid; ui.rp = null; } break;
@@ -3768,6 +3784,63 @@ function nameField(pid, p) {
 }
 // The signed-in player's own page: where they stand in the scoring table (the top three, and themselves below if they are not among them),
 // their own numbers, and with the right their name, picture and colour.
+/* ----- notifications to the phone, also when the app is closed: goals, "Teidän vuoro", the champion ----- */
+// Only on the site (with its public push key), in a browser that can; on an iPhone only from the home screen.
+const PUSH_LS = 'anarit.push', PUSH_PREFS = { own: true, all: false, turn: true, champ: true };
+const PUSH_LABEL = { turn: 'Teidän vuoro: oma ottelu alkaa', own: 'Oman joukkueen maalit', all: 'Kaikki maalit', champ: 'Turnauksen mestari' };
+const pushMine = () => { try { const x = JSON.parse(lsGet(PUSH_LS) || 'null'); return x && x.token ? x : null; } catch (e) { return null; } };
+const pushCan = () => NET && !!fb && !!(window.ANARIT_FB && window.ANARIT_FB.vapid) && 'serviceWorker' in navigator && 'Notification' in window;
+const pushDev = () => (navigator.userAgent.match(/iPhone|iPad|Android|Mac|Windows/) || ['laite'])[0];
+async function pushOn() {
+  const perm = await Notification.requestPermission();   // first, while the tap still counts
+  ui.pushBusy = true; ui.pushErr = null; render();
+  try {
+    if (perm !== 'granted') { const x = new Error('denied'); x.code = 'denied'; throw x; }
+    const token = await fb.pushToken(window.ANARIT_FB.vapid), prefs = Object.assign({}, PUSH_PREFS, (pushMine() || {}).prefs), pid = ownPid();
+    await fb.pushSave(token, { pid, prefs, at: Date.now(), dev: pushDev() });
+    lsSet(PUSH_LS, JSON.stringify({ token, prefs, pid }));
+  } catch (e) {
+    ui.pushErr = e && e.code === 'denied' ? 'Ilmoitukset on estetty. Salli ne puhelimen asetuksista (Asetukset → Ilmoitukset → Änärit) ja yritä uudelleen.'
+      : e && e.code === 'unsupported' ? 'Tämä selain ei tue ilmoituksia. iPhonessa avaa Änärit kotinäytöltä.' : 'Ilmoitusten käyttöönotto ei onnistunut. Yritä hetken päästä uudelleen.';
+  }
+  ui.pushBusy = false; render();
+}
+async function pushOff() {
+  const x = pushMine();
+  if (x) { try { await fb.pushDel(x.token); } catch (e) { /* the server forgets a dead address by itself */ } }
+  try { localStorage.removeItem(PUSH_LS); } catch (e) { /* nothing kept */ }
+  render();
+}
+function pushPref(k) {
+  const x = pushMine();
+  if (!x || !(k in PUSH_PREFS)) return;
+  x.prefs = Object.assign({}, PUSH_PREFS, x.prefs); x.prefs[k] = !x.prefs[k];
+  lsSet(PUSH_LS, JSON.stringify(x));
+  fb.pushSave(x.token, { pid: x.pid || ownPid(), prefs: x.prefs, at: Date.now(), dev: pushDev() }).catch(() => {});
+}
+// the phone follows whoever signs in on it: his matches and his team decide what he hears
+function pushSync() {
+  const x = pushCan() && pushMine(), pid = ownPid();
+  if (!x || x.pid === pid) return;
+  x.pid = pid; lsSet(PUSH_LS, JSON.stringify(x));
+  fb.pushSave(x.token, { pid, prefs: Object.assign({}, PUSH_PREFS, x.prefs), at: Date.now(), dev: pushDev() }).catch(() => {});
+}
+// The notifications box: on the own page always, on Etusivu as an invitation until it is taken up or put away.
+function pushBox(where) {
+  if (!pushCan() || !ownPid()) return '';
+  const x = pushMine(), home = where === 'home';
+  if (home && (x || lsGet('anarit.pushask') === 'no')) return '';
+  const head = `<h3 class="sub${home ? '' : ' sect'}" data-k="pu-h">Ilmoitukset</h3>`;
+  let body;
+  if (isIOS() && !standalone()) body = `<p class="hint" data-k="pu-ios">iPhonessa ilmoitukset toimivat, kun avaat Änärit kotinäytöltä.</p>${a2hsOn() ? `<div class="rowbtns"><button class="btn" id="pu-a2" data-act="a2hs">Lisää kotinäytölle</button></div>` : ''}`;
+  else if (Notification.permission === 'denied') body = `<p class="hint" data-k="pu-den">Ilmoitukset on estetty tässä puhelimessa. Salli ne puhelimen asetuksista, niin voit ottaa ne käyttöön.</p>`;
+  else if (!x) body = `<p class="hint" data-k="pu-why">Saat ilmoituksen, kun on teidän vuoro pelata ja kun tulee maaleja, vaikka sovellus olisi kiinni.</p>` +
+    `<div class="rowbtns"><button class="btn primary" id="pu-on" data-act="push-on"${ui.pushBusy ? ' disabled' : ''}>${ui.pushBusy ? 'Otetaan käyttöön…' : 'Salli ilmoitukset'}</button>${home ? `<button class="btn" id="pu-no" data-act="push-ask-no">Ei nyt</button>` : ''}</div>`;
+  else { const P = Object.assign({}, PUSH_PREFS, x.prefs);
+    body = `<p class="hint" data-k="pu-on">Ilmoitukset tulevat tähän puhelimeen.</p><div class="pupref" data-k="pu-prefs">${Object.keys(PUSH_LABEL).map(k => plToggle('pu-' + k, !!P[k], 'push-pref', ` data-id="${k}"`, PUSH_LABEL[k])).join('')}</div>` +
+      `<div class="rowbtns"><button class="btn" id="pu-off" data-act="push-off">Lopeta ilmoitukset</button></div>`; }
+  return `<section class="${home ? 'set pubox' : ''}" data-k="pu-${where}">${head}${body}${ui.pushErr ? `<p class="err" role="alert" data-k="pu-err">${esc(ui.pushErr)}</p>` : ''}</section>`;
+}
 function viewOwn() {
   const u = me(), p = Object.assign({ id: u.id }, state.players[u.id]), k = kindOf(p), t = k === 'pelaaja' ? state.teams[p.teamId] : null, acc = state.users[u.id] || {};
   const st = state.config.stats.filter(s => appl(s, 'p')), first = st[0], canEdit = can('ptiedot') || ownOnly() === u.id;
@@ -3784,7 +3857,7 @@ function viewOwn() {
     `<div class="phead"><div class="pid">${playerAv(p, 'lg')}<div><h3 class="pfh">${esc(p.name)}</h3>${k === 'pelaaja' ? chips(p, '') : ''}</div></div>${k === 'katsoja' ? '' : `<span class="pts"><b data-bump>${fmt(points(p, 'p'))}</b> <small>p</small></span>`}</div>` +
     `<div class="pbody" data-k="own-body"><h3 class="sub sect" data-k="own-h1">Pistepörssi</h3>` + (rows.length ? standing + `<ol class="mlist podium" data-k="podium">${list}</ol>` : `<p class="hint" data-k="own-none">Pistepörssissä ei ole vielä pelaajia.</p>`) +
     (k === 'katsoja' || !st.length ? '' : `<h3 class="sub sect" data-k="own-h2">Omat tilastot</h3>${statTable('p', p, st)}`) +
-    `<h3 class="sub sect" data-k="own-h3">Omat tiedot</h3>${info}` +
+    pushBox('own') + `<h3 class="sub sect" data-k="own-h3">Omat tiedot</h3>${info}` +
     (canEdit ? nameField(u.id, p) + photoField('p-' + u.id) + colorField('p', u.id, COLOR[p.color] ? p.color : '')
       : ui.readOnly ? `<p class="hint" data-k="own-ro">Katselutilassa tietoja ei voi muuttaa.</p>` : '') +
     `</div></div></section></main>`;
@@ -5576,7 +5649,7 @@ function homeVis() {
 }
 function viewHome() {
   const low = adSlot(1) + adSlot(2);
-  return `<main id="v-etusivu" class="stack home">` + homeVis() + homeCountdown() + adSlot(0, 'wide') +
+  return `<main id="v-etusivu" class="stack home">` + homeVis() + homeCountdown() + pushBox('home') + adSlot(0, 'wide') +
     `<div class="hgrid" data-k="h-top">${homeBoard()}${homeChamps()}</div>` + homeLists() +
     (low ? `<div class="hgrid ads2" data-k="h-ads">${low}</div>` : '') + `</main>`;
 }
@@ -5668,6 +5741,7 @@ function morphKids(from, to) {
 function render() {
   statsCache = null;
   allShifts();
+  try { pushSync(); } catch (e) { /* notifications are extra */ }
   markSeen();
   document.documentElement.classList.toggle('showing', showOn());
   document.documentElement.classList.toggle('wizon', !!ui.wiz);
