@@ -361,6 +361,15 @@ button.wzs{padding:0 12px;cursor:pointer}
 .thero .thm{color:var(--board-dim);font-size:14px}
 .thchip:empty{display:none}
 @keyframes thin{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+/* On Tulostaulu, Ottelut and Joukkueet the tournament's banner folds down to its name, so the section starts near the top. */
+.lhead .thin{transition:padding .45s cubic-bezier(.2,.7,.2,1),gap .45s cubic-bezier(.2,.7,.2,1)}
+.lhead .thin>:not(.tht){max-height:120px;overflow:hidden;transition:max-height .45s cubic-bezier(.2,.7,.2,1),opacity .3s ease,margin .45s ease}
+.lhead .tht{transition:font-size .45s cubic-bezier(.2,.7,.2,1)}
+.lhead.mini .thin{padding:14px 18px;gap:0}
+.lhead.mini .thin>:not(.tht){max-height:0;opacity:0;margin:0;pointer-events:none}
+.lhead.mini .tht{font-size:clamp(24px,6.5vw,34px)}
+.lhead.mini .confetti,.lhead.mini canvas{display:none}
+@media (prefers-reduced-motion:reduce){.lhead .thin,.lhead .thin>*,.lhead .tht{transition:none}}
 @keyframes thfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes thdot{0%{box-shadow:0 0 0 0 rgba(255,84,104,.6)}80%,100%{box-shadow:0 0 0 10px rgba(255,84,104,0)}}
 @keyframes thdotbar{50%{opacity:.45}}
@@ -387,6 +396,16 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 @media (prefers-reduced-motion:reduce){.pgt .sec{animation:none}}
 /* The front page banner: bigger, with the countdown on scoreboard tiles and the running matches with their scores */
 .hhero .thin{padding:34px 18px 26px;gap:18px}
+/* front page → tournament: the banner carries over, the rest of the page fades and rises */
+/* front page → tournament: a dive into the centre ice of the front page's banner, and the tournament comes up out of it */
+::view-transition-old(root){animation:vtout .6s cubic-bezier(.55,0,.85,.35) both;transform-origin:var(--vtx,50%) var(--vty,35%)}
+::view-transition-new(root){animation:vtin .5s .32s cubic-bezier(.15,.8,.25,1) both;transform-origin:var(--vtx,50%) var(--vty,35%)}
+@keyframes vtout{60%{opacity:1}to{opacity:0;transform:scale(4);filter:blur(3px)}}
+@keyframes vtin{from{opacity:0;transform:scale(.9)}}
+.lhead.enter{animation:lhin .55s cubic-bezier(.2,.75,.2,1) both}
+.lhead.enter ~ *{animation:vtin .5s .12s cubic-bezier(.2,.75,.2,1) both}
+@keyframes lhin{from{opacity:0;transform:scale(1.25);filter:blur(8px)}}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
 .hhero .tht{font-size:clamp(42px,13vw,76px)}
 .thhead{display:flex;flex-direction:column;align-items:center;gap:10px}
 .thd{font:600 16px/1.2 var(--f-body);color:var(--board-dim)}
@@ -3139,6 +3158,7 @@ function act(a, d) {
       ui.navSub = hov ? (shown ? 'shut' : true) : !ui.navSub; break;
     }
     case 'nav-tour': {   // a tournament from the menu: the one being played on its own tab, the others (and a new one) under Turnaukset
+      if (ui.tab === 'etusivu' && d.tour && d.tour !== '__new') ui.vt = true;
       ui.navOpen = false; ui.navSub = false;
       const at = activeTour(), tabs = allowedTabs();
       if (d.tour && d.tour !== '__new' && at && at.id === d.tour && tabs.indexOf('kaynnissa') >= 0) { setTab('kaynnissa'); ui.liveMatch = null; }
@@ -3254,6 +3274,7 @@ function act(a, d) {
     case 'close-match': if (d.scope === 'live') ui.liveMatch = null; else ui.tourMatch = null; ui.goal = null; ui.note = null; ui.confirm = null; ui.vmBack = false; break;
     case 'vm-back': ui.liveMatch = null; ui.tourMatch = null; setTab('valvomo'); ui.toTop = true; break;
     case 'vm-tour': {
+      if (ui.tab === 'etusivu') ui.vt = true;
       // a tournament's own Valvomo: on the tournament tab when it is the one being played, else on its page under Turnaukset
       const T = state.tournaments[d.tour], at = activeTour(), tabs = allowedTabs();
       if (!T) break;
@@ -5072,7 +5093,7 @@ function showLink(T, short) {
 // The tournament's banner at the top of its page: an arena under the lights, the name large, where the tournament stands
 // (on now, coming, over), who takes part, and how far it has got. It slides in once when the page opens.
 const MONTHS_SHORT = ['1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.', '10.', '11.', '12.'];
-function tourHero(T, chip) {
+function tourHero(T, chip, mini) {
   const ms = matchList(T).filter(m => !isBye(m)), done = ms.filter(m => m.endedAt).length, live = ms.filter(m => mStatus(m) === 'live').length;
   const st = tourState(T), ids = tourTeamIds(T);
   const d = START_RE.test(T.start || '') ? new Date(T.start) : null;
@@ -5080,7 +5101,9 @@ function tourHero(T, chip) {
   const pod = st === 'done' ? tourPodium(T) : null, champ = pod && pod[0] ? state.teams[pod[0].t] : null;
   const kick = st === 'live' ? 'Käynnissä nyt' : st === 'on' ? 'Turnaus käynnissä' : st === 'done' ? (champ ? 'Mestari: ' + champ.name : 'Päättynyt') : when ? 'Alkaa ' + when : 'Tulossa';
   const pct = ms.length ? Math.round(done / ms.length * 100) : 0, show = ids.slice(0, 10), more = ids.length - show.length;
-  return `<section class="lhead thero st-${st}" data-k="lhead">${champ ? confetti(28, ['#e2b33c', '#f6d777', '#ffffff', COLOR[champ.color] || COLOR.grey]) : ''}<div class="thin">` +
+  if (ui.vtEnter) { ui.vtEnter = false; ui.vtUntil = Date.now() + 800; }
+  const enter = (ui.vtUntil || 0) > Date.now();
+  return `<section class="lhead thero st-${st}${mini ? ' mini' : ''}${enter ? ' enter' : ''}" data-k="lhead">${champ ? confetti(28, ['#e2b33c', '#f6d777', '#ffffff', COLOR[champ.color] || COLOR.grey]) : ''}<div class="thin">` +
     `<p class="thk" data-k="th-k">${st === 'live' ? '<span class="thdot" aria-hidden="true"></span>' : champ ? TROPHY : ''}${esc(kick)}</p>` +
     `<h2 class="sec tht">${esc(T.name)}</h2>` +
     (ids.length ? `<div class="thteams" data-k="th-teams" aria-label="Joukkueet">${show.map(id => state.teams[id] ? teamAv(Object.assign({ id }, state.teams[id]), 'sm') : '').join('')}${more > 0 ? `<span class="thmore">+${more}</span>` : ''}<span class="thtc">${ids.length} ${ids.length === 1 ? 'joukkue' : 'joukkuetta'}</span></div>` : '') +
@@ -5125,8 +5148,8 @@ function tourPage(T, scope) {
   const top = open ? '' : tab === 'ottelut' ? own : manage ? heroLines(T, mine, scope) : (mine ? myHero(T, mine, sideTeam(T, mySide(T, mine, me().id) === 'a' ? mine.away : mine.home), scope) + (vm && (can('kirj') || ownAll(T.id, mine.id)) ? '' : myGoal(T, mine)) : '') + (vm ? '' : liveHero(T, mine, scope));
   const act = activeTour(), chip = tour ? tourChip(tourState(T), !!act && act.id === T.id) : '';
   const others = !tour && !open && allowedTabs().indexOf('turnaukset') >= 0 && Object.keys(state.tournaments).length > 1 ? `<div data-k="tsw"><button class="btn back" id="tsw-all" data-act="tab" data-tab="turnaukset">Kaikki turnaukset</button></div>` : '';
-  return (tour && !open ? backBtn('tour', 'Kaikki turnaukset') : '') + others + (open ? '' : tourHero(T, chip)) + top +
-    (tabs.length > 1 && !open ? secTabs(tour ? 'tour' : 'live', tabs, tab) : '') + `<div class="pbody" data-k="${tour ? 'tub' : 'lv'}-${open ? 'm-' + esc(open) : tab}">${body}</div>` +
+  return (tour && !open ? backBtn('tour', 'Kaikki turnaukset') : '') + others + (open ? '' : tourHero(T, chip, ['taulukko', 'ottelut', 'joukkueet'].indexOf(tab) >= 0)) +
+    (tabs.length > 1 && !open ? secTabs(tour ? 'tour' : 'live', tabs, tab) : '') + top + `<div class="pbody" data-k="${tour ? 'tub' : 'lv'}-${open ? 'm-' + esc(open) : tab}">${body}</div>` +
     (tour && !edit && !open ? `<h3 class="sub sect" data-k="tu-sh">Esitys isolle näytölle</h3>${showLink(T, true)}` : '');
 }
 // The tournament's sections as one row of tabs that scrolls sideways on a phone, like the views at the top.
@@ -6056,7 +6079,24 @@ function morphKids(from, to) {
   }
   while (f) { const n = f.nextSibling; from.removeChild(f); f = n; }
 }
+// Going from the front page into a tournament: the front page's banner grows into the tournament's own (where the browser can
+// animate between two views), or else the tournament's page rises into place.
 function render() {
+  if (ui.vt) {
+    ui.vt = false;
+    const calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!calm && document.startViewTransition && painted) {
+      // the zoom heads for the centre ice of the front page's banner
+      const hb = app.querySelector('[data-k="h-cd"]'), r = hb ? hb.getBoundingClientRect() : null;
+      document.documentElement.style.setProperty('--vtx', r ? Math.round(r.left + r.width / 2) + 'px' : '50%');
+      document.documentElement.style.setProperty('--vty', r ? Math.round(r.top + r.height * 0.62) + 'px' : '35%');
+      try { document.startViewTransition(() => renderNow()); return; } catch (e) { /* plain below */ }
+    }
+    if (!calm) ui.vtEnter = true;
+  }
+  renderNow();
+}
+function renderNow() {
   statsCache = null;
   allShifts();
   try { pushSync(); } catch (e) { /* notifications are extra */ }
