@@ -509,6 +509,16 @@ div.lrowb{cursor:default}
 .pchip{min-height:42px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--sheet);color:var(--ink);font:600 15px/1.2 var(--f-body);touch-action:manipulation}
 .pchip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ice)}
 .pchip:disabled{opacity:.45}
+.pchk{display:flex;align-items:center;gap:12px;width:100%;max-width:420px;min-height:52px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--sheet);color:var(--ink);font:600 16px/1.25 var(--f-body);text-align:left;cursor:pointer;touch-action:manipulation}
+.pchkb{flex:none;display:grid;place-items:center;width:24px;height:24px;border:2px solid var(--ink-2);border-radius:6px;font:800 16px/1 var(--f-body);color:#fff}
+.pchk[aria-checked="true"] .pchkb{background:var(--ok);border-color:var(--ok)}
+.acdd{margin-top:22px;border:1px solid var(--line);border-radius:12px;background:var(--sheet);overflow:hidden}
+.acddb{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:10px 14px;border:0;background:none;color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+.acddb small{display:block;color:var(--ink-2);font-weight:500}
+.acddc{margin-left:auto;font-size:18px;color:var(--ink-2);transition:transform .15s}
+.acdd.on .acddc{transform:rotate(180deg)}
+.acddp{padding:14px 14px 14px;border-top:1px solid var(--line)}
+.acddp [data-k="ac-ah"]{display:none}
 .swt{display:flex;align-items:center;gap:12px;width:100%;max-width:420px;min-height:52px;padding:8px 12px 8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--sheet);color:var(--ink);font:600 16px/1.25 var(--f-body);text-align:left;cursor:pointer;touch-action:manipulation}
 .swt:hover{border-color:var(--ink-2)}
 .subsw{padding-left:14px;border-left:2px solid var(--line)}
@@ -584,6 +594,24 @@ button.tchip:hover{border-color:var(--ink-2)}
 .empty span{color:var(--ink-2);max-width:60ch}
 
 .linkbtn{display:inline-flex;align-items:center;text-decoration:none}
+.burg{width:44px;height:40px;padding:0;display:inline-grid;place-items:center}
+.burgi{display:flex;flex-direction:column;gap:4px;width:20px}
+.burgi i{display:block;height:2.5px;border-radius:2px;background:currentColor;transition:transform .18s,opacity .18s}
+.burg[aria-expanded="true"]{background:var(--red);border-color:var(--red);color:var(--on-red)}
+.burg[aria-expanded="true"] .burgi i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burg[aria-expanded="true"] .burgi i:nth-child(2){opacity:0}
+.burg[aria-expanded="true"] .burgi i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.top{position:relative}
+.navbg{position:fixed;inset:0;z-index:60;background:rgba(3,6,10,.45)}
+.navm{position:absolute;right:0;top:56px;z-index:61;width:min(300px,calc(100vw - 32px));background:var(--sheet);border:1px solid var(--line);border-top:3px solid var(--red);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.5);padding:6px;animation:navin .15s ease-out}
+@keyframes navin{from{opacity:0;transform:translateY(-6px)}}
+.navm ul{list-style:none;margin:0;padding:0}
+.navi{display:flex;flex-direction:column;align-items:flex-start;width:100%;min-height:48px;justify-content:center;padding:8px 14px;border:0;border-radius:8px;background:none;color:var(--ink);font:700 16px/1.15 var(--f-display);letter-spacing:.04em;text-transform:uppercase;text-align:left;cursor:pointer}
+.navi small{font:600 11px/1 var(--f-body);letter-spacing:.08em;color:var(--ink-2);margin-bottom:3px}
+.navi span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.navi:hover{background:rgba(255,255,255,.06)}
+.navi[aria-current="page"]{background:var(--red);color:var(--on-red)}
+.navi[aria-current="page"] small{color:inherit;opacity:.8}
 .who{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto;min-width:0;font-size:14px;color:var(--ink-2)}
 .who b{color:var(--ink);font-weight:600}
 .who .mebtn{max-width:11em}
@@ -1396,7 +1424,7 @@ const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'n
   'nhl-open': 'joukkue', 'nhl-close': 'joukkue', 'nhl-pick': 'joukkue', 'nhl-all': 'joukkue', 'nhl-add': 'joukkue', 'tmdel-mode': 'joukkue', 'tmdel-pick': 'joukkue', 'tmdel-all': 'joukkue',
   'wiz-open': 'ottelu', 'wiz-close': 'ottelu', 'wiz-pick': 'ottelu', 'wiz-pool': 'ottelu', 'wiz-out': 'ottelu', 'wiz-shuffle': 'ottelu', 'wiz-clear': 'ottelu', 'wiz-next': 'ottelu', 'wiz-back': 'ottelu', 'wiz-cons': 'ottelu', 'wiz-gap': 'ottelu', 'wiz-save': 'ottelu',
   'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
-  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
+  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
 const FIELD_NEED = { 'rp-q': 'kokoonpano', 'wiz-pname': 'ottelu', 'wiz-first': 'ottelu', 'wiz-time': 'ottelu', 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'tour-match': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
   'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
@@ -1475,8 +1503,7 @@ function allowedTabs() {
   // Etusivu is everyone's, whatever the role; the rest come from the role
   const all = m.id === 'ADMIN';   // an admin's tabs come from the Admin role, with the settings always there
   const base = m.admin && ui.readOnly ? ['etusivu', 'kaynnissa'] : all ? TABS : ['etusivu'].concat(TABS.filter(t => t !== 'etusivu' && (m.tabs.indexOf(t) >= 0 || (m.admin && t === 'asetukset'))));
-  // an admin can hide Etusivu from everyone but the admins
-  return base.filter(t => (t !== 'kaynnissa' || T) && (t !== 'etusivu' || !state.config.homeHidden || (m.admin && !ui.readOnly)));
+  return base.filter(t => t !== 'kaynnissa' || T);
 }
 const byOrder = (a, b) => (a.order - b.order) || (a.id < b.id ? -1 : 1);
 const toursSorted = () => Object.keys(state.tournaments).map(id => Object.assign({ id }, state.tournaments[id])).sort((a, b) => (b.order - a.order) || (a.id < b.id ? -1 : 1));
@@ -2937,7 +2964,6 @@ function act(a, d) {
     case 'ad-cancel': ui.adEdit = null; break;
     case 'ad-clear': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i] = { title: '', text: '', link: '', hidden: a[i].hidden }; state.config.ads = a; persistConf(['ads']); } ui.adEdit = null; break; }
     case 'ad-vis': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i].hidden = !a[i].hidden; state.config.ads = a; persistConf(['ads']); } break; }
-    case 'home-vis': state.config.homeHidden = !state.config.homeHidden; persistConf(['homeHidden']); break;
     case 'home-board': {   // Kokonaistilanne opens over Etusivu and closes back to it
       ui.homeBoard = d.v === '1'; ui.cards = []; ui.toTop = true; ui.focusId = ui.homeBoard ? 'tt-back' : 'hpp-all';
       try { history.replaceState(null, '', ui.homeBoard ? '#tulostaulu' : '#etusivu'); } catch (e) { /* hash is optional */ }
@@ -2946,8 +2972,12 @@ function act(a, d) {
     case 'home-all': ui.homeAll = Object.assign({}, ui.homeAll, { [d.w]: !(ui.homeAll || {})[d.w] }); break;
     case 'err-home': ui.cards = []; ui.own = false; ui.tour = null; ui.tourMatch = null; ui.liveMatch = null; ui.team = null; ui.player = null; ui.show = null; setTab('etusivu'); break;
     case 'role-open': ui.roleOpen = ui.roleOpen === d.id ? null : d.id; ui.confirm = null; break;
-    case 'acct-open': if (state.players[d.id]) { setTab('pelaajat'); ui.player = d.id; ui.playerTab = 'tunnus'; ui.toTop = true; } break;
+    case 'acct-open': if (state.players[d.id]) { setTab('pelaajat'); ui.player = d.id; ui.playerTab = 'muokkaa'; ui.acctDd = d.id; ui.toTop = true; } break;
+    case 'acct-dd': ui.acctDd = ui.acctDd === d.id ? null : d.id; ui.confirm = null; break;
+    case 'nav-open': ui.navOpen = !ui.navOpen; if (ui.navOpen) ui.focusId = 'tab-' + ui.tab; break;
+    case 'nav-close': ui.navOpen = false; ui.focusId = 'nav-open'; break;
     case 'tab':
+      ui.navOpen = false;
       if (allowedTabs().indexOf(d.tab) < 0) break;
       ui.adEdit = null;
       if (d.tab === ui.tab) { if (d.tab === 'etusivu') ui.homeBoard = false; if (d.tab === 'joukkueet') ui.team = null; if (d.tab === 'pelaajat') ui.player = null; if (d.tab === 'turnaukset') { ui.tour = null; ui.tourMatch = null; } if (d.tab === 'kaynnissa') ui.liveMatch = null; if (d.tab === 'asetukset') ui.setView = ''; }
@@ -2956,18 +2986,18 @@ function act(a, d) {
       if (d.scope === 'team') { ui.team = d.id || null; ui.teamTab = 'kortti'; ui.teamErr = null; }
       else if (d.scope === 'tour') { ui.tour = d.id || null; ui.tourTab = ''; ui.tourErr = null; ui.matchErr = null; ui.newMatch = false; ui.tourMatch = null; ui.goal = null; ui.note = null; }
       else { ui.player = d.id || null; ui.playerTab = 'kortti'; ui.playerErr = null; }
-      ui.confirm = null; ui.photoErr = null; ui.toTop = true; ui.newPl = true; ui.rosterErr = null; ui.nameErr = null;
+      ui.confirm = null; ui.photoErr = null; ui.toTop = true; ui.newPl = true; ui.rosterErr = null; ui.nameErr = null; ui.acctDd = null;
       if (d.id === '__new') ui.focusId = d.scope === 'team' ? 'nt-name' : d.scope === 'tour' ? 'nu-name' : 'np-name';
       break;
     case 'subtab':
       if (d.scope === 'team') ui.teamTab = d.tab; else if (d.scope === 'tour') ui.tourTab = d.tab; else if (d.scope === 'live') ui.liveTab = d.tab;
       if (d.scope === 'tour' || d.scope === 'live') ui.revealTab = true;
-      else if (d.scope === 'card') { const c = topCard(); if (c) c.tab = ['muokkaa', 'tunnus'].indexOf(d.tab) >= 0 ? d.tab : 'kortti'; }
+      else if (d.scope === 'card') { const c = topCard(); if (c) c.tab = d.tab === 'muokkaa' ? d.tab : 'kortti'; }
       else ui.playerTab = d.tab;
       if (d.scope === 'tour') ui.tourMatch = null;
       if (d.scope === 'live') ui.liveMatch = null;
       ui.goal = null; ui.note = null; ui.vmBack = false;
-      ui.confirm = null; ui.photoErr = null; break;
+      ui.confirm = null; ui.photoErr = null; ui.acctDd = null; break;
     case 'new-match': ui.newMatch = !ui.newMatch; ui.matchErr = null; break;
     case 'pz-new': ui.pzEdit = 'new'; ui.pzErr = null; ui.focusId = 'pzn-new'; break;
     case 'pz-edit': ui.pzEdit = d.id; ui.pzErr = null; ui.focusId = 'pzn-' + d.id; break;
@@ -3336,8 +3366,12 @@ function topBar(tab, tabs) {
       ? `<button class="btn sm mebtn" id="me-open" data-act="own-open" title="Oma profiili" aria-label="Oma profiili: ${esc(m.name)}"${ui.own ? ' aria-current="page"' : ''}>${playerAv(Object.assign({ id: m.id }, state.players[m.id]), 'sm')}<span>${esc(m.name)}</span></button>`
       : `<span><span class="ww">Kirjautunut: </span><b>${esc(m.name)}</b></span>`) + `<button class="btn sm" id="logout" data-act="logout" title="Kirjaudu ulos"><span class="ww">Kirjaudu ulos</span><span class="nw">Ulos</span></button>` : '';
   const a2 = a2hsOn() ? `<button class="btn sm a2b" id="a2hs-open" data-act="a2hs" aria-label="Lisää Änärit puhelimen kotinäytölle">${PLUS_I}<span>Kotinäytölle</span></button>` : '';
-  return `<header class="top" data-k="top"><div class="brand">${brandHome(tabs)}<div class="who" data-k="who">${a2}${syncTag(s)}${who}</div></div>` +
-    (tabs.length && navOn(tabs) ? `<nav class="tabs" data-k="tabs" aria-label="Näkymät"><div class="tabsx" data-k="tabsx">${tabs.map(t => `<button class="tab${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab ? ' aria-current="page"' : ''}${t === 'kaynnissa' ? ` title="${esc(T.name)}"` : ''}>${t === 'kaynnissa' ? `<span class="ttx">${esc(T.name)}</span>` : TAB_LABEL[t]}</button>`).join('')}</div></nav>` : '') + `</header>`;
+  const nav = tabs.length && navOn(tabs), menu = nav && !window.ANARIT_TABS;
+  const tabLbl = t => t === 'kaynnissa' ? esc(T.name) : TAB_LABEL[t];
+  const burger = menu ? `<button type="button" class="btn sm burg" id="nav-open" data-act="nav-open" aria-expanded="${!!ui.navOpen}" aria-controls="navm" aria-label="Valikko"><span class="burgi" aria-hidden="true"><i></i><i></i><i></i></span></button>` : '';
+  const panel = menu && ui.navOpen ? `<div class="navbg" data-k="navbg" data-act="nav-close" aria-hidden="true"></div><nav class="navm" id="navm" data-k="navm" aria-label="Näkymät"><ul>${tabs.map(t => `<li><button type="button" class="navi${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab ? ' aria-current="page"' : ''}>${t === 'kaynnissa' ? `<small>Turnaus</small>` : ''}<span>${tabLbl(t)}</span></button></li>`).join('')}</ul></nav>` : '';
+  return `<header class="top" data-k="top"><div class="brand">${brandHome(tabs)}<div class="who" data-k="who">${a2}${syncTag(s)}${who}${burger}</div></div>${panel}` +
+    (nav && !menu ? `<nav class="tabs" data-k="tabs" aria-label="Näkymät"><div class="tabsx" data-k="tabsx">${tabs.map(t => `<button class="tab${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab ? ' aria-current="page"' : ''}${t === 'kaynnissa' ? ` title="${esc(T.name)}"` : ''}>${t === 'kaynnissa' ? `<span class="ttx">${esc(T.name)}</span>` : TAB_LABEL[t]}</button>`).join('')}</div></nav>` : '') + `</header>`;
 }
 // The tab row fades out at an edge where more tabs are hidden, so it reads as something that scrolls.
 function tabFade() {
@@ -3757,8 +3791,6 @@ function acctBody(pid) {
   const roles = state.config.roles, r = roleOf(u), rights = hasRights(u), gone = !!u.role && u.role !== 'admin' && !roles.some(x => x.id === u.role), k = kindOf(q);
   // the same Pelaaja switch as when the user is made; what he may record in his own matches comes with his role
   const t = state.teams[q.teamId];
-  h += `<div class="f sectl" data-k="ac-pl"><div>${plToggle('acpl-' + id, k === 'pelaaja', 'kind', ` data-id="${id}"`, 'Pelaaja')}</div>` +
-    `<p class="hint">${k === 'pelaaja' ? (t ? 'Pois kytkettynä hän poistuu joukkueesta.' : PL_HINT_ON) : PL_HINT_OFF}</p></div>`;
   h += `<h3 class="sub sect" data-k="ac-ah">Rooli</h3>`;
   h += `<label class="f" data-k="ac-role"><span>Rooli</span><select id="acro-${id}" data-field="acct-role" data-id="${id}">${roles.map(x => `<option value="${esc(x.id)}"${u.role === x.id ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}` +
     `<option value="admin"${u.role === 'admin' ? ' selected' : ''}>Admin</option>${!u.role ? '<option value="" selected>Mukautettu (vanha)</option>' : ''}${gone ? `<option value="${esc(u.role)}" selected>Poistettu rooli</option>` : ''}</select></label>${saveBar('acro-' + pid, 'Tallenna rooli')}`;
@@ -3866,18 +3898,28 @@ function viewOwn() {
 // picture, colour), and admins get Tunnus (the account, its role and password).
 function playerTabs(pid) {
   const own = !can('ptiedot') && ownOnly() === pid;
-  return [['kortti', kindOf(state.players[pid]) === 'pelaaja' ? 'Pelaajakortti' : 'Käyttäjäkortti']].concat(can('ptiedot') || can('kokoonpano') || own ? [['muokkaa', 'Asetukset']] : [], can('set:tunnukset') && !acctLocked(pid) ? [['tunnus', 'Tunnus']] : []);
+  return [['kortti', kindOf(state.players[pid]) === 'pelaaja' ? 'Pelaajakortti' : 'Käyttäjäkortti']].concat(can('ptiedot') || can('kokoonpano') || own ? [['muokkaa', 'Asetukset']] : []);
 }
 function playerSettings(pid) {
   const p = Object.assign({ id: pid }, state.players[pid]), id = esc(pid), k = kindOf(p), t = k === 'pelaaja' ? state.teams[p.teamId] : null, full = can('kokoonpano'), adm = can('admin');
   const info = can('ptiedot') || ownOnly() === pid;
   return `<h3 class="sub sect" data-k="pse-h1">Perustiedot</h3>` + (info ? nameField(pid, p) : '') +
-    (adm ? `<div class="f" data-k="pkf"><div>${plToggle('pk-pl-' + id, k === 'pelaaja', 'kind', ` data-id="${id}"`)}</div>` +
-      `<p class="hint">${k === 'pelaaja' ? (t ? 'Pois kytkettynä hän poistuu joukkueesta.' : PL_HINT_ON) : PL_HINT_OFF}</p></div>` : '') +
+    (adm ? `<div class="f" data-k="pkf"><button type="button" class="pchk" role="checkbox" id="pk-pl-${id}" data-act="kind" data-id="${id}" aria-checked="${k === 'pelaaja'}"><span class="pchkb" aria-hidden="true">${k === 'pelaaja' ? '✓' : ''}</span><span>Pelaaja</span></button>` +
+      `<p class="hint">${k === 'pelaaja' ? (t ? 'Ruksi pois, niin hän poistuu joukkueesta.' : PL_HINT_ON) : PL_HINT_OFF}</p></div>` : '') +
     (full && k === 'pelaaja' ? `<label class="f" data-k="ptf"><span>Joukkue</span><select id="pf-team" data-field="player-team" data-id="${id}">${teamOptions(teamsSorted(), t ? p.teamId : '')}</select></label>${saveBar('pf-team')}` +
       `<div class="f subsw" data-k="psf"><div>${plToggle('pf-sub-' + id, !!p.sub && !t, 'sub', ` data-id="${id}"`, 'Varapelaaja')}</div><p class="hint">${t ? 'Varapelaajana hän poistuu joukkueesta.' : SUB_HINT}</p></div>` : '') +
     (info ? photoField('p-' + pid) + colorField('p', pid, COLOR[p.color] ? p.color : '') : '') +
-    (full && (t || adm) ? `<h3 class="sub sect" data-k="pse-h2">${adm ? 'Poista' : 'Joukkueesta'}</h3><div class="rowbtns" data-k="pf-del">${t ? twice('rel-' + pid, 'release:' + pid, 'Poista joukkueesta') : ''}${adm && !acctLocked(pid) ? ask('pfd', 'del-player:' + pid, k === 'pelaaja' ? 'Poista pelaaja' : 'Poista käyttäjä') : ''}</div>` : '');
+    (full && (t || adm) ? `<h3 class="sub sect" data-k="pse-h2">${adm ? 'Poista' : 'Joukkueesta'}</h3><div class="rowbtns" data-k="pf-del">${t ? twice('rel-' + pid, 'release:' + pid, 'Poista joukkueesta') : ''}${adm && !acctLocked(pid) ? ask('pfd', 'del-player:' + pid, k === 'pelaaja' ? 'Poista pelaaja' : 'Poista käyttäjä') : ''}</div>` : '') + acctDrop(pid);
+}
+// Tunnus, rooli ja kirjautuminen: a dropdown at the very bottom of Asetukset, for the main admin Valvomo alone.
+const isValvomo = () => { const m = me(); return !!m && m.id === 'ADMIN' && !ui.readOnly; };
+function acctDrop(pid) {
+  if (!isValvomo() || acctLocked(pid) || !state.players[pid]) return '';
+  const open = ui.acctDd === pid, u = state.users[pid], id = esc(pid);
+  const sum = !u || !u.on ? 'Ei käyttäjätunnusta' : (roleOf(u).admin ? 'Admin' : (state.config.roles.find(x => x.id === u.role) || {}).name || 'Tunnus käytössä');
+  return `<div class="acdd${open ? ' on' : ''}" data-k="acdd"><button type="button" class="acddb" id="acdd-${id}" data-act="acct-dd" data-id="${id}" aria-expanded="${open}" aria-controls="acddp-${id}">` +
+    `<span class="itxt"><b>Tunnus ja kirjautuminen</b><small>${esc(sum)}</small></span><span class="acddc" aria-hidden="true">▾</span></button>` +
+    (open ? `<div class="acddp" id="acddp-${id}" data-k="acddp">${acctTab(pid)}</div>` : '') + `</div>`;
 }
 // Under a player's name: the Pelaaja box and his team. The box is a button for the player himself (and admins, to tidy it):
 // it turns into a small field for his own few words. The team is a button for those who may change line-ups:
@@ -5640,16 +5682,9 @@ function homeLists() {
       : `<p class="hint" data-k="h${w}-none">${none}</p>`) + `</section>`;
   return `<div class="hgrid" data-k="h-lists">${list('pl', 'Pelaajat', ps, pRow, 'Pelaajia ei ole vielä lisätty.')}${list('jo', 'Joukkueet', ts, tRow, 'Joukkueet näkyvät tässä, kun ne ovat pelanneet.')}</div>`;
 }
-// For an admin, a line on top says whether the others see Etusivu, with a button to hide it from them or show it again.
-function homeVis() {
-  if (!can('admin')) return '';
-  const off = !!state.config.homeHidden;
-  return `<div class="hvis${off ? ' off' : ''}" data-k="h-vis"><span>${off ? '<b>Etusivu on piilotettu muilta.</b> Vain adminit näkevät sen.' : 'Etusivu näkyy kaikille.'}</span>` +
-    `<button class="btn sm" id="home-vis" data-act="home-vis">${off ? 'Näytä kaikille' : 'Piilota muilta'}</button></div>`;
-}
 function viewHome() {
   const low = adSlot(1) + adSlot(2);
-  return `<main id="v-etusivu" class="stack home">` + homeVis() + homeCountdown() + pushBox('home') + adSlot(0, 'wide') +
+  return `<main id="v-etusivu" class="stack home">` + homeCountdown() + pushBox('home') + adSlot(0, 'wide') +
     `<div class="hgrid" data-k="h-top">${homeBoard()}${homeChamps()}</div>` + homeLists() +
     (low ? `<div class="hgrid ads2" data-k="h-ads">${low}</div>` : '') + `</main>`;
 }
@@ -5697,7 +5732,7 @@ const brandH1 = () => `<h1>${brandIn()}</h1>`;
 const brandHome = tabs => tabs.indexOf('etusivu') >= 0 ? `<h1><button type="button" class="brandb" id="home-logo" data-act="tab" data-tab="etusivu" aria-label="Etusivulle">${brandIn()}</button></h1>` : brandH1();
 // The row of tabs is the admins' tool; everyone else goes about from Etusivu (and back to it by the logo), as long as Etusivu is there for them.
 // (the older test pages keep the row for everyone with window.ANARIT_TABS; the site itself never sets it)
-const navOn = tabs => can('admin') || tabs.indexOf('etusivu') < 0 || !!window.ANARIT_TABS;
+const navOn = tabs => can('admin') || tabs.some(t => ['etusivu', 'kaynnissa', 'turnaukset'].indexOf(t) < 0) || !!window.ANARIT_TABS;
 const keyOf = el => el.id || el.getAttribute('data-k') || '';
 function morph(from, to) {
   if (from.nodeType !== 1) {
@@ -5889,6 +5924,7 @@ window.addEventListener('storage', e => {
   render();
 });
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && ui.navOpen) { ui.navOpen = false; ui.focusId = 'nav-open'; render(); return; }
   if (e.key === 'Escape' && ui.rp) { ui.rp = null; render(); return; }
   if (e.key === 'Escape' && ui.nhlPick) { ui.nhlPick = null; render(); return; }
   if (e.key === 'Escape' && ui.a2hs) { ui.a2hs = false; render(); return; }
