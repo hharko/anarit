@@ -895,7 +895,7 @@ html.showing body::before{background-image:linear-gradient(180deg,rgba(5,9,14,.5
 @media (prefers-reduced-motion:reduce){.tcardh::after{animation:none;display:none}}
 /* The home screen button and its how-to. */
 .a2i{width:20px;height:20px;flex:none;vertical-align:-4px}
-.a2b{display:inline-flex;align-items:center;gap:6px;border-color:rgba(116,168,245,.45);background:rgba(116,168,245,.12)}
+.a2b{display:inline-grid;place-items:center;width:40px;height:40px;padding:0;border-color:rgba(116,168,245,.45);background:rgba(116,168,245,.12)}
 .wiz.a2{align-items:center;padding:16px}
 .wizp.a2p{width:min(460px,100%);height:auto;max-height:100%;border-radius:16px;border-color:var(--board-line);background:linear-gradient(180deg,#0f1b2a,var(--ice));box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .a2top{display:flex;align-items:center;gap:14px;padding:18px 18px 6px}
@@ -3335,7 +3335,7 @@ const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.pla
 const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
 const coarse = () => !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
 // shown on a phone or tablet in its browser (not in an app already, not inside another page), until it is added or put away
-const a2hsOn = () => !inFrame && !standalone() && !showOn() && ['off', 'done'].indexOf(lsGet('anarit.a2hs')) < 0 && (!!a2hsEvt || coarse());
+const a2hsOn = () => !inFrame && !standalone() && !showOn() && (!!a2hsEvt || coarse());   // always there, except when opened from the home screen
 const SHARE_I = '<svg viewBox="0 0 24 24" aria-hidden="true" class="a2i"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10H5.5A1.5 1.5 0 0 0 4 11.5v8A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 18.5 10H17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 const PLUS_I = '<svg viewBox="0 0 24 24" aria-hidden="true" class="a2i"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 const DOTS_I = '<svg viewBox="0 0 24 24" aria-hidden="true" class="a2i"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>';
@@ -3343,7 +3343,7 @@ function a2hsGo() {
   if (a2hsEvt) {
     const e = a2hsEvt; a2hsEvt = null;
     e.prompt();
-    if (e.userChoice) e.userChoice.then(c => { if (c && c.outcome === 'accepted') lsSet('anarit.a2hs', 'done'); render(); }).catch(() => {});
+    if (e.userChoice) e.userChoice.then(() => render()).catch(() => {});
     return;
   }
   ui.a2hs = true; ui.focusId = 'a2-title';
@@ -3357,7 +3357,7 @@ function a2hsView() {
   return `<div class="wiz a2" data-k="a2"><div class="wizp a2p" role="dialog" aria-modal="true" aria-labelledby="a2-title">` +
     `<div class="a2top"><span class="a2app" aria-hidden="true">${MARK}</span><div><h2 class="sec" id="a2-title" tabindex="-1">Änärit kotinäytölle</h2><small class="muted">Aukeaa kuin oma sovellus, ilman selaimen palkkeja.</small></div></div>` +
     `<ol class="a2steps" data-k="a2-steps">${steps}</ol>` + (ios && !safari ? `<p class="hint" data-k="a2-safari">Jos kohtaa ei löydy, avaa sivu Safarissa ja tee sama siellä.</p>` : '') +
-    `<div class="wizf"><button type="button" class="btn" id="a2-hide" data-act="a2hs-hide">Älä näytä nappia</button><span class="wzsp"></span><button type="button" class="btn primary" id="a2-close" data-act="a2hs-close">Selvä</button></div></div></div>`;
+    `<div class="wizf"><span class="wzsp"></span><button type="button" class="btn primary" id="a2-close" data-act="a2hs-close">Selvä</button></div></div></div>`;
 }
 function topBar(tab, tabs) {
   const s = syncInfo(), T = activeTour(), m = me();
@@ -3365,7 +3365,7 @@ function topBar(tab, tabs) {
     : authOn() && m && !m.guest ? (m.id !== 'ADMIN' && state.players[m.id]
       ? `<button class="btn sm mebtn" id="me-open" data-act="own-open" title="Oma profiili" aria-label="Oma profiili: ${esc(m.name)}"${ui.own ? ' aria-current="page"' : ''}>${playerAv(Object.assign({ id: m.id }, state.players[m.id]), 'sm')}<span>${esc(m.name)}</span></button>`
       : `<span><span class="ww">Kirjautunut: </span><b>${esc(m.name)}</b></span>`) + `<button class="btn sm" id="logout" data-act="logout" title="Kirjaudu ulos"><span class="ww">Kirjaudu ulos</span><span class="nw">Ulos</span></button>` : '';
-  const a2 = a2hsOn() ? `<button class="btn sm a2b" id="a2hs-open" data-act="a2hs" aria-label="Lisää Änärit puhelimen kotinäytölle">${PLUS_I}<span>Kotinäytölle</span></button>` : '';
+  const a2 = a2hsOn() ? `<button class="btn sm a2b" id="a2hs-open" data-act="a2hs" title="Lisää kotinäytölle" aria-label="Lisää Änärit puhelimen kotinäytölle">${PLUS_I}</button>` : '';
   const nav = tabs.length && navOn(tabs), menu = nav && !window.ANARIT_TABS;
   const tabLbl = t => t === 'kaynnissa' ? esc(T.name) : TAB_LABEL[t];
   const burger = menu ? `<button type="button" class="btn sm burg" id="nav-open" data-act="nav-open" aria-expanded="${!!ui.navOpen}" aria-controls="navm" aria-label="Valikko"><span class="burgi" aria-hidden="true"><i></i><i></i><i></i></span></button>` : '';
@@ -5917,7 +5917,7 @@ window.addEventListener('hashchange', () => {
 });
 // With no shared store the page lives in this browser only; another tab of it (the big-screen show) follows along through storage events.
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); a2hsEvt = e; render(); });
-window.addEventListener('appinstalled', () => { a2hsEvt = null; lsSet('anarit.a2hs', 'done'); ui.a2hs = false; render(); });
+window.addEventListener('appinstalled', () => { a2hsEvt = null; ui.a2hs = false; render(); });
 window.addEventListener('storage', e => {
   if (ui.backend !== 'local' || (e.key !== LS_STATE && e.key !== LS_PHOTOS && e.key !== LS_LOG)) return;
   readLocal();
