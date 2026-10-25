@@ -684,6 +684,38 @@ span.cardb .nm{text-decoration:none}
 .acch:focus-visible{outline-offset:-3px}
 .lgg{border-top:1px solid var(--line);padding-top:14px;margin-top:4px}
 /* Etusivu */
+.hduo{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.hduo .hsw{display:flex}
+.hduo.side-pp .hduo-s,.hduo.side-st .hduo-p{display:none}
+@media (min-width:760px){.hduo{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}.hduo .hsw{display:none}.hduo.side-pp .hduo-s,.hduo.side-st .hduo-p{display:block}}
+.rboard{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px;align-items:start;margin-top:4px}
+.rcard{background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--rc,var(--line));border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.rch{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border:0;background:linear-gradient(135deg,color-mix(in srgb,var(--rc,#556) 24%,transparent),transparent 72%);color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+button.rch:hover{background:linear-gradient(135deg,color-mix(in srgb,var(--rc,#556) 36%,transparent),transparent 80%)}
+.rch .av.lg{width:56px;height:56px}
+.rct{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rct b{font:800 20px/1.1 var(--f-display);letter-spacing:.03em;text-transform:uppercase;overflow-wrap:anywhere}
+.rct small{color:var(--ink-2);font-size:13px}
+.rcr{font:700 11px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.rcpts{flex:none;font:800 30px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.rcpts small{font:600 13px/1 var(--f-body);color:var(--ink-2);margin-left:3px}
+.rhx{cursor:default;padding-block:12px}
+.rx{--rc:#5b6b80}
+.rcl{list-style:none;margin:0;padding:4px 8px 10px;border-top:1px solid var(--line)}
+.rpi{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:6px 8px;border:0;border-radius:8px;background:none;color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+.rpi:hover{background:rgba(255,255,255,.06)}
+.rpn{flex:1;min-width:0;display:flex;flex-direction:column}
+.rpn b{font-weight:600}
+.rpn small{color:var(--ink-2);font-size:12px}
+.rpts{flex:none;font:800 18px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.rpts small{font:600 12px/1 var(--f-body);color:var(--ink-2)}
+.rce{margin:0;padding:12px 16px 14px;border-top:1px solid var(--line);color:var(--ink-2);font-size:14px}
+.rempty{margin-top:16px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.rchips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.rchip{display:inline-flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border:1px solid var(--line);border-radius:999px;background:var(--sheet);color:var(--ink);font:600 14px/1 var(--f-body);cursor:pointer}
+.rchip:hover{border-color:var(--ink-2)}
+.tlwrap{max-width:none}
+@media (min-width:900px){.tlwrap .slist{max-width:none;max-height:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tlwrap .slist li + li{border-top:0}.tlwrap .slist li{border-bottom:1px solid var(--line)}}
 .hgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
 @media (min-width:760px){.hgrid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}
 .home .set{margin:0}
@@ -1424,7 +1456,7 @@ const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'n
   'nhl-open': 'joukkue', 'nhl-close': 'joukkue', 'nhl-pick': 'joukkue', 'nhl-all': 'joukkue', 'nhl-add': 'joukkue', 'tmdel-mode': 'joukkue', 'tmdel-pick': 'joukkue', 'tmdel-all': 'joukkue',
   'wiz-open': 'ottelu', 'wiz-close': 'ottelu', 'wiz-pick': 'ottelu', 'wiz-pool': 'ottelu', 'wiz-out': 'ottelu', 'wiz-shuffle': 'ottelu', 'wiz-clear': 'ottelu', 'wiz-next': 'ottelu', 'wiz-back': 'ottelu', 'wiz-cons': 'ottelu', 'wiz-gap': 'ottelu', 'wiz-save': 'ottelu',
   'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
-  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
+  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'pl-new-go': 'admin', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
 const FIELD_NEED = { 'rp-q': 'kokoonpano', 'wiz-pname': 'ottelu', 'wiz-first': 'ottelu', 'wiz-time': 'ottelu', 'tour-start': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'tour-match': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
   'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
@@ -2123,7 +2155,7 @@ async function startNet() {
     const email = user ? String(user.email || '').toLowerCase() : '', viewer = !!user && email === fb.viewEmail;
     if (GATED) {
       // signed out of an open page (an admin left, or the site password was changed): start over from the lock
-      if (!user) { if (ui.gate === 'open') { location.reload(); return; } ui.gate = 'locked'; }
+      if (!user) { if (ui.relocking) return; if (ui.gate === 'open') { location.reload(); return; } ui.gate = 'locked'; }
       else openGate();
     }
     let a = null;
@@ -2141,6 +2173,25 @@ async function startNet() {
   window.addEventListener('online', () => { render(); syncClock(); });
   window.addEventListener('offline', () => render());
 }
+// The site password, kept on this device once it has opened the page, so that leaving a Google account (which takes the place of the
+// site password while signed in) goes back to the sign-in, not to the lock. A wrong one (the password was changed) is forgotten.
+const GATE_LS = 'anarit.gk';
+function gateKeep(pw) { try { lsSet(GATE_LS, btoa(unescape(encodeURIComponent(pw)))); } catch (e) { /* not kept */ } }
+async function relock() {
+  let pw = '';
+  try { pw = decodeURIComponent(escape(atob(lsGet(GATE_LS) || ''))); } catch (e) { pw = ''; }
+  if (!pw || !fb) return false;
+  try { await fb.unlock(pw); return true; } catch (e) { lsSet(GATE_LS, ''); return false; }
+}
+// Leaves the Google account and opens the page again with the kept site password; without one, the page locks as before.
+async function leaveGoogle() {
+  ui.relocking = true;
+  try { await fb.signOut(); } catch (e) { /* signed out anyway */ }
+  const ok = await relock();
+  ui.relocking = false;
+  if (!ok && GATED) { location.reload(); return; }
+  render();
+}
 function openGate() {
   if (ui.gate === 'open') return;
   ui.gate = 'open'; ui.gateErr = null;
@@ -2152,7 +2203,7 @@ async function gateUnlock(form) {
   if (!fb || ui.gateBusy || ui.gBusy) return;
   if (!pw) { ui.gateErr = 'Kirjoita sivun salasana.'; ui.focusId = 'gt-pw'; render(); return; }
   ui.gateBusy = true; ui.gateErr = null; ui.loginErr = null; render();
-  try { await fb.unlock(pw); }   // the sign-in reaches onUser, which opens the page
+  try { await fb.unlock(pw); gateKeep(pw); }   // the sign-in reaches onUser, which opens the page
   catch (e) {
     const c = e && e.code;
     ui.gateErr = c === 'auth/too-many-requests' ? 'Liian monta yritystä. Odota hetki ja yritä uudelleen.'
@@ -2173,8 +2224,9 @@ async function googleLogin() {
     try { a = await fb.access(email); } catch (e) { a = null; }
     if (!a) { try { await fb.setAccess(email, { pid: 'ADMIN', lvl: 'admin' }); a = { pid: 'ADMIN', lvl: 'admin' }; } catch (e) { a = null; } }
     if (!a || (a.pid !== 'ADMIN' && loaded.players && !state.players[a.pid])) {
-      try { await fb.signOut(); } catch (e) { /* signed out anyway below */ }
       ui.fb = { ready: true, user: null, email: '', pid: '', lvl: '' };
+      if (GATED && ui.gate === 'open') { ui.loginErr = 'Google-tilille ' + email + ' ei ole annettu tunnusta. Pyydä Valvomoa lisäämään se.'; ui.gBusy = false; ui.relocking = true; try { await fb.signOut(); } catch (e) { /* signed out */ } const ok = await relock(); ui.relocking = false; if (ok) { render(); return; } }
+      else { try { await fb.signOut(); } catch (e) { /* signed out anyway below */ } }
       ui.loginErr = 'Google-tilille ' + email + ' ei ole annettu tunnusta. Pyydä Valvomoa lisäämään se.';
       // the Google account took the place of the site password on this device, so the page locks again
       if (GATED && ui.gate === 'open') { try { sessionStorage.setItem('anarit.gerr', ui.loginErr); } catch (e) { /* shown below */ } location.reload(); return; }
@@ -2935,7 +2987,7 @@ function act(a, d) {
   if (!mayAct(a, d)) return;
   switch (a) {
     case 'logout':
-      if (NET && fb && ui.fb.user) { fb.signOut().catch(() => { /* signed out here anyway */ }); ui.fb = { ready: true, user: null, email: '', pid: '', lvl: '' }; ui.access = {}; if (accessSub) { try { accessSub(); } catch (e) { /* gone */ } accessSub = null; } }
+      if (NET && fb && ui.fb.user) { if (GATED) leaveGoogle(); else fb.signOut().catch(() => { /* signed out here anyway */ }); ui.fb = { ready: true, user: null, email: '', pid: '', lvl: '' }; ui.access = {}; if (accessSub) { try { accessSub(); } catch (e) { /* gone */ } accessSub = null; } }
       setSession('', ''); ui.login = null; ui.loginErr = null; ui.confirm = null; ui.loginOpen = false; break;
     case 'login-open': ui.loginOpen = true; ui.login = null; ui.loginErr = null; ui.focusId = 'lg-name'; ui.toTop = true; break;
     case 'login-close': ui.loginOpen = false; ui.login = null; ui.loginErr = null; break;
@@ -2969,6 +3021,9 @@ function act(a, d) {
       try { history.replaceState(null, '', ui.homeBoard ? '#tulostaulu' : '#etusivu'); } catch (e) { /* hash is optional */ }
       break;
     }
+    case 'empty-open': ui.emptyOpen = !ui.emptyOpen; break;
+    case 'pl-new-go': setTab('pelaajat'); ui.player = '__new'; ui.plFromTeams = true; ui.newPl = true; ui.newSub = false; ui.newPw = false; ui.playerErr = null; ui.focusId = 'np-name'; ui.toTop = true; break;
+    case 'home-side': ui.homeSide = d.v === 'st' ? 'st' : 'pp'; break;
     case 'home-all': ui.homeAll = Object.assign({}, ui.homeAll, { [d.w]: !(ui.homeAll || {})[d.w] }); break;
     case 'err-home': ui.cards = []; ui.own = false; ui.tour = null; ui.tourMatch = null; ui.liveMatch = null; ui.team = null; ui.player = null; ui.show = null; setTab('etusivu'); break;
     case 'role-open': ui.roleOpen = ui.roleOpen === d.id ? null : d.id; ui.confirm = null; break;
@@ -2977,7 +3032,7 @@ function act(a, d) {
     case 'nav-open': ui.navOpen = !ui.navOpen; if (ui.navOpen) ui.focusId = 'tab-' + ui.tab; break;
     case 'nav-close': ui.navOpen = false; ui.focusId = 'nav-open'; break;
     case 'tab':
-      ui.navOpen = false;
+      ui.navOpen = false; ui.plFromTeams = false;
       if (allowedTabs().indexOf(d.tab) < 0) break;
       ui.adEdit = null;
       if (d.tab === ui.tab) { if (d.tab === 'etusivu') ui.homeBoard = false; if (d.tab === 'joukkueet') ui.team = null; if (d.tab === 'pelaajat') ui.player = null; if (d.tab === 'turnaukset') { ui.tour = null; ui.tourMatch = null; } if (d.tab === 'kaynnissa') ui.liveMatch = null; if (d.tab === 'asetukset') ui.setView = ''; }
@@ -3369,7 +3424,7 @@ function topBar(tab, tabs) {
   const nav = tabs.length && navOn(tabs), menu = nav && !window.ANARIT_TABS;
   const tabLbl = t => t === 'kaynnissa' ? esc(T.name) : TAB_LABEL[t];
   const burger = menu ? `<button type="button" class="btn sm burg" id="nav-open" data-act="nav-open" aria-expanded="${!!ui.navOpen}" aria-controls="navm" aria-label="Valikko"><span class="burgi" aria-hidden="true"><i></i><i></i><i></i></span></button>` : '';
-  const panel = menu && ui.navOpen ? `<div class="navbg" data-k="navbg" data-act="nav-close" aria-hidden="true"></div><nav class="navm" id="navm" data-k="navm" aria-label="Näkymät"><ul>${tabs.map(t => `<li><button type="button" class="navi${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab ? ' aria-current="page"' : ''}>${t === 'kaynnissa' ? `<small>Turnaus</small>` : ''}<span>${tabLbl(t)}</span></button></li>`).join('')}</ul></nav>` : '';
+  const panel = menu && ui.navOpen ? `<div class="navbg" data-k="navbg" data-act="nav-close" aria-hidden="true"></div><nav class="navm" id="navm" data-k="navm" aria-label="Näkymät"><ul>${tabs.filter(t => t !== 'pelaajat' || tabs.indexOf('joukkueet') < 0).map(t => `<li><button type="button" class="navi${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab || (t === 'joukkueet' && tab === 'pelaajat') ? ' aria-current="page"' : ''}>${t === 'kaynnissa' ? `<small>Turnaus</small>` : ''}<span>${t === 'joukkueet' ? 'Joukkueet ja pelaajat' : tabLbl(t)}</span></button></li>`).join('')}</ul></nav>` : '';
   return `<header class="top" data-k="top"><div class="brand">${brandHome(tabs)}<div class="who" data-k="who">${a2}${syncTag(s)}${who}${burger}</div></div>${panel}` +
     (nav && !menu ? `<nav class="tabs" data-k="tabs" aria-label="Näkymät"><div class="tabsx" data-k="tabsx">${tabs.map(t => `<button class="tab${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab ? ' aria-current="page"' : ''}${t === 'kaynnissa' ? ` title="${esc(T.name)}"` : ''}>${t === 'kaynnissa' ? `<span class="ttx">${esc(T.name)}</span>` : TAB_LABEL[t]}</button>`).join('')}</div></nav>` : '') + `</header>`;
 }
@@ -3412,7 +3467,7 @@ function loginView() {
       (L.id === 'ADMIN' && ui.owner ? `<div class="f" data-k="lg-reset"><p class="hint">Olet tämän sivun omistaja, joten voit nollata Valvomon unohtuneen salasanan. Kirjautuminen poistuu silloin käytöstä, kunnes asetat uuden.</p><div>${twice('lg-reset', 'reset-admin:1', 'Nollaa Valvomon salasana')}</div></div>` : '') + `</form>`;
   const s = syncInfo();
   return `<header class="top" data-k="top"><div class="brand">${brandH1()}<div class="who" data-k="who">${syncTag(s)}</div></div></header><main id="v-login" class="stack">` +
-    (NET ? `<div data-k="lg-close"><button class="btn back" id="lg-close" data-act="login-close">Takaisin etusivulle</button></div>` : '') + `${form}</main>`;
+    `<div class="pgt lgt" data-k="lg-t"><h2 class="sec">Kirjaudu sisään</h2><span class="muted">Kirjoita käyttäjänimesi.</span></div>${form}</main>`;
 }
 // Passwords are typed on the phone's number pad; ABC brings back the whole keyboard for a password with letters in it
 // (remembered on the device), and 123 the number pad again.
@@ -3534,7 +3589,9 @@ function statRow(s) {
     `<div class="a-del">${saveBar(['sn-' + s.id, 'ss-' + s.id, 'sv-' + s.id, 'st-' + s.id])}${ask('sd-' + s.id, 'del-stat:' + s.id, 'Poista')}</div></div>`;
 }
 /* ----- pieces shared by team and player profiles ----- */
-function backBtn(scope, label) { return `<div data-k="back-${scope}"><button class="btn back" id="back-${scope}" data-act="open" data-scope="${scope}" data-id="">${label}</button></div>`; }
+function backBtn(scope, label) {
+  if (scope === 'player' && ui.plFromTeams) return `<div data-k="back-player"><button class="btn back" id="back-player" data-act="tab" data-tab="joukkueet">Joukkueet ja pelaajat</button></div>`;
+  return `<div data-k="back-${scope}"><button class="btn back" id="back-${scope}" data-act="open" data-scope="${scope}" data-id="">${label}</button></div>`; }
 function subtabs(scope, tabs, cur) {
   return `<div class="seg wide n${tabs.length}" role="group" aria-label="Osiot" data-k="sub-${scope}">${tabs.map(x => `<button id="sub-${scope}-${x[0]}" data-act="subtab" data-scope="${scope}" data-tab="${x[0]}" aria-pressed="${x[0] === cur}">${x[1]}</button>`).join('')}</div>`;
 }
@@ -3625,6 +3682,7 @@ function teamMeta(t, rk) {
 function teamList(ts) {
   const rk = ranks('t'), qa = !!ui.qaMode && can('kokoonpano'), del = can('joukkue') && ui.tmDel ? ui.tmDel : null;
   const head = (can('joukkue') && !del ? '<button class="btn primary" id="tm-new" data-act="open" data-scope="team" data-id="__new">Uusi joukkue</button>' : '') +
+    (can('admin') && !qa && !del ? '<button class="btn" id="tm-pnew" data-act="pl-new-go">Uusi pelaaja</button>' : '') +
     (can('kokoonpano') && ts.length ? `<button class="btn" id="tm-qa" data-act="qa-mode" aria-pressed="${qa}">${qa ? 'Valmis' : 'Lisää pelaajia'}</button>` : '') +
     (can('joukkue') && !qa && !del && nhlMissing().length ? `<button class="btn" id="tm-nhl" data-act="nhl-open">NHL-joukkueet</button>` : '') +
     (can('joukkue') && !qa && ts.length ? `<button class="btn${del ? ' primary' : ''}" id="tm-del" data-act="tmdel-mode" aria-pressed="${!!del}">${del ? 'Valmis' : 'Poista joukkueita'}</button>` : '');
@@ -3639,8 +3697,28 @@ function teamList(ts) {
     (qa ? `<p class="hint" data-k="tl-qah">Paina joukkuetta ja valitse pelaaja.</p>` : '') +
     (del ? (n => `<div class="delbar" data-k="tl-delbar"><span><b>${n}</b> valittu</span><button class="btn sm" id="tmdel-all" data-act="tmdel-all">${ts.filter(t => !teamPlayed(t.id)).every(t => del[t.id]) ? 'Poista valinnat' : 'Valitse kaikki'}</button><span class="wzsp"></span>` +
       (n ? twice('tmdel-go', 'del-teams', 'Poista valitut (' + n + ')', false, 'Vahvista: poista ' + n + (n === 1 ? ' joukkue' : ' joukkuetta')) : '') + `</div><p class="hint" data-k="tl-delh">Valittujen joukkueiden pelaajat jäävät ilman joukkuetta, ja heidän pisteensä säilyvät.</p>`)(Object.keys(del).filter(id => del[id] && state.teams[id]).length) : '') +
-    (ts.length ? `<div class="tlwrap" data-k="tl-wrap"><ul class="slist" data-k="tl" aria-label="Joukkueet">${ts.map(row).join('')}</ul>${qa ? qaMenu() : ''}</div>`
-      : `<div class="empty" data-k="tl-empty"><strong>Ei vielä joukkueita</strong><span>Luo ensimmäinen joukkue yllä olevasta napista.</span></div>`);
+    (ts.length && !qa && !del ? rosterBoard(ts, rk) : '') + (!ts.length && !qa && !del && allPlayers().length ? rosterBoard(ts, rk) : '') +
+    (ts.length && (qa || del) ? `<div class="tlwrap" data-k="tl-wrap"><ul class="slist" data-k="tl" aria-label="Joukkueet">${ts.map(row).join('')}</ul>${qa ? qaMenu() : ''}</div>`
+      : ts.length ? '' : `<div class="empty" data-k="tl-empty"><strong>Ei vielä joukkueita</strong><span>Luo ensimmäinen joukkue yllä olevasta napista.</span></div>`);
+}
+// The teams as cards, each with its players; teams with players first, best first. Then Varapelaajat, players on no team, and for
+// an admin the users who are not players. Teams with nobody in them wait in a folded strip at the end, so a long list of them stays out of the way.
+function rosterBoard(ts, rk) {
+  const prk = ranks('p'), adm = can('admin');
+  const pRow = p => `<li data-k="rp-${esc(p.id)}"><button type="button" class="rpi" ${cardAttrs('p', p.id, 'rp-' + p.id)} id="rp-${esc(p.id)}">${playerAv(p, 'sm')}<span class="rpn"><b>${esc(p.name)}</b>${kindOf(p) === 'pelaaja' ? `<small>${p.sub && !state.teams[p.teamId] ? 'Varapelaaja · ' : ''}${prk.by[p.id]}. pistepörssissä</small>` : '<small>Käyttäjä</small>'}</span>${kindOf(p) === 'pelaaja' ? `<span class="rpts">${fmt(points(p, 'p'))}<small> p</small></span>` : ''}</button></li>`;
+  const byPts = (a, b) => (points(b, 'p') - points(a, 'p')) || a.name.localeCompare(b.name, 'fi');
+  const card = t => { const ps = playersOf(t.id).filter(p => kindOf(p) === 'pelaaja').sort(byPts);
+    return `<article class="rcard" data-k="tli-${esc(t.id)}" style="--rc:${COLOR[t.color] || COLOR.grey}"><button type="button" class="rch" id="to-${esc(t.id)}" data-act="open" data-scope="team" data-id="${esc(t.id)}">` +
+      `${teamAv(t, 'lg')}<span class="rct"><span class="rcr">${rk.by[t.id]}. sarjataulukossa</span><b>${esc(t.name)}</b><small>${ps.length} ${ps.length === 1 ? 'pelaaja' : 'pelaajaa'}</small></span><span class="rcpts">${fmt(teamTotal(t))}<small>p</small></span></button>` +
+      (ps.length ? `<ul class="rcl" data-k="rcl-${esc(t.id)}">${ps.map(pRow).join('')}</ul>` : `<p class="rce" data-k="rce-${esc(t.id)}">Ei pelaajia</p>`) + `</article>`; };
+  const group = (k, title, ps, note) => ps.length ? `<article class="rcard rx" data-k="${k}"><div class="rch rhx"><span class="rct"><b>${title}</b><small>${note || (ps.length + (ps.length === 1 ? ' henkilö' : ' henkilöä'))}</small></span></div><ul class="rcl">${ps.map(pRow).join('')}</ul></article>` : '';
+  const full = ts.filter(t => playersOf(t.id).some(p => kindOf(p) === 'pelaaja')).sort((a, b) => (teamTotal(b) - teamTotal(a)) || byOrder(a, b)), empty = ts.filter(t => full.indexOf(t) < 0);
+  const free = allPlayers().filter(p => kindOf(p) === 'pelaaja' && !state.teams[p.teamId]), subs = free.filter(p => p.sub).sort(byPts), none = free.filter(p => !p.sub).sort(byPts);
+  const users = adm ? allPlayers().filter(p => kindOf(p) !== 'pelaaja').sort((a, b) => a.name.localeCompare(b.name, 'fi')) : [];
+  const fold = empty.length > 8, open = !fold || !!ui.emptyOpen;   // a few empty teams show as they are; a long list folds away
+  return `<div class="rboard" data-k="tl" aria-label="Joukkueet ja pelaajat">${full.map(card).join('')}${group('rx-sub', 'Varapelaajat', subs)}${group('rx-none', 'Ilman joukkuetta', none)}${group('rx-users', 'Käyttäjät', users, 'Eivät pelaa · näkyy vain adminille')}</div>` +
+    (empty.length ? `<div class="rempty" data-k="rempty">` + (fold ? `<button type="button" class="btn sm" id="rempty-t" data-act="empty-open" aria-expanded="${open}">${open ? 'Piilota' : 'Näytä'} joukkueet ilman pelaajia (${empty.length})</button>` : `<h3 class="sub" data-k="rempty-h">Joukkueet ilman pelaajia</h3>`) +
+      (open ? `<ul class="rchips" data-k="rchips">${empty.map(t => `<li><button type="button" class="rchip" id="to-${esc(t.id)}" data-act="open" data-scope="team" data-id="${esc(t.id)}">${teamAv(t, 'sm')}<span>${esc(t.name)}</span></button></li>`).join('')}</ul>` : '') + `</div>` : '');
 }
 function qaMenu() {
   const q = ui.qa, t = q && state.teams[q.tid];
@@ -3717,7 +3795,7 @@ function teamSettings(t) {
 }
 function viewTeams() {
   const ts = teamsSorted(), sel = ui.team === '__new' ? '__new' : (ui.team && state.teams[ui.team] ? ui.team : '');
-  return `<main id="v-joukkueet" class="stack"><section class="set">${pageHead('Joukkueet', teamsSorted().length + (teamsSorted().length === 1 ? ' joukkue' : ' joukkuetta') + ' · ' + realPlayers().length + ' pelaajaa')}` +
+  return `<main id="v-joukkueet" class="stack"><section class="set">${pageHead('Joukkueet ja pelaajat', teamsSorted().length + (teamsSorted().length === 1 ? ' joukkue' : ' joukkuetta') + ' · ' + realPlayers().length + ' pelaajaa')}` +
     (sel === '' ? teamList(ts) : sel === '__new' ? newTeam() : teamProfile(sel)) + `</section></main>`;
 }
 
@@ -5682,10 +5760,25 @@ function homeLists() {
       : `<p class="hint" data-k="h${w}-none">${none}</p>`) + `</section>`;
   return `<div class="hgrid" data-k="h-lists">${list('pl', 'Pelaajat', ps, pRow, 'Pelaajia ei ole vielä lisätty.')}${list('jo', 'Joukkueet', ts, tRow, 'Joukkueet näkyvät tässä, kun ne ovat pelanneet.')}</div>`;
 }
+// Sarjataulukko: the teams that have played, best first; beside Pistepörssi on a wide screen, behind a switch on a phone.
+function homeTable() {
+  const played = new Set(); toursSorted().filter(T => tourState(T) === 'done').forEach(T => tourTeamIds(T).forEach(id => played.add(id)));
+  const rows = teamsSorted().filter(t => played.has(t.id) || teamTotal(t) > 0).map(t => ({ t, pts: teamTotal(t) })).sort((a, b) => (b.pts - a.pts) || a.t.name.localeCompare(b.t.name, 'fi'));
+  rank(rows);
+  const top = rows.slice(0, 8);
+  return `<section class="set hpp" data-k="h-st"><h2 class="sec">Sarjataulukko</h2>` + (top.length ? `<ol class="mlist podium" data-k="hst-l">${top.map(r => { const n = playersOf(r.t.id).length;
+    return `<li data-k="hst-${esc(r.t.id)}">${homeRow('t', r.t.id, 'hst-' + r.t.id, `<span class="mtime">${r.rank <= 3 && r.pts > 0 ? `<span class="medal m${r.rank}" aria-label="${r.rank}.">${r.rank}</span>` : r.rank + '.'}</span>${teamAv(r.t, 'sm')}<span class="itxt"><b>${esc(r.t.name)}</b><small>${n} ${n === 1 ? 'pelaaja' : 'pelaajaa'}</small></span><span class="mres">${fmt(r.pts)} <small>p</small></span>`)}</li>`; }).join('')}</ol>`
+    : `<p class="hint" data-k="hst-none">Joukkueet näkyvät tässä, kun ne ovat pelanneet.</p>`) + `</section>`;
+}
+function homeDuo() {
+  const side = ui.homeSide === 'st' ? 'st' : 'pp';
+  const sw = `<div class="seg wide hsw" role="group" aria-label="Näytä" data-k="h-sw"><button id="hsw-pp" data-act="home-side" data-v="pp" aria-pressed="${side === 'pp'}">Pistepörssi</button><button id="hsw-st" data-act="home-side" data-v="st" aria-pressed="${side === 'st'}">Sarjataulukko</button></div>`;
+  return `<div class="hduo side-${side}" data-k="h-top">${sw}<div class="hduo-p">${homeBoard()}</div><div class="hduo-s">${homeTable()}</div></div>`;
+}
 function viewHome() {
   const low = adSlot(1) + adSlot(2);
   return `<main id="v-etusivu" class="stack home">` + homeCountdown() + pushBox('home') + adSlot(0, 'wide') +
-    `<div class="hgrid" data-k="h-top">${homeBoard()}${homeChamps()}</div>` + homeLists() +
+    homeDuo() + homeChamps() +
     (low ? `<div class="hgrid ads2" data-k="h-ads">${low}</div>` : '') + `</main>`;
 }
 // If drawing a view ever fails (say, data left behind by a removed team), the page says so and stays usable rather than freezing.
@@ -5707,7 +5800,7 @@ function view() {
   if (GATED && ui.gate !== 'open') return ui.gate === 'locked' ? gateView() : `<header class="top" data-k="top"><div class="brand">${brandH1()}</div></header>` + loading;
   if (showOn()) return viewShow();
   if (!ui.ready) return topBar('', []) + loading;
-  if (!me() || (NET && ui.loginOpen && me().guest)) return loginView();
+  if (!me() || me().guest) return loginView();   // the site password alone shows nothing: everyone signs in with their own user
   const tabs = allowedTabs(), tab = tabs.indexOf(ui.tab) >= 0 ? ui.tab : (tabs[0] || '');
   const own = !!ui.own && me().id !== 'ADMIN' && !!state.players[me().id];   // the signed-in player's own page sits on top of whichever tab was open
   const card = topCard();   // and a card opened from a table sits on top of both
