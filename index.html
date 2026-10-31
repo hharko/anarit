@@ -73,6 +73,19 @@ h1,h2,h3,h4,p{margin:0}
 .tbl td{white-space:nowrap}
 @media (max-width:420px){.tbl th,.tbl td{padding-inline:5px}}
 .tbl .cardb{min-height:40px;display:flex;align-items:center}
+/* the standings and the scoring table in the style of the big results sites: a coloured box for the place, PIS in bold */
+.tbl.fs{background:rgba(5,9,14,.55);border-radius:10px;overflow:hidden}
+.tbl.fs thead th{background:#0d1a29;color:var(--ink-2);font:700 12px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding-block:12px;border-bottom:0}
+.tbl.fs thead th abbr{text-decoration:none}
+.tbl.fs tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
+.tbl.fs td,.tbl.fs th{border-bottom:1px solid rgba(255,255,255,.06);padding-block:10px;font-size:15px}
+.tbl.fs .rk{width:44px}
+.rkb{display:inline-grid;place-items:center;min-width:30px;height:30px;padding:0 4px;border-radius:6px;font:800 14px/1 var(--f-display);color:var(--ink);box-sizing:border-box}
+.rkb.r1,.rkb.r2,.rkb.r3,.rkb.r4{background:#1f5fd1;color:#fff}
+.rkb.r3,.rkb.r4{background:#3b82f6}
+.tbl.fs td.p{font:800 17px/1 var(--f-display);color:var(--ink)}
+.tbl.fs td.jk,.tbl.fs th.jk{text-align:left;color:var(--ink-2);font-weight:600}
+.jkn{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .tbl thead th{font:700 13px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);border-bottom:2px solid var(--ink)}
 .tbl .l{text-align:left}
 .tbl .rk{width:2.4em;color:var(--ink-2)}
@@ -366,6 +379,17 @@ button.wzs{padding:0 12px;cursor:pointer}
 .lhead .thin>:not(.tht){max-height:120px;overflow:hidden;transition:max-height .45s cubic-bezier(.2,.7,.2,1),opacity .3s ease,margin .45s ease}
 .lhead .tht{transition:font-size .45s cubic-bezier(.2,.7,.2,1)}
 .lhead.mini .thin{padding:14px 18px;gap:0}
+.tdone .thin{gap:10px;padding-top:26px;padding-bottom:24px}
+.lhead.tdone .thin>.thchamp{max-height:none;overflow:visible}
+.tdone .thk{color:#f6d777}
+.thchamp{display:flex;flex-direction:column;align-items:center;gap:12px;border:0;background:none;padding:4px;color:inherit;font:inherit;cursor:pointer}
+.thchamp .av.lg{width:clamp(84px,22vw,118px);height:clamp(84px,22vw,118px);font-size:clamp(28px,7vw,40px);box-shadow:0 0 0 4px #e2b33c,0 0 34px rgba(226,179,60,.45)}
+.thcn{font:800 clamp(30px,8.5vw,52px)/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.8)}
+.thchamp:hover .thcn{text-decoration:underline;text-underline-offset:6px}
+.tdone .tht.tdn{font-size:clamp(18px,4.6vw,24px);color:#dfe7ef;margin-top:2px}
+.tdone .tdd{margin-top:-6px}
+.thsec{display:inline-flex;align-items:center;gap:10px;margin-top:4px;padding:7px 16px 7px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(5,9,14,.74);color:#e8eef5;font:600 15px/1 var(--f-body);cursor:pointer}
+.thsec:hover{border-color:rgba(255,255,255,.35)}
 .lhead.mini .thin>:not(.tht){max-height:0;opacity:0;margin:0;pointer-events:none}
 .lhead.mini .tht{font-size:clamp(24px,6.5vw,34px)}
 .lhead.mini .confetti,.lhead.mini canvas{display:none}
@@ -438,6 +462,9 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .thero .thk,.thero .thm,.thero .thd,.thero .thtc{text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.8)}
 .thero .thm,.thero .thd,.thero .thtc{color:#c9d5e2}
 .thero .cdn.big div,.thlv li{background:rgba(5,9,14,.78);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+/* the small lines sit on the bright centre ice, so they get a dark plate of their own to stay readable */
+.thero .thm,.thero .thd,.thero .thteams{display:flex;width:fit-content;max-width:100%;margin-inline:auto;padding:6px 14px;border-radius:999px;background:rgba(5,9,14,.74);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);color:#e8eef5;font-weight:600}
+.thero .thteams{padding:5px 14px 5px 6px}
 .hero{background:var(--board);color:var(--board-ink);border:1px solid var(--board-line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
 .hm{padding:12px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 .hm + .hm{border-top:1px solid var(--board-line)}
@@ -825,6 +852,24 @@ button.rch:hover{background:linear-gradient(135deg,color-mix(in srgb,var(--rc,#5
 .ad.empty .adedit{align-self:center}
 .ad.edit{min-height:0;justify-content:flex-start}
 .adbtns{display:flex;flex-wrap:wrap;gap:8px}
+.ad.fbk{text-align:left}
+.fbkhd{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.fbkf{display:flex;flex-direction:column;gap:10px;width:100%}
+.fbkf .pills{margin-bottom:0}
+.fbkf textarea{width:100%;min-height:84px;resize:vertical}
+.fbkrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.fbkrow .chk{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--board-dim, var(--ink-2))}
+.nbadge{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:6px;border-radius:999px;background:var(--red);color:#fff;font:800 12px/1 var(--f-body)}
+.burg{position:relative}
+.nbadge.nb-dot{position:absolute;top:-6px;right:-6px;margin:0;box-shadow:0 0 0 2px var(--bg, #05090e)}
+.fklist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.fk{padding:12px 14px;border-radius:12px;background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--red)}
+.fk.done{border-left-color:var(--line);opacity:.75}
+.fkh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fkh small{color:var(--ink-2);margin-left:auto}
+.fkk{padding:3px 8px;border-radius:6px;font:800 11px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:#4a5a6e}
+.fkk.k-idea{background:#2f6fd6}.fkk.k-vika{background:#d93a4d}
+.fkt{margin:8px 0 10px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.45}
 .ad.empty .adbtns{justify-content:center}
 .ad.hid{border:2px dashed var(--warn)}
 .ad .adhid{align-self:flex-start;padding:3px 8px;border-radius:999px;background:var(--warn);color:#201503;font:700 12px/1.2 var(--f-body)}
@@ -996,6 +1041,107 @@ html.showing body::before{background-image:linear-gradient(180deg,rgba(5,9,14,.5
 .tshf input{max-width:9em;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
 .mlist li.mine{background:linear-gradient(90deg,rgba(90,162,255,.14),transparent 70%);box-shadow:inset 3px 0 0 var(--blue);border-radius:6px;padding-left:8px;margin-left:-8px}
 .mlist li.mine .itxt b::after{content:"Sinun pelisi";margin-left:8px;padding:2px 7px;border-radius:999px;background:rgba(90,162,255,.18);color:#bcd8ff;font:700 11px/1.4 var(--f-body);letter-spacing:.04em;text-transform:uppercase;vertical-align:2px}
+.pills{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 6px;margin-bottom:8px}
+.pills::-webkit-scrollbar{display:none}
+.pill{flex:none;padding:9px 16px;border:0;border-radius:8px;background:#13263a;color:var(--ink-2);font:700 13px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+.pill:hover{color:var(--ink)}
+.pill[aria-pressed="true"]{background:var(--red);color:#fff}
+.tbv-sarja [data-k="tb-c2"],.tbv-kunto [data-k="tb-c2"],.tbv-kunto [data-k="tb-teams"],.tbv-maalit [data-k="tb-c1"]{display:none}
+.fmrow{display:inline-flex;align-items:center;gap:5px;vertical-align:middle}
+.fmb{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:5px;font:800 12px/1 var(--f-display);color:#fff}
+.fmrow .fmb:last-child{box-shadow:0 0 0 2px var(--bg,#05090e),0 0 0 4px #fff}
+.fmb.v{background:#1f9d55}.fmb.h{background:#d93a4d}.fmb.t{background:#d99a1f}
+.tpage{display:flex;flex-direction:column;gap:14px}
+.tjl .lrowb{padding:10px 12px}
+.tjl .itxt b{font-size:17px}
+.bcl{padding:0;border:0;background:none;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;min-height:0;border-radius:4px}
+.bcl:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.fsh.pl{overflow:visible}
+.fsh.pl .pmeta{margin:8px 0 0}
+button.fmt{border:0;background:none;padding:6px;border-radius:12px;color:inherit;font:inherit;cursor:pointer}
+button.fmt:hover .fmn{text-decoration:underline;text-underline-offset:4px}
+button.fmt:hover .fslogo{box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.rhgo{border:0;background:none;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.rhgo:hover b{text-decoration:underline}
+/* the player's own team, wherever it shows: a gold ring on the badge, a gold edge and tint on its row, a star after its name */
+.tbl tr:has(.av.own) > *{background:rgba(245,194,66,.1)}
+.tbl tr:has(.av.own) > :first-child{box-shadow:inset 3px 0 0 #f5c242}
+.mlist li > .lrowb:has(> .av.own),.mlist li > .item:has(> .av.own){padding-left:12px;border-radius:8px;background:linear-gradient(90deg,rgba(245,194,66,.16),transparent 75%);box-shadow:inset 3px 0 0 #f5c242}
+.bkt:has(> .av.own){background:linear-gradient(90deg,rgba(245,194,66,.16),transparent 75%);box-shadow:inset 3px 0 0 #f5c242}
+.hme .mlist li > .lrowb:has(> .av.own){padding-left:0;background:none;box-shadow:none}
+.fst:has(> .av.own) .fsn{color:#f5c242}
+.tn:has(> .av.own) .nm::after,.fst:has(> .av.own) .fsn::after,.item:has(> .av.own) .itxt > b::after,.lrowb:has(> .av.own) .itxt > b::after,.bkt:has(> .av.own) .bkn::after{content:"★";margin-left:6px;color:#f5c242;font-size:.9em}
+.hme .lrowb:has(> .av.own) .itxt > b::after{content:none}
+.hme .fsht{display:flex;flex-direction:column;gap:14px}
+.hme .fshm{margin-top:4px}
+.hmek{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.hmek .kpi{padding:10px 6px}
+.hmem{display:flex;flex-direction:column;gap:6px}
+.hme .rowbtns{margin:0}
+@media (max-width:560px){.hmek{gap:6px}.hmek .kpi b{font-size:22px}}
+.fmh .fsht{padding-bottom:18px}
+.fmh .fsbc{flex-wrap:wrap;row-gap:6px}
+.fmlive{margin-left:auto;display:inline-flex;align-items:center;gap:6px}
+.fmhrow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;margin-top:22px}
+.fmt{display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0;text-align:center}
+.fmt.l .fmn{color:#8d9eb0}
+.fmn{font:600 clamp(16px,3.6vw,24px)/1.2 var(--f-body);color:#fff;overflow-wrap:anywhere}
+.fmt.w .fmn{font-weight:800}
+.fmc{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;text-align:center}
+.fmd{margin:0;color:#c3ced9;font-size:16px;font-variant-numeric:tabular-nums}
+.fms{display:flex;align-items:center;gap:clamp(8px,2vw,16px)}
+.fms b{font:800 clamp(40px,10vw,64px)/1 var(--f-body);font-variant-numeric:tabular-nums;color:#fff}
+.fms i{font:700 clamp(24px,6vw,40px)/1 var(--f-body);font-style:normal;color:var(--ink-2)}
+.fms.none i{display:block;width:30px;height:8px;border-radius:2px;background:#fff;font-size:0}
+.fmh.st-live .fms b{color:#ff6b7d}
+/* a played match: the winner's score green, the loser's red */
+.fms b.w,.fsm .fst.w .fss,.mrow.w .mnum,.bkt.win .bkv{color:#36c97a}
+.fms b.l,.fsm .fst.l .fss,.mrow.l .mnum,.bkt.lose .bkv{color:#ff5a6e}
+.fmst{margin:0;color:#9fb0c1;font-size:14px}
+.h2hsum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.h2hsum div{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;border-radius:10px;background:var(--sheet);border:1px solid var(--line);text-align:center;min-width:0}
+.h2hsum b{font:800 28px/1 var(--f-display)}
+.h2hsum small{color:var(--ink-2);overflow-wrap:anywhere}
+@media (max-width:560px){.fmhrow{gap:8px;margin-top:16px}.fmt{gap:8px}.fmd{font-size:13px}}
+.fsh{background:#0a1620;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fsht{padding:16px 20px 20px}
+.fsbc{display:flex;align-items:center;gap:10px;margin:0;color:#c3ced9;font:700 13px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase}
+.fsbc .bcs{color:var(--ink-2);font-weight:400;font-size:16px}
+.bci{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.fshm{display:flex;align-items:center;gap:22px;margin-top:20px}
+.fslogo{flex:none;display:grid;place-items:center;width:112px;height:112px;border-radius:16px;background:#fff}
+.fslogo .av.lg{width:84px;height:84px;font-size:30px;box-shadow:none}
+.fshn{min-width:0}
+.fsname{margin:0;font:800 clamp(24px,5.5vw,32px)/1.15 var(--f-body);color:#fff;overflow-wrap:anywhere}
+.fsinfo{margin:10px 0 0;color:#9fb0c1;font-size:15px;line-height:1.5}
+.fsinfo{display:flex;flex-wrap:wrap;gap:2px 18px}
+.fsinfo span{white-space:nowrap}
+.fsinfo b{color:#e8eef5}
+.fsh .stabs{border-top:1px solid var(--line);border-bottom:0;padding:0 8px}
+.fsh .stab{padding:16px 14px 14px}
+.fsgrp{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.fsgh{display:flex;align-items:center;gap:8px;margin:0;padding:8px 10px;border-radius:8px;background:#13263a;color:#dfe7ef;font:700 13px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase}
+.fsgh .chip{margin-left:auto}
+.tbl.fs tr.me td,.tbl.fs tr.me th{background:rgba(255,64,88,.14)}
+.tform{display:flex;align-items:center;gap:12px;margin:4px 0}
+.tform .sub{margin:0;padding:0;line-height:24px}
+.tpage > .pills{margin:0}
+@media (max-width:560px){.fsht{padding:14px 14px 16px}.fshm{gap:14px;margin-top:14px}.fslogo{width:76px;height:76px;border-radius:12px}.fslogo .av.lg{width:58px;height:58px;font-size:22px}.fsinfo{gap:2px 12px;font-size:14px}}
+.fsl-list{background:rgba(8,14,22,.92);border-radius:10px;overflow:hidden}
+.fsl-list li{border-bottom:1px solid rgba(255,255,255,.06)}
+.fsli .lrowb{display:flex;align-items:center;gap:12px;padding:10px 12px}
+.fsm{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.fsl{color:var(--ink-2);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fst{display:flex;align-items:center;gap:10px;font-size:16px}
+.fst .fsn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fst.w .fsn,.fst.w .fss{font-weight:800;color:var(--ink)}
+.fst.l .fsn{color:var(--ink-2)}
+.fss{flex:none;min-width:22px;text-align:right;font:700 17px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.fsw{flex:none;min-width:64px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;color:var(--ink-2);font:600 15px/1.1 var(--f-body);font-variant-numeric:tabular-nums}
+.fsw small{font-size:11px}
+.fsw.live{color:#ff6b7d;font-weight:800}
+.fsli.on{background:linear-gradient(90deg,rgba(255,64,88,.12),transparent 60%)}
+.fsli .lrowb::after{display:none}
 .tjed{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 @media (max-width:600px){.nhlg{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* a team badge in place of the round initials */
@@ -1017,6 +1163,10 @@ html.showing body::before{background-image:linear-gradient(180deg,rgba(5,9,14,.5
 .tcardh .pts small{display:block;margin-top:2px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .tcardh .muted{color:#c3d0dd}
 @media (prefers-reduced-motion:reduce){.tcardh::after{animation:none;display:none}}
+/* the team list opened from the card head must show over the tabs below it, not be cut off; the sheen is clipped by its own layer */
+.tcardh{overflow:visible;z-index:4}
+.tcardh::before{border-radius:inherit}
+.tcardh::after{display:none}
 /* The home screen button and its how-to. */
 .a2i{width:20px;height:20px;flex:none;vertical-align:-4px}
 .a2b{display:inline-grid;place-items:center;width:40px;height:40px;padding:0;border-color:rgba(116,168,245,.45);background:rgba(116,168,245,.12)}
@@ -1288,7 +1438,7 @@ function normAds(a) {
   for (let i = 0; i < AD_SLOTS; i++) {
     const x = Array.isArray(a) && a[i] && typeof a[i] === 'object' ? a[i] : {};
     const link = typeof x.link === 'string' && /^https?:\/\/[^\s"'<>]+$/.test(x.link) ? x.link.slice(0, 300) : '';
-    out.push({ title: String(x.title || '').slice(0, 60), text: String(x.text || '').slice(0, 400), link, hidden: x.hidden === true });
+    out.push({ title: String(x.title || '').slice(0, 60), text: String(x.text || '').slice(0, 400), link, hidden: x.hidden === true, kind: x.kind === 'palaute' ? 'palaute' : '' });
   }
   return out;
 }
@@ -1570,12 +1720,12 @@ const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'n
   'nhl-open': 'joukkue', 'nhl-close': 'joukkue', 'nhl-pick': 'joukkue', 'nhl-all': 'joukkue', 'nhl-add': 'joukkue', 'tmdel-mode': 'joukkue', 'tmdel-pick': 'joukkue', 'tmdel-all': 'joukkue',
   'wiz-open': 'ottelu', 'wiz-close': 'ottelu', 'wiz-pick': 'ottelu', 'wiz-pool': 'ottelu', 'wiz-out': 'ottelu', 'wiz-shuffle': 'ottelu', 'wiz-clear': 'ottelu', 'wiz-next': 'ottelu', 'wiz-back': 'ottelu', 'wiz-cons': 'ottelu', 'wiz-gap': 'ottelu', 'wiz-save': 'ottelu',
   'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
-  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'tour-arenas': 'tasetus', 'tj-open': 'tasetus', 'tj-pick': 'tasetus', 'tj-all': 'tasetus', 'tj-add': 'tasetus', 'pl-new-go': 'admin', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
+  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'lj-edit': 'tasetus', 'fbk-done': 'admin', 'fbk-filter': 'admin', 'fbk-open': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'tour-arenas': 'tasetus', 'tj-open': 'tasetus', 'tj-pick': 'tasetus', 'tj-all': 'tasetus', 'tj-add': 'tasetus', 'pl-new-go': 'admin', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
 const FIELD_NEED = { 'rp-q': 'kokoonpano', 'wiz-pname': 'ottelu', 'wiz-first': 'ottelu', 'wiz-time': 'ottelu', 'tour-start': 'tasetus', 'team-short': 'joukkue', 'tour-arena': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'tour-match': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
   'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
 const FORM_NEED = { 'pz-save': 'ottelu', 'view-pw': 'set:kirjautuminen', 'ad-save': 'admin', 'add-team': 'joukkue', 'add-player': 'admin', 'new-player': 'admin', 'add-tour': 'turnaus', 'add-match': 'ottelu', 'set-pw': 'set:tunnukset', 'add-acc': 'set:kirjautuminen' };
-const KEY_NEED = { 'nhl-teams': 'joukkue', 'del-teams': 'joukkue', 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
+const KEY_NEED = { 'fbk-del': 'admin', 'nhl-teams': 'joukkue', 'del-teams': 'joukkue', 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
 // ADMIN's account and every Superadmin's are the main account's to change; a Superadmin cannot touch them, nor give the role.
 const acctLocked = id => !can('main') && id === 'ADMIN';
 function mayKey(key) {
@@ -1592,7 +1742,7 @@ function mayAct(a, d) {
   if (a === 'role-open' && (d.id === 'super' || d.id === 'admin') && !can('main')) return false;
   if (a === 'card' && isGuest()) return false;   // a guest sees the front page only
   if (a === 'ask' || a === 'arm' || a === 'yes') return mayKey(d.key);
-  if (a === 'goal-new') { const T = state.tournaments[d.tour], m = T && T.matches[d.id]; if (m && goalWait(m) > nowMs()) return false; }   // fifteen seconds between goals
+  if (a === 'goal-new') { const T = state.tournaments[d.tour], m = T && T.matches[d.id]; if (m && (goalWait(m) > nowMs() || onBreak(m))) return false; }   // fifteen seconds between goals, and none in an intermission
   if (a === 'open' && d.id === '__new') return can(d.scope === 'tour' ? 'turnaus' : d.scope === 'team' ? 'joukkue' : 'admin');
   if (['goal-p', 'goal-a', 'goal-noa', 'goal-save', 'goal-cancel'].indexOf(a) >= 0 && ui.goal && ui.goal.ev) return can('kmuok');
   const need = a === 'color' ? (d.kind === 'p' ? 'ptiedot' : 'joukkue') : a === 'photo-del' ? (String(d.key || '').indexOf('p-') === 0 ? 'ptiedot' : 'joukkue') : ACT_NEED[a];
@@ -2133,6 +2283,7 @@ function readLocal() {
     }
   } catch (e) { /* start empty */ }
   readLocalLogs();
+  readLocalFbk();
   try { const ph = JSON.parse(lsGet(LS_PHOTOS) || '{}'); for (const k of Object.keys(photos)) delete photos[k]; for (const k in ph) { const v = normPhoto({ data: ph[k] }); if (v) photos[k] = v; } } catch (e) { /* no pictures */ }
 }
 function startLocal() {
@@ -2150,6 +2301,7 @@ async function boot() {
   const saved = lsGet(LS_TAB);
   ui.tab = TABS.includes(h) ? h : h === 'tulostaulu' ? 'etusivu' : (TABS.includes(saved) ? saved : 'etusivu');
   if (h === 'tulostaulu') ui.homeBoard = true;   // an old link to Kokonaistilanne
+  if (/^(joukkue|pelaaja|turnaus)\/|^oma$/.test(h)) ui.pendRoute = h;   // a page's own address: opened once the data is in
   render();
   if (NET) { startNet(); return; }
   let user = null;
@@ -2498,7 +2650,57 @@ function setTab(tab) {
   if (!TABS.includes(tab)) return;
   ui.tab = tab; ui.rp = null; ui.nhlMsg = null; ui.tmDel = null; ui.nhlPick = null; ui.tjPick = null; ui.wiz = null; ui.homeBoard = false; ui.qaMode = false; ui.qa = null; ui.tm = null; ui.bEdit = null; ui.own = false; ui.cards = []; ui.vmBack = false; ui.nameErr = null; ui.confirm = null; ui.playerErr = null; ui.teamErr = null; ui.photoErr = null; ui.tourErr = null; ui.matchErr = null; ui.goal = null; ui.note = null; ui.goalNote = null; ui.rosterErr = null; ui.revealTab = true;
   lsSet(LS_TAB, tab);
-  try { history.replaceState(null, '', '#' + tab); } catch (e) { /* hash is optional */ }
+}
+/* ---------- the address: each page has its own (#joukkue/…, #pelaaja/…, #turnaus/…, #etusivu), so a link opens it straight
+   away and the phone's back button walks back through the pages. A move made by pressing something adds a step to the history;
+   the page drawn from an address, or changed by new data, only writes the address down. ---------- */
+let routeQuiet = true;
+function routeNow() {
+  const c = topCard(), enc = encodeURIComponent;
+  if (c) return c.k === 't' ? (c.tour && c.tour !== 'all' ? 'turnaus/' + enc(c.tour) + '/joukkue/' + enc(c.id) : 'joukkue/' + enc(c.id) + (c.tour === 'all' ? '/kaikki' : ''))
+    : c.k === 'p' ? 'pelaaja/' + enc(c.id) : 'turnaus/' + enc(c.id) + '/kortti';
+  if (ui.own) return 'oma';
+  if (ui.tab === 'etusivu') return ui.homeBoard ? 'tulostaulu' : 'etusivu';
+  if (ui.tab === 'kaynnissa') { const T = activeTour(); return T ? 'turnaus/' + enc(T.id) + (ui.liveMatch ? '/ottelu/' + enc(ui.liveMatch) : '') : 'kaynnissa'; }
+  if (ui.tab === 'turnaukset' && ui.tour && state.tournaments[ui.tour]) return 'turnaus/' + enc(ui.tour) + (ui.tourMatch ? '/ottelu/' + enc(ui.tourMatch) : '');
+  return ui.tab;
+}
+function syncHash() {
+  if (!ui.ready || !me() || me().guest || showOn()) return;
+  const want = '#' + routeNow(), push = !routeQuiet && !!ui.navAct && !!location.hash;
+  routeQuiet = false; ui.navAct = false;
+  if (location.hash === want) return;
+  try { if (push) history.pushState(null, '', want); else history.replaceState(null, '', want); } catch (e) { /* the address is extra */ }
+}
+// The page an address names. Going back to a page already in the stack drops the pages over it; a new one goes on top.
+function applyRoute(h0) {
+  const h = String(h0 || '').replace(/^#/, ''), p = h.split('/').map(x => { try { return decodeURIComponent(x); } catch (e) { return x; } }), tabs = allowedTabs();
+  const page = (k, id, tour) => {
+    const st = ui.cards || (ui.cards = []), i = st.map(c => c.k === k && c.id === id).lastIndexOf(true);
+    if (i >= 0) { const gone = st.splice(i + 1); if (gone.length) { ui.scrollBack = gone[0].y; ui.focusCb = gone[0].from; } if (k === 't') st[i].tour = tour || ''; }
+    else { if (ui.own) ui.own = false; st.push({ k, id, y: window.scrollY || 0, from: '', ctx: '', tour: tour || '' }); ui.toTop = true; }
+  };
+  const leave = () => { const st = ui.cards || []; if (st.length) { ui.scrollBack = st[0].y; ui.focusCb = st[0].from; } ui.cards = []; ui.own = false; };
+  if ((p[0] === 'joukkue' || p[0] === 'pelaaja') && p[1]) { const k = p[0] === 'joukkue' ? 't' : 'p'; if (!cardObj({ k, id: p[1] })) return false; page(k, p[1], k === 't' && p[2] === 'kaikki' ? 'all' : ''); return true; }
+  if (p[0] === 'turnaus' && p[1] && state.tournaments[p[1]]) {
+    const top = topCard(), T = state.tournaments[p[1]], mid = p[2] === 'ottelu' && p[3] && T.matches[p[3]] ? p[3] : null, at = activeTour();
+    if (p[2] === 'joukkue' && p[3] && state.teams[p[3]]) { page('t', p[3], p[1]); return true; }   // a team's page in the tournament
+    if (p[2] === 'kortti') { page('tr', p[1]); return true; }
+    leave();
+    if (at && at.id === p[1] && tabs.indexOf('kaynnissa') >= 0) { if (ui.tab !== 'kaynnissa') setTab('kaynnissa'); ui.liveMatch = mid; }
+    else if (tabs.indexOf('turnaukset') >= 0) { if (ui.tab !== 'turnaukset') setTab('turnaukset'); ui.tour = p[1]; ui.tourMatch = mid; }
+    return true;
+  }
+  if (h === 'oma') { const m = me(); if (!m || m.id === 'ADMIN' || !state.players[m.id]) return false; ui.cards = []; ui.own = true; return true; }
+  if (h === 'tulostaulu') { leave(); if (ui.tab !== 'etusivu') setTab('etusivu'); ui.homeBoard = true; return true; }
+  if (TABS.includes(h)) {
+    leave(); if (ui.tab !== h) setTab(h);
+    ui.homeBoard = false;
+    if (h === 'turnaukset') { ui.tour = null; ui.tourMatch = null; }
+    if (h === 'kaynnissa') ui.liveMatch = null;
+    return true;
+  }
+  return false;
 }
 // The 32 NHL teams of the 2026-27 season, each with the colour of the page's own palette nearest its own. Names only: the teams' logos
 // are their trademarks, so a team shows its colour and initials until someone gives it a picture of their own.
@@ -3041,7 +3243,8 @@ function setPassword(form) {
 }
 function confirmed(key) {
   const i = key.indexOf(':'), k = i < 0 ? key : key.slice(0, i), id = i < 0 ? '' : key.slice(i + 1);
-  if (k === 'del-team') removeTeam(id);
+  if (k === 'fbk-del') { if (fbk[id]) { delete fbk[id]; fbkWrite(id, true); } }
+  else if (k === 'del-team') removeTeam(id);
   else if (k === 'nhl-teams') addNhlTeams();
   else if (k === 'del-teams' && ui.tmDel) { const ids = Object.keys(ui.tmDel).filter(id => ui.tmDel[id] && state.teams[id] && !teamPlayed(id)); ids.forEach(removeTeam); ui.nhlMsg = 'Poistettiin ' + ids.length + (ids.length === 1 ? ' joukkue.' : ' joukkuetta.'); ui.tmDel = null; }
   // Removing a player who also has a user account keeps the user: only the player goes, so he is no longer on a team or in the scoring.
@@ -3103,6 +3306,7 @@ function confirmed(key) {
   else if (k === 'del-match') { const part = id.split('|'), T = state.tournaments[part[0]]; if (T && T.matches[part[1]] && !T.matches[part[1]].auto) { logAct(part[0], part[1], 'm', 'poisti ottelun'); const before = tourSnap(T); delete T.matches[part[1]]; syncBracket(T); persistTour(part[0], before); } }
 }
 function act(a, d) {
+  ui.navAct = true;   // a press: a move to another page goes down in the history
   if (ui.readOnly && ['tab', 'subtab', 'open', 'open-match', 'close-match', 'copy-link', 'vm-back', 'vm-tour', 'vm-filter', 'vm-more', 'tp-toggle', 'show-prev', 'show-next', 'show-pause', 'show-full', 'logout', 'login-back', 'own-open', 'card', 'card-back', 'lt-toggle', 'tb-all', 'mc-toggle', 'err-home', 'home-all', 'ad-cancel', 'login-open', 'login-close', 'g-login', 'kb-abc'].indexOf(a) < 0) return;
   if (!mayAct(a, d)) return;
   switch (a) {
@@ -3134,11 +3338,10 @@ function act(a, d) {
     }
     case 'ad-edit': ui.adEdit = +d.i; ui.focusId = 'adt-' + (+d.i); break;
     case 'ad-cancel': ui.adEdit = null; break;
-    case 'ad-clear': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i] = { title: '', text: '', link: '', hidden: a[i].hidden }; state.config.ads = a; persistConf(['ads']); } ui.adEdit = null; break; }
+    case 'ad-clear': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i] = { title: '', text: '', link: '', hidden: a[i].hidden, kind: '' }; state.config.ads = a; persistConf(['ads']); } ui.adEdit = null; break; }
     case 'ad-vis': { const a = normAds(state.config.ads), i = +d.i; if (a[i]) { a[i].hidden = !a[i].hidden; state.config.ads = a; persistConf(['ads']); } break; }
     case 'home-board': {   // Kokonaistilanne opens over Etusivu and closes back to it
       ui.homeBoard = d.v === '1'; ui.cards = []; ui.toTop = true; ui.focusId = ui.homeBoard ? 'tt-back' : 'hpp-all';
-      try { history.replaceState(null, '', ui.homeBoard ? '#tulostaulu' : '#etusivu'); } catch (e) { /* hash is optional */ }
       break;
     }
     case 'empty-open': ui.emptyOpen = !ui.emptyOpen; break;
@@ -3172,6 +3375,10 @@ function act(a, d) {
       if (d.tab === ui.tab) { if (d.tab === 'etusivu') ui.homeBoard = false; if (d.tab === 'joukkueet') ui.team = null; if (d.tab === 'pelaajat') ui.player = null; if (d.tab === 'turnaukset') { ui.tour = null; ui.tourMatch = null; } if (d.tab === 'kaynnissa') ui.liveMatch = null; if (d.tab === 'asetukset') ui.setView = ''; }
       setTab(d.tab); break;
     case 'open':
+      // a team or a player opens as a page of its own, the same as from anywhere else
+      if ((d.scope === 'team' || d.scope === 'player') && d.id && d.id !== '__new' && cardObj({ k: d.scope === 'team' ? 't' : 'p', id: d.id })) {
+        act('card', { kind: d.scope === 'team' ? 't' : 'p', id: d.id, cb: (d.scope === 'team' ? 'to-' : 'po-') + d.id }); return;
+      }
       if (d.scope === 'team') { ui.team = d.id || null; ui.teamTab = 'kortti'; ui.teamErr = null; }
       else if (d.scope === 'tour') { ui.tour = d.id || null; ui.tourTab = ''; ui.tourErr = null; ui.matchErr = null; ui.newMatch = false; ui.tourMatch = null; ui.goal = null; ui.note = null; }
       else { ui.player = d.id || null; ui.playerTab = 'kortti'; ui.playerErr = null; }
@@ -3181,7 +3388,8 @@ function act(a, d) {
     case 'subtab':
       if (d.scope === 'team') ui.teamTab = d.tab; else if (d.scope === 'tour') ui.tourTab = d.tab; else if (d.scope === 'live') ui.liveTab = d.tab;
       if (d.scope === 'tour' || d.scope === 'live') ui.revealTab = true;
-      else if (d.scope === 'card') { const c = topCard(); if (c) c.tab = d.tab === 'muokkaa' ? d.tab : 'kortti'; }
+      else if (d.scope === 'mp') ui.mpTab = d.tab;
+      else if (d.scope === 'card') { const c = topCard(); if (c) c.tab = c.k === 't' || d.tab === 'muokkaa' ? d.tab : 'kortti'; }
       else ui.playerTab = d.tab;
       if (d.scope === 'tour') ui.tourMatch = null;
       if (d.scope === 'live') ui.liveMatch = null;
@@ -3207,6 +3415,13 @@ function act(a, d) {
     case 'rp-close': if (ui.rp) { ui.focusId = 'rp-open-' + ui.rp.tid; ui.rp = null; } break;
     case 'rp-save': rosterSave(); break;
     case 'night-share': nightShare(d.tour); break;
+    case 'go-match': {   // a match opened from the front page: in the running tournament's tab, or else under Turnaukset
+      const T = state.tournaments[d.tour], at = activeTour(), tabs = allowedTabs();
+      if (!T || !T.matches[d.id]) break;
+      if (at && at.id === d.tour && tabs.indexOf('kaynnissa') >= 0) { setTab('kaynnissa'); ui.liveMatch = d.id; }
+      else if (tabs.indexOf('turnaukset') >= 0) { setTab('turnaukset'); ui.tour = d.tour; ui.tourMatch = d.id; }
+      ui.mpTab = null; ui.goal = null; ui.note = null; ui.toTop = true; break;
+    }
     case 'turn-open': {   // opens the match and puts the strip away, like OK
       (ui.turnOk || (ui.turnOk = {}))[d.id] = 1;
       const T = state.tournaments[d.tour], act = activeTour(), tabs = allowedTabs();
@@ -3267,10 +3482,19 @@ function act(a, d) {
     case 'wiz-back': if (ui.wiz) { ui.wiz.step = 1; ui.wiz.err = null; ui.focusId = 'wz-title'; } break;
     case 'tour-arenas': { const T = state.tournaments[d.id]; if (T) { const n = Math.max(1, Math.min(20, arenaCount(T) + (+d.d || 0))); T.arenas = arenaList(T.arenas, n); persistMatch(d.id, null, null, null, ['arenas']); } break; }
     case 'show-ctl': ui.showCtl = !ui.showCtl; break;
+    case 'fbk-kind': ui.fbkKind = d.v; ui.fbkMsg = null; break;
+    case 'fbk-filter': ui.fbkF = d.f; break;
+    case 'fbk-done': if (fbk[d.id]) { fbk[d.id].done = !fbk[d.id].done; fbkWrite(d.id); } break;
+    case 'fbk-open': if (allowedTabs().indexOf('asetukset') >= 0) { act('tab', { tab: 'asetukset' }); ui.setView = 'palaute'; ui.toTop = true; } break;
+    case 'lj-edit': ui.ljEdit = !ui.ljEdit; break;
+    case 'pill':
+      if (d.key === 'lt') ui.ltView = d.v; else if (d.key === 'tb') ui.tbView = d.v;
+      else if (d.key === 'tt') { const c = topCard(); if (c && c.k === 't') c.tour = d.v; else ui.teamTour = d.v; }
+      break;
     case 'wiz-cons': if (ui.wiz) { ui.wiz.cons = Math.max(1, Math.min(20, ui.wiz.cons + (+d.d || 0))); lsSet('anarit.consoles', String(ui.wiz.cons)); wizSchedule(); } break;
     case 'wiz-gap': if (ui.wiz) { const g = ui.wiz.gap, st = g < 30 || (g === 30 && +d.d < 0) ? 5 : 15; ui.wiz.gap = Math.max(5, Math.min(240, g + st * (+d.d || 0))); lsSet('anarit.gap', String(ui.wiz.gap)); wizSchedule(); } break;
     case 'wiz-save': wizSave(); break;
-    case 'open-match': if (d.scope === 'live') ui.liveMatch = d.id; else ui.tourMatch = d.id; ui.goal = null; ui.note = null; ui.confirm = null; ui.toTop = true; ui.vmBack = false; break;
+    case 'open-match': if (d.scope === 'live') ui.liveMatch = d.id; else ui.tourMatch = d.id; ui.mpTab = null; ui.goal = null; ui.note = null; ui.confirm = null; ui.toTop = true; ui.vmBack = false; break;
     case 'close-match': if (d.scope === 'live') ui.liveMatch = null; else ui.tourMatch = null; ui.goal = null; ui.note = null; ui.confirm = null; ui.vmBack = false; break;
     case 'vm-back': ui.liveMatch = null; ui.tourMatch = null; setTab('valvomo'); ui.toTop = true; break;
     case 'vm-tour': {
@@ -3319,9 +3543,12 @@ function act(a, d) {
     case 'cancel-field': cancelFields(d.for); break;
     case 'own-open': { const m = me(), had = !!(ui.cards && ui.cards.length); ui.cards = []; ui.own = (had || !ui.own) && !!m && m.id !== 'ADMIN' && !!state.players[m.id]; ui.confirm = null; ui.photoErr = null; ui.nameErr = null; ui.toTop = true; break; }
     case 'card': {
-      const k = d.kind === 't' || d.kind === 'tr' ? d.kind : 'p', st = ui.cards || (ui.cards = []), top = st[st.length - 1];
-      if (!cardObj({ k, id: d.id }) || (top && top.k === k && top.id === d.id && (top.ctx || '') === (d.ctx || ''))) break;
-      st.push({ k, id: d.id, y: window.scrollY || 0, from: d.cb || '', ctx: d.ctx || '' });   // ctx: the team a tournament card was opened from
+      let k = d.kind === 't' || d.kind === 'tr' ? d.kind : 'p', id = d.id, tour = d.tour || '';
+      if (k === 'tr' && d.ctx && state.teams[d.ctx]) { k = 't'; tour = d.id; id = d.ctx; }   // a team's run in a tournament: the team's page in that tournament
+      const st = ui.cards || (ui.cards = []), top = st[st.length - 1];
+      if (k === 't' && !tour) tour = cardTourGuess(top);
+      if (!cardObj({ k, id }) || (top && top.k === k && top.id === id && (top.tour || '') === tour)) break;
+      st.push({ k, id, y: window.scrollY || 0, from: d.cb || '', ctx: '', tour, pushed: true });
       if (st.length > 20) st.splice(0, st.length - 20);
       ui.confirm = null; ui.toTop = true; ui.focusId = 'card-back'; break;
     }
@@ -3329,7 +3556,11 @@ function act(a, d) {
     case 'tb-all': ui.tbAll = !ui.tbAll; break;
     case 'lt-toggle': { const o = ui.liveOpen || (ui.liveOpen = {}); if (o[d.id]) delete o[d.id]; else o[d.id] = true; break; }
     case 'mc-toggle': kToggle(d.mk); break;
-    case 'card-back': { const c = (ui.cards || []).pop(); if (c) { ui.scrollBack = c.y; ui.focusCb = c.from; } ui.confirm = null; break; }
+    case 'card-back': {
+      const st = ui.cards || [], top = st[st.length - 1];
+      if (top && top.pushed && location.hash === '#' + routeNow()) { try { history.back(); return; } catch (e) { /* step back by hand below */ } }
+      routeQuiet = true;   // a page opened straight from a link: back to the page under it, without a new step in the history
+      const c = st.pop(); if (c) { ui.scrollBack = c.y; ui.focusCb = c.from; } ui.confirm = null; break; }
     case 'card-edit': {
       const tab = d.kind === 't' ? 'joukkueet' : 'pelaajat';
       if (allowedTabs().indexOf(tab) < 0 || !cardObj({ k: d.kind === 't' ? 't' : 'p', id: d.id })) break;
@@ -3595,8 +3826,8 @@ function topBar(tab, tabs) {
   const a2 = a2hsOn() ? `<button class="btn sm a2b" id="a2hs-open" data-act="a2hs" title="Lisää kotinäytölle" aria-label="Lisää Änärit puhelimen kotinäytölle">${PLUS_I}</button>` : '';
   const nav = tabs.length && navOn(tabs), menu = nav && !window.ANARIT_TABS;
   const tabLbl = t => t === 'kaynnissa' ? esc(T.name) : TAB_LABEL[t];
-  const burger = menu ? `<button type="button" class="btn sm burg" id="nav-open" data-act="nav-open" aria-expanded="${!!ui.navOpen}" aria-controls="navm" aria-label="Valikko"><span class="burgi" aria-hidden="true"><i></i><i></i><i></i></span></button>` : '';
-  const panel = menu && ui.navOpen ? `<div class="navbg" data-k="navbg" data-act="nav-close" aria-hidden="true"></div><nav class="navm" id="navm" data-k="navm" aria-label="Näkymät"><ul>${menuTabs(tabs).map(t => t === 'kaynnissa' || (t === 'turnaukset' && tabs.indexOf('kaynnissa') < 0) ? navTours(t, tab, T, tabs) : `<li><button type="button" class="navi" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab || MENU_HOME[tab] === t ? ' aria-current="page"' : ''}><span>${MENU_LABEL[t] || TAB_LABEL[t]}</span></button></li>`).join('')}</ul></nav>` : '';
+  const burger = menu ? `<button type="button" class="btn sm burg" id="nav-open" data-act="nav-open" aria-expanded="${!!ui.navOpen}" aria-controls="navm" aria-label="Valikko"><span class="burgi" aria-hidden="true"><i></i><i></i><i></i></span>${fbkReader() && fbkNew() ? `<span class="nbadge nb-dot" aria-label="${fbkNew()} uutta palautetta">${fbkNew()}</span>` : ''}</button>` : '';
+  const panel = menu && ui.navOpen ? `<div class="navbg" data-k="navbg" data-act="nav-close" aria-hidden="true"></div><nav class="navm" id="navm" data-k="navm" aria-label="Näkymät"><ul>${menuTabs(tabs).map(t => t === 'kaynnissa' || (t === 'turnaukset' && tabs.indexOf('kaynnissa') < 0) ? navTours(t, tab, T, tabs) : `<li><button type="button" class="navi" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab || MENU_HOME[tab] === t ? ' aria-current="page"' : ''}><span>${MENU_LABEL[t] || TAB_LABEL[t]}</span>${t === 'asetukset' && fbkReader() && fbkNew() ? `<span class="nbadge" aria-label="${fbkNew()} uutta palautetta">${fbkNew()}</span>` : ''}</button></li>`).join('')}</ul></nav>` : '';
   return `<header class="top" data-k="top"><div class="brand">${brandHome(tabs)}<div class="who" data-k="who">${a2}${syncTag(s)}${who}${burger}</div></div>${panel}` +
     (nav && !menu ? `<nav class="tabs" data-k="tabs" aria-label="Näkymät"><div class="tabsx" data-k="tabsx">${tabs.map(t => `<button class="tab${t === 'kaynnissa' ? ' tt' : ''}" id="tab-${t}" data-act="tab" data-tab="${t}"${t === tab ? ' aria-current="page"' : ''}${t === 'kaynnissa' ? ` title="${esc(T.name)}"` : ''}>${t === 'kaynnissa' ? `<span class="ttx">${esc(T.name)}</span>` : TAB_LABEL[t]}</button>`).join('')}</div></nav>` : '') + `</header>`;
 }
@@ -3678,7 +3909,17 @@ function avatar(key, name, colorKey, cls, inner) {
 }
 const playerColor = p => COLOR[p.color] ? p.color : (state.teams[p.teamId] ? state.teams[p.teamId].color : 'grey');
 // an NHL team shows its badge instead of initials; a picture given to the team still covers it
-const teamAv = (t, cls) => { const b = NHL_BADGE[String(t.name || '').trim()]; return b ? avatar('t-' + t.id, t.name, t.color, (cls ? cls + ' ' : '') + 'bdg', badgeSvg(b)) : avatar('t-' + t.id, t.name, t.color, cls); };
+// The signed-in player's own teams: his team, and the one he plays for in the running tournament. Their badges carry the class
+// "own", and the rows, lists and match lines they are in are lit by it. Worked out once per drawing of the page.
+let ownTeamMemo = null;
+function ownTeams() {
+  if (ownTeamMemo) return ownTeamMemo;
+  const set = new Set(), pid = ownPid(), q = pid && state.players[pid], T = activeTour();
+  if (q && state.teams[q.teamId]) set.add(q.teamId);
+  if (pid && T) { const t = tTeam(T, pid); if (t) set.add(t); }
+  return (ownTeamMemo = set);
+}
+const teamAv = (t, cls0) => { const cls = t && t.id && ownTeams().has(t.id) ? (cls0 ? cls0 + ' own' : 'own') : cls0; const b = NHL_BADGE[String(t.name || '').trim()]; return b ? avatar('t-' + t.id, t.name, t.color, (cls ? cls + ' ' : '') + 'bdg', badgeSvg(b)) : avatar('t-' + t.id, t.name, t.color, cls); };
 const playerAv = (p, cls) => avatar('p-' + p.id, p.name, playerColor(p), cls);
 function ranks(kind) {
   const rows = (kind === 'p' ? realPlayers() : teamsSorted()).map(o => ({ id: o.id, pts: kind === 'p' ? points(o, 'p') : teamTotal(o) })).sort((a, b) => b.pts - a.pts);
@@ -3734,13 +3975,20 @@ function liveTable(T) {
   const ab = (short, title) => `<th scope="col"><abbr title="${title}">${short}</abbr></th>`;
   // the scoring table shows the top ten places until it is opened in full, so the page under it stays near
   const cut = !ui.tbAll && pr.filter(r => r.rank > 10).length > 0, shown = cut ? pr.filter(r => r.rank <= 10) : pr;
-  return `<div class="cols2" data-k="tb-cols"><div data-k="tb-c1"><h3 class="sub" data-k="tb-h1">Sarjataulukko</h3><div class="tscroll" data-k="tb-teams"><table class="tbl"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Joukkue</th>${ab('O', 'Pelatut ottelut')}${ab('V', 'Voitot')}${ties ? ab('T', 'Tasapelit') : ''}${ab('H', 'Häviöt')}${ab('M', 'Tehdyt ja päästetyt maalit')}${ab('P', 'Pisteet')}</tr></thead><tbody>` +
-    tr.map(r => `<tr data-k="tbt-${esc(r.t.id)}" class="crow" ${cardAttrs('t', r.t.id, 'tbt-' + r.t.id)}><td class="l rk">${r.rank}.</td><th class="l" scope="row">${cardName('t', r.t, 'tbt-' + r.t.id)}</th><td>${r.s.o}</td><td>${r.s.v}</td>${ties ? `<td>${r.s.t}</td>` : ''}<td>${r.s.h}</td><td>${r.s.gf}–${r.s.ga}</td><td class="p"><span data-bump>${fmt(r.pts)}</span></td></tr>`).join('') + `</tbody></table></div>` +
-    `</div><div data-k="tb-c2"><h3 class="sub" data-k="tb-h2">Pistepörssi</h3>` + (pr.length ? `<div class="tscroll" data-k="tb-players"><table class="tbl"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Pelaaja</th>${pst.map(x => ab(esc(x.short), esc(x.name))).join('')}${ab('P', 'Pisteet')}</tr></thead><tbody>` +
-      shown.map(r => `<tr data-k="tbp-${esc(r.q.id)}" class="crow" ${cardAttrs('p', r.q.id, 'tbp-' + r.q.id)}><td class="l rk">${r.rank}.</td><th class="l" scope="row">${cardName('p', r.q, 'tbp-' + r.q.id, esc(tTeamText(T, r.q)))}</th>${pst.map(x => `<td>${r.c[x.id] || 0}</td>`).join('')}<td class="p"><span data-bump>${fmt(r.pts)}</span></td></tr>`).join('') + `</tbody></table></div>` +
+  const view = ['kunto', 'maalit'].indexOf(ui.tbView) >= 0 ? ui.tbView : 'sarja';
+  // Kunto: each team's last five played matches in this tournament, newest on the right
+  const form = tid => matchList(T).filter(m => m.endedAt && !isBye(m) && (sideTeam(T, m.home) === tid || sideTeam(T, m.away) === tid)).sort((x, y) => x.endedAt - y.endedAt).slice(-5)
+    .map(m => { const us = sideTeam(T, m.home) === tid ? m.hs : m.as, them = sideTeam(T, m.home) === tid ? m.as : m.hs, r = us > them ? ['v', 'V', 'Voitto'] : us < them ? ['h', 'H', 'Häviö'] : ['t', 'T', 'Tasapeli'];
+      return `<span class="fmb ${r[0]}" title="${r[2]} ${us}–${them}">${r[1]}</span>`; }).join('') || '<span class="muted">–</span>';
+  const kunto = `<div class="tscroll" data-k="tb-form"><table class="tbl fs"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Joukkue</th><th class="l" scope="col">Viimeiset 5</th></tr></thead><tbody>` +
+    tr.map(r => `<tr data-k="tbf-${esc(r.t.id)}" class="crow" ${cardAttrs('t', r.t.id, 'tbf-' + r.t.id)}><td class="l rk"><span class="rkb r${Math.min(r.rank, 4)}">${r.rank}.</span></td><th class="l" scope="row">${cardName('t', r.t, 'tbf-' + r.t.id)}</th><td class="l"><span class="fmrow">${form(r.t.id)}</span></td></tr>`).join('') + `</tbody></table></div>`;
+  return pills('tb', [['sarja', 'Sarjataulukko'], ['kunto', 'Kunto'], ['maalit', 'Maalintekijät']], view) + `<div class="tbv tbv-${view}" data-k="tb-cols"><div data-k="tb-c1">${view === 'kunto' ? kunto : ''}<div class="tscroll" data-k="tb-teams"><table class="tbl fs"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Joukkue</th>${ab('OTT', 'Pelatut ottelut')}${ab('V', 'Voitot')}${ties ? ab('T', 'Tasapelit') : ''}${ab('H', 'Häviöt')}${ab('M', 'Maalit: tehdyt ja päästetyt')}${ab('PIS', 'Pisteet')}</tr></thead><tbody>` +
+    tr.map(r => `<tr data-k="tbt-${esc(r.t.id)}" class="crow" ${cardAttrs('t', r.t.id, 'tbt-' + r.t.id)}><td class="l rk"><span class="rkb r${Math.min(r.rank, 4)}">${r.rank}.</span></td><th class="l" scope="row">${cardName('t', r.t, 'tbt-' + r.t.id)}</th><td>${r.s.o}</td><td>${r.s.v}</td>${ties ? `<td>${r.s.t}</td>` : ''}<td>${r.s.h}</td><td>${r.s.gf}:${r.s.ga}</td><td class="p"><span data-bump>${fmt(r.pts)}</span></td></tr>`).join('') + `</tbody></table></div>` +
+    `</div><div data-k="tb-c2">` + (pr.length ? `<div class="tscroll" data-k="tb-players"><table class="tbl fs"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Pelaaja</th><th class="l jk" scope="col">Joukkue</th>${ab('PIS', 'Pisteet')}${pst.map(x => ab(esc(x.short), esc(x.name))).join('')}</tr></thead><tbody>` +
+      shown.map(r => `<tr data-k="tbp-${esc(r.q.id)}" class="crow" ${cardAttrs('p', r.q.id, 'tbp-' + r.q.id)}><td class="l rk"><span class="rkb">${r.rank}.</span></td><th class="l" scope="row">${cardName('p', r.q, 'tbp-' + r.q.id)}</th><td class="l jk">${(t => t && state.teams[t] ? `<span class="jkn">${teamAv(state.teams[t], 'sm')}${esc(state.teams[t].name)}</span>` : '–')(tTeam(T, r.q.id))}</td><td class="p"><span data-bump>${fmt(r.pts)}</span></td>${pst.map(x => `<td>${r.c[x.id] || 0}</td>`).join('')}</tr>`).join('') + `</tbody></table></div>` +
       (cut || ui.tbAll && pr.some(r => r.rank > 10) ? `<div data-k="tb-all"><button class="btn sm" id="tb-all" data-act="tb-all" aria-expanded="${!cut}">${cut ? 'Näytä kaikki ' + pr.length : 'Näytä vain kärki'}</button></div>` : '')
       : `<p class="hint" data-k="tb-nop">Turnauksen joukkueissa ei ole vielä pelaajia.</p>`) + `</div></div>` +
-    `<p class="legend" data-k="tb-key">${pst.map(x => `<span><b>${esc(x.short)}</b> ${esc(x.name)} ${signed(x.value)} p</span>`).join('')}${linkStat('win') ? `<span>Voitosta joukkue saa ${signed(linkStat('win').value)} p</span>` : ''}</p>`;
+    `<p class="legend" data-k="tb-key"><span><b>OTT</b> ottelut</span><span><b>V</b> voitot</span>${ties ? '<span><b>T</b> tasapelit</span>' : ''}<span><b>H</b> häviöt</span><span><b>M</b> maalit tehty:päästetty</span><span><b>PIS</b> pisteet</span>${pst.map(x => `<span><b>${esc(x.short)}</b> ${esc(x.name)} ${signed(x.value)} p</span>`).join('')}${linkStat('win') ? `<span>Voitosta joukkue saa ${signed(linkStat('win').value)} p</span>` : ''}</p>`;
 }
 // Kokonaistilanne, opened from Etusivu: the overall standings and scoring table, every match of every tournament added up.
 function viewBoard() {
@@ -3950,11 +4198,92 @@ function teamRoster(t) {
 // A team opened in Joukkueet: its card first, the same as from the tables, and for whoever may change teams an Asetukset tab with
 // everything about the team in one place: name, picture, colour, its players, and removing it.
 function teamProfile(tid) {
-  const t = Object.assign({ id: tid }, state.teams[tid]);
-  const tabs = [['kortti', 'Joukkuekortti']].concat(can('joukkue') || can('kokoonpano') ? [['muokkaa', 'Asetukset']] : []);
-  const tab = tabs.some(x => x[0] === ui.teamTab) ? ui.teamTab : 'kortti';
-  return backBtn('team', 'Kaikki joukkueet') + `<div class="tset pcard" data-k="tp-card">${teamHead(t)}` +
-    (tabs.length > 1 ? subtabs('team', tabs, tab) : '') + `<div class="pbody" data-k="tpb-${tab}">${tab === 'kortti' ? teamCardBody(tid) : teamSettings(t)}</div></div>`;
+  return backBtn('team', 'Kaikki joukkueet') + `<div class="tpage" data-k="tp-card">${teamPage(tid, 'team', ui.teamTab, ui.teamTour)}</div>`;
+}
+// The tournament a team's page opens in: the one it was opened from (a table, a match, the tournament's own pages), else the
+// running one; 'all' for every tournament together.
+function cardTourGuess(top) {
+  if (top && top.k === 't' && top.tour) return top.tour;
+  if (top && top.k === 'tr') return top.id;
+  if (!top && ui.tab === 'kaynnissa' && activeTour()) return activeTour().id;
+  if (!top && ui.tab === 'turnaukset' && ui.tour && state.tournaments[ui.tour]) return ui.tour;
+  return '';
+}
+function teamScope(tid, sel) {
+  const tours = teamTours(tid);
+  if (sel === 'all' || !tours.length) return null;
+  return tours.find(T => T.id === sel) || tours.find(T => /live|on/.test(tourState(T))) || tours[0];
+}
+// A team's page as on the big results sites: a head with the way there, the badge on a white tile, the name and a line of facts,
+// and under it the sections as tabs. The same page opens from Joukkueet and from a name pressed in a table.
+const TEAM_TABS = [['kortti', 'Yleiskatsaus'], ['tulokset', 'Tulokset'], ['ohjelma', 'Otteluohjelma'], ['taulukko', 'Sarjataulukko'], ['kokoonpano', 'Kokoonpano']];
+const teamTours = tid => toursSorted().filter(T => tourTeamIds(T).indexOf(tid) >= 0);
+const teamTabList = tid => TEAM_TABS.filter(x => x[0] !== 'taulukko' || teamTours(tid).length).concat(can('joukkue') || can('kokoonpano') ? [['muokkaa', 'Asetukset']] : []);
+const HOCKEY_I = '<svg class="bci" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l9 9h6"/><path d="M14 4l-5 11"/><ellipse cx="18.5" cy="18" rx="3" ry="1.4"/></svg>';
+function teamPage(tid, scope, want, sel) {
+  const t = Object.assign({ id: tid }, state.teams[tid]), tabs = teamTabList(tid), tab = tabs.some(x => x[0] === want) ? want : 'kortti';
+  const tours = teamTours(tid), T = teamScope(tid, sel);
+  let info;
+  if (T) {
+    const rows = tourTeamRows(T, tourStats(T)), r = rows.find(x => x.t.id === tid), pod = tourPodium(T), medal = pod && pod.find(x => x.t === tid);
+    info = `<span>Sijoitus: <b>${medal ? MEDAL[medal.r] : r ? r.rank + './' + rows.length : '–'}</b></span><span>Pisteet: <b data-bump>${r ? fmt(r.pts) : 0}</b></span><span>Pelaajat: <b>${tourTeamPlayers(T, tid).length}</b></span>`;
+  } else { const rk = ranks('t'); info = `<span>Sarjataulukossa: <b>${rk.by[tid]}./${rk.n}</b></span><span>Pisteet: <b data-bump>${fmt(teamTotal(t))}</b></span><span>Pelaajat: <b>${playersOf(tid).length}</b></span>`; }
+  // which tournament the numbers are from: the team's tournaments, newest first, and all of them together
+  const pick = tours.length ? pills('tt', tours.map(x => [x.id, x.name]).concat([['all', 'Kaikki turnaukset']]), T ? T.id : 'all') : '';
+  const body = tab === 'muokkaa' ? teamSettings(t) : tab === 'tulokset' ? teamFsMatches(tid, true, T) : tab === 'ohjelma' ? teamFsMatches(tid, false, T)
+    : tab === 'taulukko' ? (T ? tourFsTable(T, [tid]) : teamTables(tid)) : tab === 'kokoonpano' ? (T ? teamTourSquad(T, tid) : teamSquad(tid)) : T ? teamTourBody(T, tid) : teamCardBody(tid);
+  return `<div class="fsh" data-k="${scope}-fsh" style="--pc:${COLOR[t.color] || COLOR.grey}"><div class="fsht">` +
+    `<p class="fsbc" data-k="${scope}-bc">${HOCKEY_I}${T ? tourLink(T) : `<button type="button" class="bcl" data-act="tab" data-tab="joukkueet">Joukkueet</button>`}<span class="bcs" aria-hidden="true">›</span><span>${esc(t.name)}</span></p>` +
+    `<div class="fshm"><span class="fslogo">${teamAv(t, 'lg')}</span><div class="fshn"><h3 class="fsname">${esc(t.name)}</h3><p class="fsinfo">${info}</p></div></div></div>` +
+    secTabs(scope, tabs, tab, 'Joukkueen osiot') + `</div>` + (tab === 'muokkaa' ? '' : pick) + `<div class="pbody fsbody" data-k="${scope}-tb-${tab}">${body}</div>`;
+}
+// Yleiskatsaus in one tournament: the team's numbers there, its form, its match now or next, and where it finished.
+function teamTourBody(T, tid) {
+  const rows = tourTeamRows(T, tourStats(T)), r = rows.find(x => x.t.id === tid), s = r ? r.s : { o: 0, v: 0, t: 0, h: 0, gf: 0, ga: 0 };
+  const ms = teamMatches(tid).filter(x => x.T.id === T.id), last = ms.filter(y => mStatus(y.m) === 'done').slice(0, 5).reverse(), next = ms.filter(y => mStatus(y.m) !== 'done').sort((a, b) => (mStatus(b.m) === 'live') - (mStatus(a.m) === 'live'))[0];
+  const form = last.map(({ m, s: sd }) => { const us = sd === 'h' ? m.hs : m.as, them = sd === 'h' ? m.as : m.hs, x = us > them ? ['v', 'V', 'Voitto'] : us < them ? ['h', 'H', 'Häviö'] : ['t', 'T', 'Tasapeli']; return `<span class="fmb ${x[0]}" title="${x[2]} ${us}–${them}">${x[1]}</span>`; }).join('');
+  return `<div class="kpis" data-k="tt-kpi">${kpi(s.o, 'Ottelut')}${kpi(s.v, 'Voitot')}${s.t ? kpi(s.t, 'Tasapelit') : ''}${kpi(s.h, 'Häviöt')}${kpi(s.gf, 'Maalit')}${kpi(s.ga, 'Päästetyt')}${kpi(r ? fmt(r.pts) : 0, 'Pisteet')}</div>` +
+    `<p class="hint" data-k="tt-place">${esc(T.name)}: ${tourPlace(T, tid) || 'ei vielä pelattuja otteluita'}</p>` +
+    (form ? `<div class="tform" data-k="tt-form"><span class="sub">Viimeiset ${last.length}</span><span class="fmrow">${form}</span></div>` : '') +
+    (next ? `<h3 class="sub sect" data-k="tt-hn">${mStatus(next.m) === 'live' ? 'Käynnissä nyt' : 'Seuraava ottelu'}</h3><ul class="mlist fsl-list" data-k="tt-next"><li class="fsli${mStatus(next.m) === 'live' ? ' on' : ''}" data-k="ttn-${esc(next.m.id)}">${goRow(T, next.m, fsInner(T, next.m))}</li></ul>` : '') +
+    `<h3 class="sub sect" data-k="tt-hp">Pistepörssi tässä turnauksessa</h3>${teamTourSquad(T, tid)}` +
+    `<p class="hint" data-k="tt-how">Luvut ovat vain tästä turnauksesta. Valitse ylempää toinen turnaus tai Kaikki turnaukset.</p>`;
+}
+// The team's players in one tournament, with their points there.
+function teamTourSquad(T, tid) {
+  const pr = tourPlayerRows(T, tourStats(T)), mine = pr.filter(r => tTeam(T, r.q.id) === tid);
+  return mine.length ? `<ul class="mlist" data-k="tt-pl">${mine.map(r => `<li data-k="ttq-${esc(r.q.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', r.q.id, 'ttq-' + r.q.id)}>${playerAv(r.q, 'sm')}<span class="itxt"><b>${esc(r.q.name)}</b><small>Turnauksen pistepörssissä ${r.rank}./${pr.length}${ptsWhat(r.c) ? ' · ' + ptsWhat(r.c) : ''}</small></span><span class="mres">${fmt(r.pts)} <small>p</small></span></button></li>`).join('')}</ul>`
+    : `<p class="hint" data-k="tt-nopl">Joukkueella ei ole pelaajia tässä turnauksessa.</p>`;
+}
+// The team's matches in the results sites' rows, under the name of their tournament: the played ones newest first, or the coming ones.
+function teamFsMatches(tid, played, T) {
+  const ms = teamMatches(tid).filter(x => (!T || x.T.id === T.id) && (played ? mStatus(x.m) === 'done' : mStatus(x.m) !== 'done'));
+  if (!played) ms.sort((a, b) => (mStatus(b.m) === 'live') - (mStatus(a.m) === 'live'));
+  if (!ms.length) return `<p class="hint" data-k="tfm-none">${played ? 'Joukkue ei ole vielä pelannut yhtään ottelua.' : 'Joukkueella ei ole tulevia otteluita.'}</p>`;
+  const groups = [];
+  ms.forEach(x => { const g = groups[groups.length - 1]; if (g && g.T.id === x.T.id) g.ms.push(x.m); else groups.push({ T: x.T, ms: [x.m] }); });
+  return groups.map(g => `<div class="fsgrp" data-k="tfg-${esc(g.T.id)}"><p class="fsgh" data-k="tfh-${esc(g.T.id)}">${HOCKEY_I}${tourLink(g.T)}</p><ul class="mlist fsl-list" data-k="tfl-${esc(g.T.id)}">` +
+    g.ms.map(m => `<li data-k="tfm-${esc(g.T.id)}-${esc(m.id)}" class="fsli${mStatus(m) === 'live' ? ' on' : ''}">${goRow(g.T, m, fsInner(g.T, m))}</li>`).join('') + `</ul></div>`).join('');
+}
+// A tournament's name that opens it, and a match line that opens the match, from anywhere.
+const tourLink = T => `<button type="button" class="bcl" data-act="nav-tour" data-tour="${esc(T.id)}">${esc(T.name)}</button>`;
+function goRow(T, m, inner) {
+  return `<button type="button" class="lrowb" data-act="go-match" data-tour="${esc(T.id)}" data-id="${esc(m.id)}">${inner}</button>`;
+}
+// The tables of the tournaments the team is in, the team's own row lit; the one being played first.
+function teamTables(tid) {
+  const tours = teamTours(tid).sort((a, b) => (/live|on/.test(tourState(b)) ? 1 : 0) - (/live|on/.test(tourState(a)) ? 1 : 0));
+  return tours.map(T => tourFsTable(T, [tid])).join('') || `<p class="hint" data-k="ttb-none">Joukkue ei ole vielä mukana turnauksessa.</p>`;
+}
+function tourFsTable(T, lit) {
+  const S = tourStats(T), rows = tourTeamRows(T, S), ties = rows.some(r => r.s.t), on = id => lit.indexOf(id) >= 0;
+  return `<div class="fsgrp" data-k="ttb-${esc(T.id)}"><p class="fsgh">${HOCKEY_I}${tourLink(T)}${tourChip(tourState(T), false)}</p><div class="tscroll"><table class="tbl fs"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Joukkue</th><th scope="col" title="Ottelut">OTT</th><th scope="col" title="Voitot">V</th>${ties ? '<th scope="col" title="Tasapelit">T</th>' : ''}<th scope="col" title="Häviöt">H</th><th scope="col" title="Maalit">M</th><th scope="col" title="Pisteet">PIS</th></tr></thead><tbody>` +
+    rows.map(r => `<tr data-k="ttr-${esc(T.id)}-${esc(r.t.id)}" class="crow${on(r.t.id) ? ' me' : ''}" ${cardAttrs('t', r.t.id, 'ttr-' + r.t.id, T.id)}><td class="l rk"><span class="rkb r${Math.min(r.rank, 4)}">${r.rank}.</span></td><th class="l" scope="row"><span class="tn">${teamAv(r.t, 'sm')}<span class="nm">${esc(r.t.name)}</span></span></th><td>${r.s.o}</td><td>${r.s.v}</td>${ties ? `<td>${r.s.t}</td>` : ''}<td>${r.s.h}</td><td>${r.s.gf}:${r.s.ga}</td><td class="p">${fmt(r.pts)}</td></tr>`).join('') +
+    `</tbody></table></div></div>`;
+}
+function teamSquad(tid) {
+  const ps = playersOf(tid), rk = ranks('p');
+  return ps.length ? `<ul class="mlist" data-k="cd-ps">${ps.map(q => `<li data-k="cdp-${esc(q.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', q.id, 'cdp-' + q.id)}>${playerAv(q, 'sm')}<span class="itxt"><b>${esc(q.name)}</b><small>Pistepörssissä ${rk.by[q.id]}./${rk.n}</small></span><span class="mres">${fmt(points(q))} <small>p</small></span></button></li>`).join('')}</ul>` : `<p class="hint" data-k="cd-nop">Joukkueessa ei ole pelaajia.</p>`;
 }
 function teamSettings(t) {
   const id = esc(t.id), own = can('joukkue');
@@ -3969,6 +4298,7 @@ function teamSettings(t) {
 }
 function viewTeams() {
   const ts = teamsSorted(), sel = ui.team === '__new' ? '__new' : (ui.team && state.teams[ui.team] ? ui.team : '');
+  if (sel && sel !== '__new') return `<main id="v-joukkueet" class="stack pagev">${teamProfile(sel)}</main>`;
   return `<main id="v-joukkueet" class="stack"><section class="set">${pageHead('Joukkueet ja pelaajat', teamsSorted().length + (teamsSorted().length === 1 ? ' joukkue' : ' joukkuetta') + ' · ' + realPlayers().length + ' pelaajaa')}` +
     (sel === '' ? teamList(ts) : sel === '__new' ? newTeam() : teamProfile(sel)) + `</section></main>`;
 }
@@ -4203,19 +4533,30 @@ const playerMetaRank = (p, rk) => 'pistepörssissä ' + rk.by[p.id] + './' + rk.
 const chips = (p, rest) => `<div class="pmeta" data-k="pmeta">${badgeChip(p)}${teamChip(p)}${rest ? `<span class="muted">${rest}</span>` : ''}${teamMenu(p)}</div>`;
 const playerHead = p => `<div class="phead tcardh" style="--pc:${COLOR[playerColor(p)] || COLOR.grey}"><div class="pid">${playerAv(p, 'lg')}<div><h3 class="pfh">${esc(p.name)}</h3>${kindOf(p) === 'pelaaja' ? chips(p, playerMetaRank(p, ranks('p'))) : ''}</div></div>${kindOf(p) === 'katsoja' ? '' : `<span class="pts"><b data-bump>${fmt(points(p, 'p'))}</b> <small>p</small></span>`}</div>`;
 function playerProfile(pid) {
-  const p = Object.assign({ id: pid }, state.players[pid]), tabs = playerTabs(pid);
-  const tab = tabs.some(x => x[0] === ui.playerTab) ? ui.playerTab : 'kortti';
-  return backBtn('player', 'Pelaajat') + `<div class="tset pcard" data-k="pp-card">${playerHead(p)}` + (tabs.length > 1 ? subtabs('player', tabs, tab) : '') +
-    `<div class="pbody" data-k="ppb-${tab}">${tab === 'muokkaa' ? playerSettings(pid) : tab === 'tunnus' ? acctTab(pid) : playerCardBody(pid)}</div></div>`;
+  return backBtn('player', 'Pelaajat') + `<div class="tpage" data-k="pp-card">${playerPage(pid, 'player', ui.playerTab)}</div>`;
+}
+// A player's page as on the big results sites, like a team's: the way there, the picture on a white tile, the name with the
+// Pelaaja box and the team (for whoever may change them), a line of facts, and the sections as tabs.
+function playerPage(pid, scope, want, mine) {
+  const p = Object.assign({ id: pid }, state.players[pid]), k = kindOf(p), tabs = (mine ? [['kortti', 'Yleiskatsaus']] : playerTabs(pid)).map(x => x[0] === 'kortti' ? ['kortti', 'Yleiskatsaus'] : x);
+  const tab = tabs.some(x => x[0] === want) ? want : 'kortti', t = k === 'pelaaja' && state.teams[p.teamId] ? Object.assign({ id: p.teamId }, state.teams[p.teamId]) : null, rk = ranks('p');
+  const list = allowedTabs().indexOf('pelaajat') >= 0 ? 'pelaajat' : 'joukkueet';
+  const body = tab === 'muokkaa' ? playerSettings(pid) : tab === 'tunnus' ? acctTab(pid) : playerCardBody(pid) + (mine ? cardEdit('p', pid) : '');
+  return `<div class="fsh pl" data-k="${scope}-fsh"><div class="fsht">` +
+    `<p class="fsbc" data-k="${scope}-bc">${HOCKEY_I}<button type="button" class="bcl" data-act="tab" data-tab="${list}">Pelaajat</button>${t ? `<span class="bcs" aria-hidden="true">›</span>${isGuest() ? `<span>${esc(t.name)}</span>` : `<button type="button" class="bcl" ${cardAttrs('t', t.id, scope + '-bct')}>${esc(t.name)}</button>`}` : ''}</p>` +
+    `<div class="fshm"><span class="fslogo">${playerAv(p, 'lg')}</span><div class="fshn"><h3 class="fsname">${esc(p.name)}</h3>${k === 'pelaaja' ? chips(p, '') : ''}` +
+    `<p class="fsinfo">${k === 'pelaaja' ? `<span>Pistepörssissä: <b>${rk.by[pid]}./${rk.n}</b></span><span>Pisteet: <b data-bump>${fmt(points(p, 'p'))}</b></span>` : '<span>Käyttäjä, ei mukana pistepörssissä</span>'}</p></div></div></div>` +
+    (tabs.length > 1 ? secTabs(scope, tabs, tab, 'Pelaajan osiot') : '') + `</div><div class="pbody fsbody" data-k="${scope}-pb-${tab}">${body}</div>`;
 }
 function viewPlayers() {
   const ts = teamsSorted(), sel = ui.player === '__new' ? '__new' : (ui.player && state.players[ui.player] ? ui.player : '');
+  if (sel && sel !== '__new') return `<main id="v-pelaajat" class="stack pagev">${playerProfile(sel)}</main>`;
   return `<main id="v-pelaajat" class="stack"><section class="set">${pageHead('Pelaajat', realPlayers().length + (realPlayers().length === 1 ? ' pelaaja' : ' pelaajaa'))}` +
     (sel === '' ? playerList() : sel === '__new' ? newProfile(ts) : playerProfile(sel)) + `</section></main>`;
 }
 /* ----- cards: a team's or a profile's page, opened by pressing a name in a scoring table. Anyone who sees the table may open one. ----- */
 // The name in a table row is a button, and the whole row answers a press too. `cb` names the button, so focus can return to it.
-const cardAttrs = (k, id, cb) => `data-act="card" data-kind="${k}" data-id="${esc(id)}" data-cb="${esc(cb)}"`;
+const cardAttrs = (k, id, cb, tour) => `data-act="card" data-kind="${k}" data-id="${esc(id)}" data-cb="${esc(cb)}"${tour ? ` data-tour="${esc(tour)}"` : ''}`;
 const cardName = (k, o, cb, small) => { const inner = `<span class="tn">${k === 't' ? teamAv(o, 'sm') : playerAv(o, 'sm')}<span><span class="nm">${esc(o.name)}</span>${small ? `<small>${small}</small>` : ''}</span></span>`; return isGuest() ? `<span class="cardb">${inner}</span>` : `<button type="button" class="cardb" ${cardAttrs(k, o.id, cb)}>${inner}</button>`; };
 const cardObj = c => { const o = c && (c.k === 't' ? state.teams[c.id] : c.k === 'tr' ? state.tournaments[c.id] : state.players[c.id]); return o ? Object.assign({ id: c.id }, o) : null; };
 // The card on top. Cards opened from cards stack up, and Takaisin walks back through them; a card whose team or profile was removed drops out.
@@ -4308,10 +4649,13 @@ function playerRecord(pid) {
 // The team's name, picture and points at the top of its card, also on its page in Joukkueet.
 const teamHead = t => `<div class="phead tcardh team" style="--pc:${COLOR[t.color] || COLOR.grey}"><div class="pid">${teamAv(t, 'lg')}<div><h3 class="pfh">${esc(t.name)}</h3><span class="muted">${teamMeta(t, ranks('t'))}</span></div></div><span class="pts"><b data-bump>${fmt(teamTotal(t))}</b> <small>p</small></span></div>`;
 function teamCardBody(tid) {
-  const t = cardObj({ k: 't', id: tid }), x = allStats().teams[tid] || { o: 0, v: 0, t: 0, h: 0, gf: 0, ga: 0 }, ps = playersOf(tid), rk = ranks('p');
-  return kpiRow({ o: x.o, v: x.v, t: x.t, h: x.h, g: x.gf }, [x.ga, 'Päästetyt']) + teamTrophies(tid) +
-    `<h3 class="sub sect" data-k="cd-h1">Pelaajat</h3>` + (ps.length ? `<ul class="mlist" data-k="cd-ps">${ps.map(q => `<li data-k="cdp-${esc(q.id)}"><button type="button" class="lrowb crd" ${cardAttrs('p', q.id, 'cdp-' + q.id)}>${playerAv(q, 'sm')}<span class="itxt"><b>${esc(q.name)}</b><small>Pistepörssissä ${rk.by[q.id]}./${rk.n}</small></span><span class="mres">${fmt(points(q))} <small>p</small></span></button></li>`).join('')}</ul>` : `<p class="hint" data-k="cd-nop">Joukkueessa ei ole pelaajia.</p>`) +
-    `<h3 class="sub sect" data-k="cd-h2">Ottelut</h3>${teamMatchList(tid)}` +
+  const t = cardObj({ k: 't', id: tid }), x = allStats().teams[tid] || { o: 0, v: 0, t: 0, h: 0, gf: 0, ga: 0 };
+  const all = teamMatches(tid), last = all.filter(y => mStatus(y.m) === 'done').slice(0, 5).reverse(), next = all.filter(y => mStatus(y.m) !== 'done').sort((a, b) => (mStatus(b.m) === 'live') - (mStatus(a.m) === 'live'))[0];
+  const form = last.map(({ m, s }) => { const us = s === 'h' ? m.hs : m.as, them = s === 'h' ? m.as : m.hs, r = us > them ? ['v', 'V', 'Voitto'] : us < them ? ['h', 'H', 'Häviö'] : ['t', 'T', 'Tasapeli']; return `<span class="fmb ${r[0]}" title="${r[2]} ${us}–${them}">${r[1]}</span>`; }).join('');
+  return kpiRow({ o: x.o, v: x.v, t: x.t, h: x.h, g: x.gf }, [x.ga, 'Päästetyt']) +
+    (form ? `<div class="tform" data-k="cd-form"><span class="sub">Viimeiset ${last.length}</span><span class="fmrow">${form}</span></div>` : '') +
+    (next ? `<h3 class="sub sect" data-k="cd-hn">${mStatus(next.m) === 'live' ? 'Käynnissä nyt' : 'Seuraava ottelu'}</h3><ul class="mlist fsl-list" data-k="cd-next"><li class="fsli${mStatus(next.m) === 'live' ? ' on' : ''}" data-k="cdn-${esc(next.T.id)}-${esc(next.m.id)}">${goRow(next.T, next.m, fsInner(next.T, next.m, next.T.name))}</li></ul>` : '') +
+    teamTrophies(tid) +
     (state.config.stats.length ? `<h3 class="sub sect" data-k="cd-h3">Pisteet lajeittain</h3>${statTable('t', t, state.config.stats)}` : '') +
     `<p class="hint" data-k="cd-how">Luvut ovat kaikista turnauksista yhteensä.</p>`;
 }
@@ -4327,7 +4671,7 @@ function tourDay(T) {
   const rs = rounds(T), f = rs[rs.length - 1][0], m = f && T.matches[f];
   return m && m.endedAt ? new Date(m.endedAt).toLocaleDateString('fi-FI') : '';
 }
-const MEDAL = { 1: 'Voittaja', 2: 'Hopea, finaalin häviäjä', 3: 'Pronssi' };
+const MEDAL = { 1: 'Voittaja', 2: 'Hopea', 3: 'Pronssi' };
 function teamTrophies(tid) {
   const pods = teamPodiums(tid), wins = pods.filter(x => x.r === 1), other = pods.filter(x => x.r > 1);
   const row = x => `<li data-k="cdw-${esc(x.T.id)}"><button type="button" class="lrowb crd" ${cardAttrs('tr', x.T.id, 'cdw-' + x.T.id)} data-ctx="${esc(tid)}"><span class="medal m${x.r}" aria-hidden="true">${x.r}</span><span class="itxt"><b>${esc(x.T.name)}</b><small>${MEDAL[x.r]}${tourDay(x.T) ? ' · ' + tourDay(x.T) : ''}</small></span></button></li>`;
@@ -4404,9 +4748,7 @@ function tourCard(id, c) {
   return `<div class="tset pcard" data-k="cd-tr-${esc(id)}-${esc(tid)}">${head}<div class="pbody" data-k="cd-trb">${kpis}${players}${matches}<p class="hint" data-k="tc-how">Luvut ovat vain tästä turnauksesta.</p>${go}</div></div>`;
 }
 function teamCard(tid, c) {
-  const t = cardObj({ k: 't', id: tid }), full = can('joukkue') || can('kokoonpano'), tab = full && c && c.tab === 'muokkaa' ? 'muokkaa' : 'kortti';
-  return `<div class="tset pcard" data-k="cd-t-${esc(tid)}">${teamHead(t)}` + (full ? subtabs('card', [['kortti', 'Joukkuekortti'], ['muokkaa', 'Asetukset']], tab) : '') +
-    `<div class="pbody" data-k="cd-tb-${tab}">${tab === 'kortti' ? teamCardBody(tid) : teamSettings(t)}</div></div>`;
+  return `<div class="tpage" data-k="cd-t-${esc(tid)}">${teamPage(tid, 'card', c && c.tab, c && c.tour)}</div>`;
 }
 function playerCardBody(pid) {
   const p = cardObj({ k: 'p', id: pid }), k = kindOf(p), t = k === 'pelaaja' ? cardObj({ k: 't', id: p.teamId }) : null, st = state.config.stats.filter(s => appl(s, 'p')), trk = ranks('t');
@@ -4419,16 +4761,15 @@ function playerCardBody(pid) {
 // The card opened from a table, with the same Asetukset and Tunnus tabs as in Pelaajat for whoever may use them.
 // One's own card leads to one's own profile instead.
 function playerCard(pid, c) {
-  const p = cardObj({ k: 'p', id: pid }), tabs = playerTabs(pid), m = me(), mine = !!m && m.id === pid && m.id !== 'ADMIN', tab = !mine && c && tabs.some(x => x[0] === c.tab) ? c.tab : 'kortti';
-  return `<div class="tset pcard" data-k="cd-p-${esc(pid)}">${playerHead(p)}` + (tabs.length > 1 && !mine ? subtabs('card', tabs, tab) : '') +
-    `<div class="pbody" data-k="cd-pb-${tab}">${tab === 'muokkaa' ? playerSettings(pid) : tab === 'tunnus' ? acctTab(pid) : playerCardBody(pid) + (mine ? cardEdit('p', pid) : '')}</div></div>`;
+  const m = me(), mine = !!m && m.id === pid && m.id !== 'ADMIN';
+  return `<div class="tpage" data-k="cd-p-${esc(pid)}">${playerPage(pid, 'card', mine ? 'kortti' : c && c.tab, mine)}</div>`;
 }
+// A team's or a player's page, on its own: a way back and the page. A tournament card (a team's run in one tournament) keeps its frame.
 function viewCard(c) {
-  const st = ui.cards, prev = st.length > 1 ? cardObj(st[st.length - 2]) : null, o = cardObj(c);
-  const title = c.k === 't' ? 'Joukkuekortti' : c.k === 'tr' ? 'Turnauskortti' : kindOf(o) === 'pelaaja' ? 'Pelaajakortti' : 'Käyttäjäkortti';
-  return `<main id="v-kortti" class="stack"><section class="set"><h2 class="sec" data-k="cd-title">${title}</h2>` +
-    `<div data-k="back-card"><button class="btn back" id="card-back" data-act="card-back">${prev ? 'Takaisin: ' + esc(prev.name) : 'Takaisin'}</button></div>` +
-    (c.k === 't' ? teamCard(c.id, c) : c.k === 'tr' ? tourCard(c.id, c) : playerCard(c.id, c)) + `</section></main>`;
+  const st = ui.cards, prev = st.length > 1 ? cardObj(st[st.length - 2]) : null;
+  const back = `<div data-k="back-card"><button class="btn back" id="card-back" data-act="card-back">${prev ? 'Takaisin: ' + esc(prev.name) : 'Takaisin'}</button></div>`;
+  if (c.k === 'tr') return `<main id="v-kortti" class="stack"><section class="set"><h2 class="sec" data-k="cd-title">Turnauskortti</h2>${back}${tourCard(c.id, c)}</section></main>`;
+  return `<main id="v-kortti" class="stack pagev">${back}${c.k === 't' ? teamCard(c.id, c) : playerCard(c.id, c)}</main>`;
 }
 /* ----- tournaments: shared pieces ----- */
 function tourMeta(T) {
@@ -4607,7 +4948,8 @@ function matchTime(T, m) {
 // One match as a card. In the tournament's Valvomo (scope 'kirj') a running match also takes goals straight on its card: first the team, then the scorer and the assists.
 function matchCard(T, m, scope, os) {
   const tid = esc(T.id), mid = esc(m.id), st = mStatus(m), bye = isBye(m), h = sideInfo(T, m.home), a = sideInfo(T, m.away), d = `data-tour="${tid}" data-id="${mid}"`, kirj = scope === 'kirj';
-  const row = (x, side, n) => `<div class="mrow" data-k="mr-${side}">${sideAv(x)}<span class="mname${x.id ? '' : ' tbd'}">${esc(x.name)}</span>${bye || st === 'new' ? '' : `<b class="mnum" data-bump>${n}</b>`}</div>`;
+  const wl = side => st !== 'done' || m.hs === m.as ? '' : (side === 'h') === (m.hs > m.as) ? ' w' : ' l';
+  const row = (x, side, n) => `<div class="mrow${wl(side)}" data-k="mr-${side}">${sideAv(x)}<span class="mname${x.id ? '' : ' tbd'}">${esc(x.name)}</span>${bye || st === 'new' ? '' : `<b class="mnum" data-bump>${n}</b>`}</div>`;
   const scoring = kirj && (can('kirj') || ownAll(T.id, m.id)) && st === 'live' && !!h.team && !!a.team, open = scoring ? entryForm(T, m) : '';
   const entries = !scoring ? '' : open || goalButtons(T, m, 'mg', 'gn-' + m.id) + noteButtons(T, m, 'nn-' + m.id);
   const undoGoal = scoring && can('kmuok') && !open && (m.ev || []).some(e => e.k === 'g') ? twice('ug-' + m.id, 'undo-goal:' + T.id + '|' + m.id, 'Peru viimeisin maali') : '';
@@ -4692,12 +5034,13 @@ function goalForm(T, m) {
 }
 // The buttons that open the goal form. Someone who may report only his own goals gets one button, for the side he plays on.
 function goalButtons(T, m, key, pre) {
-  const h = sideInfo(T, m.home), a = sideInfo(T, m.away), d = `data-tour="${esc(T.id)}" data-id="${esc(m.id)}"`, until = goalWait(m), cool = until > nowMs();
+  const h = sideInfo(T, m.home), a = sideInfo(T, m.away), d = `data-tour="${esc(T.id)}" data-id="${esc(m.id)}"`, until = goalWait(m), brk = onBreak(m), cool = brk || until > nowMs();
   // for the wait between goals the buttons stay where they are, greyed out, and the time left is under them, so nothing jumps
   const own = !can('kirj') && myGoalScope() === 'own' ? mySide(T, m, me().id) : '';
   const b = (side, label) => `<button class="btn primary" id="${pre}-${side}" data-act="goal-new" ${d} data-side="${side}"${cool ? ` disabled aria-describedby="${pre}-cool"` : ''}>${label}</button>`;
   return (own ? `<div data-k="${key}">${b(own, 'Kirjaa oma maali')}</div>` : `<div class="rbtns" data-k="${key}">${b('h', 'Maali: ' + esc(h.name))}${b('a', 'Maali: ' + esc(a.name))}</div>`) +
-    (cool ? `<p class="hint cool" id="${pre}-cool" data-k="${key}-cool">Seuraavan maalin voi kirjata ${downClock(until)} päästä.</p>` : '');
+    (brk ? `<p class="hint cool" id="${pre}-cool" data-k="${key}-cool">Erätauko: maaleja ei voi kirjata tauon aikana. Tauko päättyy ${downClock(m.breakUntil)} päästä.</p>`
+      : cool ? `<p class="hint cool" id="${pre}-cool" data-k="${key}-cool">Seuraavan maalin voi kirjata ${downClock(until)} päästä.</p>` : '');
 }
 const goalNote = m => ui.goalNote === m.id && !can('kirj') ? `<p class="okmsg" role="status" data-k="g-note">Maali kirjattu. Jos siinä on virhe, pyydä korjaus joltakulta, jolla on Kirjaus-oikeus.</p>` : '';
 function matchRoster(T, m, side) {
@@ -4714,7 +5057,7 @@ function matchRoster(T, m, side) {
   // whoever records the results can bring in players who are not yet standing in on either side of this match
   // the players added to the tournament on their own can stand in too, for a team other than their own
   const staff = can('tuur') && x.id ? allPlayers().filter(q => standIn(T, m, q) && !on[q.id]).sort((p1, p2) => p1.name.localeCompare(p2.name, 'fi')) : [];
-  return `<div class="lteam" data-k="mro-${side}"><div class="rhead">${sideAv(x)}<span class="itxt"><b>${esc(x.name)}</b></span><span class="ipts">${side === 'a' ? m.as : m.hs}</span></div>` +
+  return `<div class="lteam" data-k="mro-${side}"><div class="rhead">${sideAv(x)}${x.team && !isGuest() ? `<button type="button" class="itxt cardb rhgo" ${cardAttrs('t', x.team.id, 'mro-' + side)}><b>${esc(x.name)}</b></button>` : `<span class="itxt"><b>${esc(x.name)}</b></span>`}<span class="ipts">${side === 'a' ? m.as : m.hs}</span></div>` +
     (rows.length ? `<div class="tscroll"><table class="tbl"><thead><tr><th class="l" scope="col">Pelaaja</th><th scope="col"><abbr title="Maalit">M</abbr></th><th scope="col"><abbr title="Syötöt">S</abbr></th><th scope="col"><abbr title="Pisteet">P</abbr></th></tr></thead><tbody>` +
         rows.map(r => `<tr data-k="mrp-${esc(r.id)}"><th class="l" scope="row"><span class="tn">${r.q ? playerAv(Object.assign({ id: r.id }, r.q), 'sm') : ''}<span>${esc(r.q ? r.q.name : 'Poistettu pelaaja')}${tag(r.id)}</span>${out(r.id)}</span></th><td>${r.G}</td><td>${r.A}</td><td class="b">${fmt(r.pts)}</td></tr>`).join('') + `</tbody></table></div>`
       : `<p class="hint">Ei pelaajia.</p>`) +
@@ -4779,13 +5122,30 @@ function logRows(list, where) {
 const logWait = () => ui.backend === 'db' && !ui.logsReady ? (ui.logsErr ? 'Lokia ei saatu ladattua. Lataa sivu uudelleen.' : 'Ladataan lokia…') : '';
 // The match's own banner at the top of its page, in the tournament banner's arena: the tournament and the match above, the two teams
 // with their badges on either side of the score, and under it when it starts, the clock while it runs or how it ended.
-function matchBanner(T, m, h, a, st, line) {
-  const side = (x, s) => `<div class="mbt mbt-${s}" data-k="mbt-${s}">${x.team ? teamAv(x.team, 'lg') : `<span class="av lg none" aria-hidden="true"></span>`}<b class="mbn">${esc(x.name)}</b></div>`;
+// The head of a match as on the big results sites: the way there on top, the two badges on white tiles with the names under them,
+// the date, the score large between them and its state under it; the match's sections as tabs at the bottom.
+function matchBanner(T, m, h, a, st, line, tabs) {
   const win = st === 'done' && m.hs !== m.as ? (m.hs > m.as ? 'h' : 'a') : '';
-  return `<section class="thero mban st-${st}${win ? ' win-' + win : ''}" data-k="mp-hero"><div class="thin">` +
-    `<p class="thk" data-k="mb-k">${st === 'live' ? '<span class="thdot" aria-hidden="true"></span>' : ''}${esc(T.name)} · ${esc(matchLabel(T, m))}${arenaBit(T, m)}</p>` +
-    `<div class="mbrow">${side(h, 'h')}<div class="mbs" aria-label="Tilanne ${m.hs}–${m.as}"><b data-bump>${m.hs}</b><i>–</i><b data-bump>${m.as}</b></div>${side(a, 'a')}</div>` +
-    (st === 'live' ? `<div class="mbst">${heroState(m)}</div>` : `<p class="hmc mbc" data-k="hmc">${line}</p>`) + `</div></section>`;
+  const side = (x, s) => { const inner = `<span class="fslogo">${x.team ? teamAv(x.team, 'lg') : `<span class="av lg none" aria-hidden="true"></span>`}</span><b class="fmn">${esc(x.name)}</b>`, cls = `fmt fmt-${s}${win ? (win === s ? ' w' : ' l') : ''}`;
+    return x.team && !isGuest() ? `<button type="button" class="${cls} fmgo" data-k="mbt-${s}" ${cardAttrs('t', x.team.id, 'mbt-' + s)} title="Avaa joukkueen sivu">${inner}</button>` : `<div class="${cls}" data-k="mbt-${s}">${inner}</div>`; };
+  const at = m.startedAt || (m._sh && m._sh.at) || 0, d = at ? new Date(at) : null;
+  // the date with the starting time; a coming match has its time in the line under the score, so only the day here
+  const when = d ? `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}` + (st === 'new' ? '' : ' ' + hm(at)) : '';
+  const sc = k => win ? (win === k ? ' class="w"' : ' class="l"') : '';
+  const score = st === 'new' ? `<div class="fms none" aria-label="Ei vielä alkanut"><i>–</i></div>` : `<div class="fms" aria-label="Tilanne ${m.hs}–${m.as}"><b data-bump${sc('h')}>${m.hs}</b><i>–</i><b data-bump${sc('a')}>${m.as}</b></div>`;
+  return `<section class="fsh fmh st-${st}" data-k="mp-hero"><div class="fsht">` +
+    `<p class="fsbc" data-k="mb-k">${HOCKEY_I}<button type="button" class="bcl" data-act="nav-tour" data-tour="${esc(T.id)}">${esc(T.name)}</button><span class="bcs" aria-hidden="true">›</span><span>${esc(matchLabel(T, m))}${arenaBit(T, m)}</span>${st === 'live' ? '<span class="chip on fmlive"><span class="thdot" aria-hidden="true"></span>Live</span>' : ''}</p>` +
+    `<div class="fmhrow">${side(h, 'h')}<div class="fmc">${when ? `<p class="fmd" data-k="mb-d">${when}</p>` : ''}${score}` +
+    (st === 'live' ? `<div class="mbst">${heroState(m)}</div>` : `<p class="hmc fmst" data-k="hmc">${line}</p>`) + `</div>${side(a, 'a')}</div></div>${tabs || ''}</section>`;
+}
+// Earlier meetings of the two teams in every tournament, newest first, with the count of wins.
+function matchH2H(T, m, h, a) {
+  const hs = teamMatches(h.team.id).filter(x => !(x.T.id === T.id && x.m.id === m.id) && mStatus(x.m) === 'done' && sideTeam(x.T, x.s === 'h' ? x.m.away : x.m.home) === a.team.id);
+  if (!hs.length) return `<p class="hint" data-k="h2h-none">Joukkueet eivät ole kohdanneet aiemmin.</p>`;
+  let wh = 0, wa = 0, tie = 0;
+  hs.forEach(({ m: x, s }) => { const us = s === 'h' ? x.hs : x.as, them = s === 'h' ? x.as : x.hs; if (us > them) wh++; else if (us < them) wa++; else tie++; });
+  return `<div class="h2hsum" data-k="h2h-sum"><div><b>${wh}</b><small>${esc(h.name)}</small></div><div><b>${tie}</b><small>Tasapelit</small></div><div><b>${wa}</b><small>${esc(a.name)}</small></div></div>` +
+    `<ul class="mlist fsl-list" data-k="h2h-l">${hs.map(({ T: X, m: x }) => `<li class="fsli" data-k="h2h-${esc(X.id)}-${esc(x.id)}">${goRow(X, x, fsInner(X, x, X.name))}</li>`).join('')}</ul>`;
 }
 function matchProfile(T, mid, scope) {
   const m = Object.assign({ id: mid }, T.matches[mid], shOf(T, mid)), st = mStatus(m), h = sideInfo(T, m.home), a = sideInfo(T, m.away), ctl = matchControls(T, m), canR = can('kirj'), canE = can('kmuok');
@@ -4797,8 +5157,12 @@ function matchProfile(T, mid, scope) {
   // The form they open comes up right under the controls; other kinds of points and a finished match keep their buttons in place.
   const bar = entry && st === 'live' && !open;
   const back = ui.vmBack ? `<button class="btn back" id="mp-back" data-act="vm-back">Takaisin valvomoon</button>` : `<button class="btn back" id="mp-back" data-act="close-match" data-scope="${scope}">Takaisin turnaukseen</button>`;
-  return `<div data-k="mp-back">${back}</div>` +
-    matchBanner(T, m, h, a, st, line) +
+  const tabs = [['ottelu', 'Ottelu']].concat(h.team && a.team ? [['h2h', 'Keskinäiset']] : []).concat(tourTeamRows(T, tourStats(T)).length ? [['taulukko', 'Sarjataulukko']] : []);
+  const tab = tabs.some(x => x[0] === ui.mpTab) ? ui.mpTab : 'ottelu';
+  const head = `<div data-k="mp-back">${back}</div>` + matchBanner(T, m, h, a, st, line, tabs.length > 1 ? secTabs('mp', tabs, tab, 'Ottelun osiot') : '');
+  if (tab === 'h2h') return head + `<div class="pbody" data-k="mp-h2h">${matchH2H(T, m, h, a)}</div>`;
+  if (tab === 'taulukko') return head + `<div class="pbody" data-k="mp-tb">${tourFsTable(T, [h.team && h.team.id, a.team && a.team.id])}</div>`;
+  return head +
     `<div class="mpgrid" data-k="mp-grid"><div class="mpmain" data-k="mp-main">` +
     (ctl ? `<div class="mcard" data-k="mp-ctl">${ctl}</div>` : '') +
     (entry ? (open || (bar ? '' : goalButtons(T, m, 'mp-goal', 'gn')) + (canR || ownAll(T.id, m.id) ? noteButtons(T, m, 'nn') : '') + goalNote(m)) : '') +
@@ -4817,14 +5181,6 @@ function matchReset(T, m) {
   return `<h3 class="sub sect" data-k="mp-rh">Nollaa ottelu</h3><p class="hint" data-k="mp-rhint">Poistaa maalit, merkinnät ja tuloksen. Ottelun voi pelata uudelleen.</p>` +
     (later.length ? `<p class="warnmsg" data-k="mp-rlater">Tämän ottelun tulos ratkaisi jo aloitetun jatko-ottelun (${later.map(x => esc(matchLabel(T, x))).join(', ')}). Nollaa tarvittaessa myös se.</p>` : '') +
     `<div class="rowbtns" data-k="mp-reset">${twice('mreset-' + m.id, 'reset-match:' + T.id + '|' + m.id, 'Nollaa ottelu', false, 'Vahvista nollaus')}</div>`;
-}
-// A finished tournament: the winner in a dark strip, and the silver and bronze under it. Each team opens its card.
-function tourWinner(T) {
-  const pod = tourPodium(T);
-  if (!pod || !pod.length) return '';
-  const team = id => cardObj({ k: 't', id }), first = team(pod[0].t);
-  return `<section class="hero twin" data-k="tu-win"><button type="button" class="hm" ${cardAttrs('t', first.id, 'tw-' + first.id)}><span class="hml">Turnauksen voittaja</span>${teamAv(first, 'lg')}<span class="hmw">${esc(first.name)}</span></button></section>` +
-    (pod.length > 1 ? `<ol class="mlist" data-k="tu-pod" aria-label="Mitalit">${pod.slice(1).map(x => { const t = team(x.t); return `<li data-k="tp-${x.r}-${esc(x.t)}"><button type="button" class="lrowb crd" ${cardAttrs('t', x.t, 'tp-' + x.t)}><span class="medal m${x.r}" aria-hidden="true">${x.r}</span>${teamAv(t, 'sm')}<span class="itxt"><b>${esc(t.name)}</b><small>${x.r === 2 ? 'Hopea, finaalin häviäjä' : 'Pronssi'}</small></span></button></li>`; }).join('')}</ol>` : '');
 }
 // The tournament in numbers, at the top of its Tulostaulu.
 function tourKpis(T) {
@@ -5103,6 +5459,10 @@ function tourHero(T, chip, mini) {
   const pct = ms.length ? Math.round(done / ms.length * 100) : 0, show = ids.slice(0, 10), more = ids.length - show.length;
   if (ui.vtEnter) { ui.vtEnter = false; ui.vtUntil = Date.now() + 800; }
   const enter = (ui.vtUntil || 0) > Date.now();
+  if (champ) {   // a finished tournament shows its champion on every section
+    return `<section class="lhead thero tdone st-done${enter ? ' enter' : ''}" data-k="lhead">${confetti(28, ['#e2b33c', '#f6d777', '#ffffff', COLOR[champ.color] || COLOR.grey])}<div class="thin">` +
+      champBits(T, pod) + (chip ? `<div class="thchip">${chip}</div>` : '') + `</div></section>`;
+  }
   return `<section class="lhead thero st-${st}${mini ? ' mini' : ''}${enter ? ' enter' : ''}" data-k="lhead">${champ ? confetti(28, ['#e2b33c', '#f6d777', '#ffffff', COLOR[champ.color] || COLOR.grey]) : ''}<div class="thin">` +
     `<p class="thk" data-k="th-k">${st === 'live' ? '<span class="thdot" aria-hidden="true"></span>' : champ ? TROPHY : ''}${esc(kick)}</p>` +
     `<h2 class="sec tht">${esc(T.name)}</h2>` +
@@ -5110,6 +5470,14 @@ function tourHero(T, chip, mini) {
     (ms.length ? `<div class="thprog" data-k="th-prog"><div class="thbar" role="progressbar" aria-label="Pelatut ottelut" aria-valuemin="0" aria-valuemax="${ms.length}" aria-valuenow="${done}"><i style="width:${pct}%"></i>${live ? `<i class="thlive" style="left:${pct}%;width:${Math.round(live / ms.length * 100)}%"></i>` : ''}</div>` +
       `<span class="muted thm">${tourMeta(T)}</span></div>` : `<span class="muted thm">${tourMeta(T)}</span>`) +
     (chip ? `<div class="thchip">${chip}</div>` : '') + `</div></section>`;
+}
+// A finished tournament's champion: the trophy, the winner's badge and name large, the tournament and its day, and the runner-up.
+function champBits(T, pod) {
+  const c1 = Object.assign({ id: pod[0].t }, state.teams[pod[0].t]), r2 = pod.find(x => x.r === 2), t2 = r2 && state.teams[r2.t] ? Object.assign({ id: r2.t }, state.teams[r2.t]) : null, day = tourDay(T);
+  return `<p class="thk" data-k="th-k">${TROPHY}Mestari</p>` +
+    `<button type="button" class="thchamp" data-k="th-champ" ${cardAttrs('t', c1.id, 'th-champ', T.id)}>${teamAv(c1, 'lg')}<b class="thcn">${esc(c1.name)}</b></button>` +
+    `<h2 class="sec tht tdn">${esc(T.name)}</h2>${day ? `<span class="thm tdd">${esc(day)}</span>` : ''}` +
+    (t2 ? `<button type="button" class="thsec" data-k="th-2" ${cardAttrs('t', t2.id, 'th-2', T.id)}><span class="medal m2" aria-label="2.">2</span>${teamAv(t2, 'sm')}<span>${esc(t2.name)}</span></button>` : '');
 }
 // A tab's title as a small arena banner, the same look as a tournament's.
 const pageHead = (title, sub, k) => `<div class="pgt" data-k="${k || 'pgt'}"><h2 class="sec">${esc(title)}</h2>${sub ? `<span class="muted">${esc(sub)}</span>` : ''}</div>`;
@@ -5153,8 +5521,8 @@ function tourPage(T, scope) {
     (tour && !edit && !open ? `<h3 class="sub sect" data-k="tu-sh">Esitys isolle näytölle</h3>${showLink(T, true)}` : '');
 }
 // The tournament's sections as one row of tabs that scrolls sideways on a phone, like the views at the top.
-function secTabs(scope, tabs, cur) {
-  return `<nav class="tabs stabs" data-k="sub-${scope}" aria-label="Turnauksen osiot"><div class="tabsx" data-k="sub-${scope}-x">${tabs.map(x => `<button class="stab" id="sub-${scope}-${x[0]}" data-act="subtab" data-scope="${scope}" data-tab="${x[0]}" aria-pressed="${x[0] === cur}">${x[1]}</button>`).join('')}</div></nav>`;
+function secTabs(scope, tabs, cur, label) {
+  return `<nav class="tabs stabs" data-k="sub-${scope}" aria-label="${label || 'Turnauksen osiot'}"><div class="tabsx" data-k="sub-${scope}-x">${tabs.map(x => `<button class="stab" id="sub-${scope}-${x[0]}" data-act="subtab" data-scope="${scope}" data-tab="${x[0]}" aria-pressed="${x[0] === cur}">${x[1]}</button>`).join('')}</div></nav>`;
 }
 // The viewer's own match and the running ones as one line each: who plays, the score and the clock. A line opens its match.
 function heroLines(T, mine, scope) {
@@ -5230,8 +5598,7 @@ function liveHero(T, skip, scope) {
       `${heroState(m)}</button>`;
   }).join('')}</section>`;
   if (skip) return '';
-  const win = tourWinner(T);
-  if (win) return win;
+  if (tourPodium(T)) return '';   // a finished tournament: its banner tells the winner
   const next = ms.filter(m => mStatus(m) === 'new' && !isBye(m)).sort((x, y) => (comeKey(x) - comeKey(y)) || byOrder(x, y))[0];
   if (next) return `<section class="hero" data-k="hero"><div class="hm"><span class="hml">Seuraavaksi${next.time ? ' klo ' + next.time : ''} · ${esc(matchLabel(T, next))}${arenaBit(T, next)}</span><span class="hmn">${esc(sideInfo(T, next.home).name)} – ${esc(sideInfo(T, next.away).name)}</span></div></section>`;
   return '';
@@ -5279,6 +5646,23 @@ function pauseSave(form) {
   ui.pzEdit = null; ui.pzErr = null;
   render();
 }
+// A row of pill buttons above a list, as on the big results sites: one of them on.
+const pills = (key, opts, cur) => `<div class="pills" role="group" data-k="pl-${key}">${opts.map(o => `<button type="button" class="pill" id="pl-${key}-${o[0]}" data-act="pill" data-key="${key}" data-v="${o[0]}" aria-pressed="${o[0] === cur}">${o[1]}</button>`).join('')}</div>`;
+// One match as on the results sites: the two teams one under the other with their badges, the score beside each, the time or the
+// state on the right; the winner of a played match in bold.
+function fsRow(T, m, scope, mine) {
+  const st = mStatus(m);
+  return `<li data-k="lt-${esc(m.id)}" class="fsli${mine ? ' mine' : ''}${st === 'live' ? ' on' : ''}">` + openRow(T, m, fsInner(T, m), scope) + `</li>`;
+}
+function fsInner(T, m, lead) {
+  const st = mStatus(m), h = sideInfo(T, m.home), a = sideInfo(T, m.away), win = st === 'done' && m.hs !== m.as ? (m.hs > m.as ? 'h' : 'a') : '';
+  const side = (x, k) => `<span class="fst${win === k ? ' w' : win ? ' l' : ''}">${x.team ? teamAv(x.team, 'sm') : '<span class="av sm none" aria-hidden="true"></span>'}<span class="fsn">${esc(x.name)}</span>${st === 'new' ? '' : `<b class="fss">${k === 'h' ? m.hs : m.as}</b>`}</span>`;
+  const d = m.startedAt ? new Date(m.startedAt) : m._sh ? new Date(m._sh.at) : null, day = d ? d.getDate() + '.' + (d.getMonth() + 1) + '.' : '';
+  const when = st === 'live' ? `<span class="fsw live">${m.pausedAt ? 'Keskeytetty' : onBreak(m) ? 'Erätauko' : mClock(m)}</span>`
+    : st === 'done' ? `<span class="fsw">${day}<small>Päättynyt</small></span>`
+    : `<span class="fsw">${m._sh ? `<span class="shf">${hm(m._sh.at)}</span><small><s>${esc(m.time)}</s></small>` : esc(m.time || '–')}</span>`;
+  return `<span class="fsm"><small class="fsl">${lead ? esc(lead) + ' · ' : ''}${esc(matchLabel(T, m))}${arenaBit(T, m)}</small>${side(h, 'h')}${side(a, 'a')}</span>${when}`;
+}
 function liveMatches(T, scope) {
   const ms = matchList(T).filter(m => !isBye(m)), rk = { new: 0, live: 1, done: 2 }, rs = rounds(T), lvl = {};
   const items = ms.concat(pauseItems(T));
@@ -5288,15 +5672,31 @@ function liveMatches(T, scope) {
   const at = m => m.pz ? 0 : lvl[m.id] === undefined ? rs.length : lvl[m.id], st = m => m.pz ? m.pst : mStatus(m), ea = m => m.pz ? m.pend : m.endedAt;
   items.sort((x, y) => (at(y) - at(x)) || (rk[st(x)] - rk[st(y)]) ||
     (st(x) === 'done' ? ea(y) - ea(x) : st(x) === 'live' ? y.startedAt - x.startedAt : comeKey(y) - comeKey(x)) || (x.pz || y.pz ? 0 : byOrder(y, x)));
-  const pid = ownPid();
-  return `<ul class="mlist" data-k="lt">${items.map(m => { if (m.pz) return pauseRow(T, m); const st = mStatus(m), mine = !!pid && !!playSide(T, m, pid); return `<li data-k="lt-${esc(m.id)}"${mine ? ' class="mine"' : ''}>${openRow(T, m, `<span class="mtime">${timeCell(m)}</span><span class="itxt">${pairHead(T, m)}${arenaTxt(T, m)}${st === 'done' ? ' · kesto ' + clock(playMs(m, m.endedAt)) : ''}${m._sh ? ` · <span class="shf">siirtynyt ${m._sh.min} min</span>` : ''}</small></span>${st === 'new' ? '' : `<span class="mres">${m.hs} – ${m.as}</span>`}${st === 'live' ? mChip(m) : ''}`, scope)}</li>`; }).join('')}</ul>`;
+  const pid = ownPid(), done = items.filter(m => (m.pz ? m.pst : mStatus(m)) === 'done'), rest = items.filter(m => (m.pz ? m.pst : mStatus(m)) !== 'done');
+  const view = ui.ltView === 'tulokset' || (ui.ltView !== 'ohjelma' && !rest.some(m => !m.pz)) ? 'tulokset' : 'ohjelma';
+  // the programme runs from the first coming match down; the results from the latest one down
+  const list = view === 'ohjelma' ? rest.slice().sort((x, y) => (rk[st(y)] - rk[st(x)]) || (st(x) === 'live' ? x.startedAt - y.startedAt : comeKey(x) - comeKey(y)) || (x.pz || y.pz ? 0 : byOrder(x, y)))
+    : done.slice().sort((x, y) => ea(y) - ea(x));
+  return pills('lt', [['ohjelma', 'Otteluohjelma'], ['tulokset', 'Tulokset']], view) +
+    (list.length ? `<ul class="mlist fsl-list" data-k="lt">${list.map(m => m.pz ? pauseRow(T, m) : fsRow(T, m, scope, !!pid && !!playSide(T, m, pid))).join('')}</ul>`
+      : `<p class="hint" data-k="lt-none">${view === 'ohjelma' ? 'Kaikki ottelut on pelattu.' : 'Yhtään ottelua ei ole vielä pelattu.'}</p>`);
 }
 // Joukkueet, a section of the tournament tab: the teams in the order of the tournament's standings. Pressing a team opens its players
 // below it, with their place in the tournament's scoring table and their points from its matches; pressing it again closes them.
+// The tournament's teams, and nothing else: each opens the team's page in this tournament. Whoever edits the tournament adds teams
+// here, and its rosters open behind Muokkaa kokoonpanoja.
 function liveTeams(T) {
-  const S = tourStats(T), tr = tourTeamRows(T, S), ed = can('tasetus') && !ui.readOnly;
-  const bar = ed ? `<div class="listhead" data-k="lj-head"><button class="btn primary" id="tj-open" data-act="tj-open" data-id="${esc(T.id)}">Lisää joukkueita</button></div>` +
-    (tr.length ? `<p class="hint" data-k="tpl-hint">Mukana <b>${tourPlayerIds(T).length}</b> pelaajaa. Avaa joukkue muokataksesi sen kokoonpanoa tähän turnaukseen.</p>` : '') : '';
+  const ed = can('tasetus') && !ui.readOnly;
+  if (ed && ui.ljEdit) return liveTeamsEdit(T);
+  const ts = tourTeamIds(T).filter(id => state.teams[id]).map(id => Object.assign({ id }, state.teams[id])).sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+  const bar = ed ? `<div class="listhead" data-k="lj-head"><button class="btn primary" id="tj-open" data-act="tj-open" data-id="${esc(T.id)}">Lisää joukkueita</button>${ts.length ? `<button class="btn" id="lj-edit" data-act="lj-edit">Muokkaa kokoonpanoja</button>` : ''}</div>` : '';
+  if (!ts.length) return bar ? bar + `<p class="hint" data-k="lj-none0">Turnauksessa ei ole vielä joukkueita.</p>` : '';
+  return bar + `<ul class="mlist tjl" data-k="lj">${ts.map(t => `<li data-k="lj-${esc(t.id)}"><button type="button" class="lrowb crd" ${cardAttrs('t', t.id, 'lj-' + t.id, T.id)}>${teamAv(t)}<span class="itxt"><b>${esc(t.name)}</b></span></button></li>`).join('')}</ul>`;
+}
+function liveTeamsEdit(T) {
+  const S = tourStats(T), tr = tourTeamRows(T, S), ed = true;
+  const bar = `<div class="listhead" data-k="lj-head"><button class="btn primary" id="lj-edit" data-act="lj-edit">Valmis</button><button class="btn" id="tj-open" data-act="tj-open" data-id="${esc(T.id)}">Lisää joukkueita</button></div>` +
+    (tr.length ? `<p class="hint" data-k="tpl-hint">Mukana <b>${tourPlayerIds(T).length}</b> pelaajaa. Avaa joukkue muokataksesi sen kokoonpanoa tähän turnaukseen.</p>` : '');
   if (!tr.length) return bar ? bar + `<p class="hint" data-k="lj-none0">Turnauksessa ei ole vielä joukkueita.</p>` : '';
   const by = {}, open = ui.liveOpen || (ui.liveOpen = {});
   tourPlayerRows(T, S).forEach(r => { by[r.q.id] = r; });
@@ -5380,7 +5780,7 @@ function nightOf(T, pid) {
 const NIGHT_MEDAL = { 1: 'Mestari', 2: 'Hopea', 3: 'Pronssi' };
 function nightCard(T, pid) {
   const q = state.players[pid], N = nightOf(T, pid);
-  if (!q || !N.n) return '';
+  if (!q || !N.n || tourState(T) !== 'done') return '';   // the summary of one's night only once the tournament is over
   const t = state.teams[N.tid], col = COLOR[t ? t.color : playerColor(q)] || COLOR.grey;
   const place = N.medal ? NIGHT_MEDAL[N.medal] : N.trank && N.done ? 'Sija ' + N.trank + './' + N.tn : '';
   const bm = N.best && N.best.m, best = bm ? `${esc(sideInfo(T, bm.home).name)} ${bm.hs}–${bm.as} ${esc(sideInfo(T, bm.away).name)}` : '';
@@ -5723,10 +6123,10 @@ function viewLog() {
 }
 // Settings: a menu on the left and the chosen part beside it, made for a computer. On a phone the menu is a list of its own,
 // and a part opens in its place with a way back.
-const SET_PARTS = [['tila', 'Tila'], ['pisteet', 'Pistelajit'], ['tunnukset', 'Käyttäjätunnukset'], ['kirjautuminen', 'Kirjautuminen'],
+const SET_PARTS = [['tila', 'Tila'], ['palaute', 'Palautteet'], ['pisteet', 'Pistelajit'], ['tunnukset', 'Käyttäjätunnukset'], ['kirjautuminen', 'Kirjautuminen'],
   ['yleiset', 'Yleiset'], ['varmuuskopiot', 'Varmuuskopiot'], ['loki', 'Loki'], ['nollaus', 'Tietojen nollaus']];
 // Yleiset is every admin's, and the parts of ADMIN_PARTS; Roolit and Tietojen nollaus only Valvomo's
-const setParts = () => SET_PARTS.filter(x => (x[0] !== 'varmuuskopiot' || NET) && (x[0] === 'yleiset' || (x[0] === 'tila' && can('admin')) || can('set:' + x[0])));
+const setParts = () => SET_PARTS.filter(x => (x[0] !== 'varmuuskopiot' || NET) && (x[0] === 'yleiset' || ((x[0] === 'tila' || x[0] === 'palaute') && can('admin')) || (x[0] !== 'palaute' && can('set:' + x[0]))));
 const partName = k => (SET_PARTS.find(x => x[0] === k) || [k, k])[1];
 // What the Admin role gives, in a few words.
 function adminSummary() {
@@ -5738,6 +6138,7 @@ const accountList = () => Object.keys(state.users).filter(id => id !== 'ADMIN' &
 function setSub(k) {
   const n = (x, one, many) => x + ' ' + (x === 1 ? one : many);
   if (k === 'tila') { const live = toursSorted().reduce((x, T) => x + matchList(T).filter(m => mStatus(m) === 'live').length, 0); return n(Object.keys(state.tournaments).length, 'turnaus', 'turnausta') + (live ? ' · ' + live + ' käynnissä' : ''); }
+  if (k === 'palaute') return fbkReader() && (ui.backend !== 'db' || ui.fbkReady) ? (fbkNew() ? n(fbkNew(), 'uusi', 'uutta') : 'Ei uusia') : 'Käyttäjien palautteet';
   if (k === 'pisteet') return n(state.config.stats.length, 'pistelaji', 'pistelajia');
   if (k === 'roolit') return n(state.config.roles.length + 1, 'rooli', 'roolia');   // with Admin
   if (k === 'tunnukset') return n(accountList().length, 'tunnus', 'tunnusta');
@@ -5752,7 +6153,7 @@ function viewSettings() {
   const nav = `<nav class="setnav" aria-label="Ylläpito" data-k="set-nav"><h2 class="sec" data-k="setn-h">Ylläpito</h2><ul class="setm" data-k="setm">` +
     parts.map(x => `<li data-k="setm-${x[0]}"><button class="setmi${x[0] === 'nollaus' ? ' dz' : ''}" id="setm-${x[0]}" data-act="setview" data-v="${x[0]}"${x[0] === show ? ' aria-current="page"' : ''}><b>${x[1]}</b><small>${esc(setSub(x[0]))}</small></button></li>`).join('') + `</ul>` +
     ((hid => hid.length ? `<p class="hint" data-k="setn-main">Muut asetukset näkyvät Valvomolle.</p>` : '')(SET_PARTS.filter(x => (x[0] !== 'varmuuskopiot' || NET) && !parts.some(y => y[0] === x[0])).map(x => x[1]))) + `</nav>`;
-  const body = show === 'tila' ? viewControl().replace(/^<main id="v-valvomo" class="stack vmwrap">/, '<div class="stack vmwrap" data-k="vm-in">').replace(/<\/main>$/, '</div>') : show === 'roolit' ? rolesPart() : show === 'tunnukset' ? accountsPart() : show === 'kirjautuminen' ? loginPart() : show === 'yleiset' ? generalPart()
+  const body = show === 'tila' ? viewControl().replace(/^<main id="v-valvomo" class="stack vmwrap">/, '<div class="stack vmwrap" data-k="vm-in">').replace(/<\/main>$/, '</div>') : show === 'palaute' ? feedbackPart() : show === 'roolit' ? rolesPart() : show === 'tunnukset' ? accountsPart() : show === 'kirjautuminen' ? loginPart() : show === 'yleiset' ? generalPart()
     : show === 'varmuuskopiot' ? `<section class="set" data-k="bk-part"><h2 class="sec">Varmuuskopiot</h2>${backupBlock()}</section>` : show === 'loki' ? viewLog() : show === 'nollaus' ? resetPart() : show === 'pisteet' ? statsPart() : generalPart();
   return `<main id="v-asetukset" class="setw${cur ? ' open' : ''}">` + nav +
     `<div class="setc stack" data-k="setc-${show}"><div class="setback" data-k="set-back"><button class="btn sm" id="set-back" data-act="setview" data-v="">‹ Ylläpito</button></div>${body}</div></main>`;
@@ -5887,26 +6288,108 @@ function saveAd(form) {
   let link = val('adl-' + i);
   if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
   if (link && !/^https?:\/\/[^\s"'<>]+$/.test(link)) { ui.adErr = 'Linkki ei ole kelvollinen nettiosoite.'; render(); return; }
-  a[i] = { title: val('adt-' + i).slice(0, 60), text: val('adx-' + i).slice(0, 400), link: link.slice(0, 300), hidden: a[i].hidden };
+  const kind = val('adk-' + i) === 'palaute' ? 'palaute' : '';
+  a[i] = { title: val('adt-' + i).slice(0, 60), text: val('adx-' + i).slice(0, 400), link: kind ? '' : link.slice(0, 300), hidden: a[i].hidden, kind };
   state.config.ads = a; persistConf(['ads']); ui.adEdit = null; ui.adErr = null; render();
 }
 function adSlot(i, cls) {
   const a = normAds(state.config.ads)[i], adm = can('admin'), id = 'ad-' + i;
   if (ui.adEdit === i && adm) {
     return `<form class="tset ad edit ${cls || ''}" data-k="${id}" data-form="ad-save" data-i="${i}" novalidate><h3 class="sub" data-k="${id}-h">Mainospaikka ${i + 1}</h3>` +
-      `<label class="f"><span>Otsikko</span><input id="adt-${i}" data-free maxlength="60" value="${esc(a.title)}" autocomplete="off"></label>` +
+      `<label class="f"><span>Sisältö</span><select id="adk-${i}" data-free><option value=""${a.kind ? '' : ' selected'}>Mainos tai tiedote</option><option value="palaute"${a.kind ? ' selected' : ''}>Palautelaatikko</option></select></label>` +
+      `<label class="f"><span>Otsikko</span><input id="adt-${i}" data-free maxlength="60" value="${esc(a.title)}" placeholder="${a.kind ? FBK_TITLE : ''}" autocomplete="off"></label>` +
       `<label class="f"><span>Teksti</span><textarea id="adx-${i}" data-free maxlength="400" rows="3">${esc(a.text)}</textarea></label>` +
+      `<p class="hint" data-k="${id}-kh">Palautelaatikossa otsikko ja teksti ovat vapaaehtoisia, ja linkki jää pois. Palautteet luet Ylläpidon Palautteet-kohdasta.</p>` +
       `<label class="f"><span>Linkki (vapaaehtoinen)</span><input id="adl-${i}" data-free maxlength="300" inputmode="url" placeholder="https://" value="${esc(a.link)}" autocomplete="off"></label>` +
       (ui.adErr ? `<p class="err" role="alert" data-k="${id}-err">${esc(ui.adErr)}</p>` : '') +
-      `<div class="rowbtns"><button class="btn primary" type="submit" id="ads-${i}">Tallenna</button><button class="btn" type="button" id="adc-${i}" data-act="ad-cancel">Peru</button>${a.title || a.text ? `<button class="btn danger" type="button" id="adz-${i}" data-act="ad-clear" data-i="${i}">Tyhjennä paikka</button>` : ''}</div></form>`;
+      `<div class="rowbtns"><button class="btn primary" type="submit" id="ads-${i}">Tallenna</button><button class="btn" type="button" id="adc-${i}" data-act="ad-cancel">Peru</button>${a.title || a.text || a.kind ? `<button class="btn danger" type="button" id="adz-${i}" data-act="ad-clear" data-i="${i}">Tyhjennä paikka</button>` : ''}</div></form>`;
   }
   if (a.hidden && !adm) return '';   // hidden from everyone but the admins
-  const edit = adm ? `<div class="adbtns" data-k="${id}-b"><button class="btn sm adedit" id="ade-${i}" data-act="ad-edit" data-i="${i}">${a.title || a.text ? 'Muokkaa' : 'Lisää sisältö'}</button>` +
+  const edit = adm ? `<div class="adbtns" data-k="${id}-b"><button class="btn sm adedit" id="ade-${i}" data-act="ad-edit" data-i="${i}">${a.title || a.text || a.kind ? 'Muokkaa' : 'Lisää sisältö'}</button>` +
     `<button class="btn sm" id="adv-${i}" data-act="ad-vis" data-i="${i}">${a.hidden ? 'Näytä kaikille' : 'Piilota muilta'}</button></div>` : '';
   const hid = a.hidden ? ' hid' : '', tag = a.hidden ? `<span class="adhid" data-k="${id}-hid">Piilotettu muilta, näkyy vain adminille</span>` : '';
+  if (a.kind === 'palaute') return fbkBox(i, a, cls, tag, hid, edit);
   if (!a.title && !a.text) return `<section class="ad empty${hid} ${cls || ''}" data-k="${id}" aria-label="Vapaa mainospaikka">${tag}<span class="adtag">Mainospaikka</span><b>Tämä paikka on vapaana</b>${edit}</section>`;
   return `<section class="ad full${hid} ${cls || ''}" data-k="${id}">${tag}${a.title ? `<h3 class="adh">${esc(a.title)}</h3>` : ''}${a.text ? `<p class="adp">${esc(a.text)}</p>` : ''}` +
     (a.link ? `<a class="btn sm adlink" id="adg-${i}" href="${esc(a.link)}" target="_blank" rel="noopener noreferrer">Lue lisää</a>` : '') + edit + `</section>`;
+}
+/* ----- Palaute: anyone signed in leaves a note from a feedback box on the front page; the admins read them in Ylläpito → Palautteet ----- */
+const FBK_TITLE = 'Anna palautetta';
+const FBK_KINDS = [['idea', 'Idea'], ['vika', 'Vika'], ['muu', 'Muu']];
+const fbkKind = k => (FBK_KINDS.find(x => x[0] === k) || FBK_KINDS[2])[1];
+function fbkBox(i, a, cls, tag, hid, edit) {
+  const u = me(), id = 'ad-' + i, k = FBK_KINDS.some(x => x[0] === ui.fbkKind) ? ui.fbkKind : 'idea', msg = ui.fbkMsg && ui.fbkMsg.i === i ? ui.fbkMsg : null;
+  const nNew = fbkReader() ? fbkNew() : 0;
+  const center = can('admin') ? `<button type="button" class="btn sm fbkgo" id="fbk-go-${i}" data-act="fbk-open">Palautekeskus${nNew ? ` <span class="nbadge">${nNew}</span>` : ''}</button>` : '';
+  const form = !u || u.guest || isGuest() ? `<p class="adp" data-k="${id}-in">Kirjaudu sisään, niin voit lähettää palautetta.</p>`
+    : `<form class="fbkf" data-k="${id}-f" data-form="fbk" data-i="${i}" novalidate>` +
+      `<div class="pills fbkk" role="group" aria-label="Palautteen laji" data-k="${id}-k">${FBK_KINDS.map(x => `<button type="button" class="pill" id="fbk-k${i}-${x[0]}" data-act="fbk-kind" data-v="${x[0]}" aria-pressed="${x[0] === k}">${x[1]}</button>`).join('')}</div>` +
+      `<label class="f"><span class="vh">Palaute</span><textarea id="fbk-t-${i}" data-free maxlength="1000" rows="3" placeholder="${k === 'vika' ? 'Mikä ei toiminut? Missä kohtaa ja mitä teit?' : k === 'idea' ? 'Mitä toivoisit sivulle?' : 'Kirjoita palautteesi'}"></textarea></label>` +
+      `<div class="fbkrow" data-k="${id}-r"><label class="chk"><input type="checkbox" id="fbk-anon-${i}" data-free> Lähetä nimettömänä</label><button type="submit" class="btn primary" id="fbk-send-${i}">Lähetä</button></div>` +
+      (msg ? `<p class="${msg.ok ? 'okmsg' : 'err'}" role="status" data-k="${id}-m">${esc(msg.text)}</p>` : '') + `</form>`;
+  return `<section class="ad full fbk${hid} ${cls || ''}" data-k="${id}">${tag}<div class="fbkhd" data-k="${id}-hd"><h3 class="adh">${esc(a.title || FBK_TITLE)}</h3>${center}</div>` +
+    `<p class="adp">${esc(a.text || 'Kerro, mikä toimii ja mikä ei. Palaute menee sivun ylläpidolle.')}</p>` + form + edit + `</section>`;
+}
+const LS_FBK = 'anarit.palaute';
+let fbk = {};            // feedback id -> { t text, k kind, pid, n name ('' when sent without a name), at, done }
+let fbkSub = null;       // the live listener while an admin who may read them is signed in
+function normFbk(x) {
+  if (!x || typeof x !== 'object' || !posInt(x.at)) return null;
+  return { t: String(x.t || '').slice(0, 1000), k: FBK_KINDS.some(y => y[0] === x.k) ? x.k : 'muu', pid: String(x.pid || '').slice(0, 40), n: String(x.n || '').slice(0, 40), at: posInt(x.at), done: x.done === true };
+}
+// On the site only an admin signed in with Google may read them; inside Claude and on this computer every admin.
+const fbkReader = () => can('admin') && (NET ? !!ui.fb.user && ui.fb.lvl === 'admin' : true);
+const fbkNew = () => Object.keys(fbk).filter(id => !fbk[id].done).length;
+function readLocalFbk() {
+  fbk = {};
+  try { const raw = JSON.parse(lsGet(LS_FBK) || '{}'); for (const k in raw) { const v = normFbk(raw[k]); if (v) fbk[k] = v; } } catch (e) { /* none yet */ }
+}
+function needFbk() {
+  if (fbkSub || !db) return;
+  fbkSub = true;
+  const off = db.collection('feedback').onSnapshot(snap => {
+    const next = {};
+    for (const d of snap.docs) { const v = normFbk(d.data()); if (v) next[d.id] = v; }
+    fbk = next; ui.fbkReady = true; render();
+  }, () => { ui.fbkErr = true; render(); });
+  if (fbkSub === true) fbkSub = typeof off === 'function' ? off : true;
+}
+// Signed out, or someone else signed in: the list is let go, and taken up again when an admin who may read it is back.
+function dropFbk() {
+  try { if (typeof fbkSub === 'function') fbkSub(); } catch (e) { /* already gone */ }
+  fbkSub = null; fbk = {}; ui.fbkReady = false; ui.fbkErr = false;
+}
+function sendFeedback(f) {
+  const u = me(), i = +f.dataset.i, ta = f.querySelector('textarea'), anon = f.querySelector('input[type="checkbox"]');
+  if (!u || u.guest || !ta) return;
+  const text = String(ta.value || '').trim().slice(0, 1000), now = nowMs();
+  const say = (ok, t) => { ui.fbkMsg = { i, ok, text: t }; render(); };
+  if (text.length < 2) { say(false, 'Kirjoita palaute ensin.'); return; }
+  if (ui.fbkAt && now - ui.fbkAt < 20000) { say(false, 'Odota hetki ennen seuraavaa palautetta.'); return; }
+  const id = now.toString(36) + uid().slice(0, 6), nameless = !!(anon && anon.checked);
+  const e = { t: text, k: FBK_KINDS.some(x => x[0] === ui.fbkKind) ? ui.fbkKind : 'idea', pid: nameless ? '' : String(u.id).slice(0, 40), n: nameless ? '' : String(u.name).slice(0, 40), at: now, done: false };
+  ui.fbkAt = now;
+  const sent = () => { ta.value = ''; if (anon) anon.checked = false; say(true, 'Kiitos! Palaute meni perille.'); };
+  if (ui.backend !== 'db') { fbk[id] = e; lsSet(LS_FBK, JSON.stringify(fbk)); sent(); return; }
+  db.doc('feedback/' + id).set(e).then(sent, () => { ui.fbkAt = 0; say(false, 'Palautetta ei saatu lähetettyä. Yritä uudelleen.'); });
+}
+function fbkWrite(id, gone) {
+  if (ui.backend !== 'db') { lsSet(LS_FBK, JSON.stringify(fbk)); return; }
+  (gone ? db.doc('feedback/' + id).delete() : db.doc('feedback/' + id).update({ done: !!(fbk[id] && fbk[id].done) })).catch(() => { ui.fbkErr2 = true; render(); });
+}
+function feedbackPart() {
+  const head = `<section class="set" data-k="fk-part"><h2 class="sec">Palautteet</h2><p class="hint" data-k="fk-h">Käyttäjät lähettävät palautetta etusivun palautelaatikosta. Laatikon saat etusivulle mainospaikasta: Lisää sisältö → Sisältö: Palautelaatikko.</p>`;
+  if (!fbkReader()) return head + `<p class="hint" data-k="fk-no">Palautteet näkyvät sivustolla vain Google-tilillä kirjautuneelle adminille.</p></section>`;
+  if (ui.backend === 'db' && !ui.fbkReady) return head + `<p class="hint" data-k="fk-wait">${ui.fbkErr ? 'Palautteita ei saatu ladattua. Lataa sivu uudelleen.' : 'Ladataan palautteita…'}</p></section>`;
+  const all = Object.keys(fbk).map(id => Object.assign({ id }, fbk[id])).sort((a, b) => b.at - a.at), nNew = all.filter(x => !x.done).length;
+  const f = ['uudet', 'kasitellyt', 'kaikki'].indexOf(ui.fbkF) >= 0 ? ui.fbkF : 'uudet';
+  const list = all.filter(x => f === 'kaikki' || (f === 'uudet' ? !x.done : x.done));
+  const seg = `<div class="seg wide kf" role="group" aria-label="Näytettävät palautteet" data-k="fk-f">${[['uudet', 'Uudet', nNew], ['kasitellyt', 'Käsitellyt', all.length - nNew], ['kaikki', 'Kaikki', all.length]].map(x => `<button id="fkf-${x[0]}" data-act="fbk-filter" data-f="${x[0]}" aria-pressed="${f === x[0]}">${x[1]}<span class="kn">${x[2]}</span></button>`).join('')}</div>`;
+  const when = at => { const d = new Date(at); return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear() + ' klo ' + hm(at); };
+  const row = x => `<li class="fk${x.done ? ' done' : ''}" data-k="fk-${esc(x.id)}"><div class="fkh"><span class="fkk k-${x.k}">${fbkKind(x.k)}</span><b>${esc(x.n || 'Nimetön')}</b><small>${when(x.at)}</small></div>` +
+    `<p class="fkt">${esc(x.t)}</p><div class="rowbtns" data-k="fkb-${esc(x.id)}"><button type="button" class="btn sm" id="fkd-${esc(x.id)}" data-act="fbk-done" data-id="${esc(x.id)}">${x.done ? 'Palauta uudeksi' : 'Merkitse käsitellyksi'}</button>${twice('fkx-' + x.id, 'fbk-del:' + x.id, 'Poista', false, 'Vahvista poisto')}</div></li>`;
+  return head + seg + (ui.fbkErr2 ? `<p class="err" role="alert" data-k="fk-err">Muutos ei mennyt läpi. Lataa sivu uudelleen.</p>` : '') +
+    (list.length ? `<ul class="fklist" data-k="fk-l">${list.map(row).join('')}</ul>` : `<p class="hint" data-k="fk-none">${f === 'uudet' ? (all.length ? 'Ei uusia palautteita. Kaikki on käsitelty.' : 'Palautteita ei ole vielä tullut.') : f === 'kasitellyt' ? 'Ei vielä käsiteltyjä palautteita.' : 'Palautteita ei ole vielä tullut.'}</p>`) + `</section>`;
 }
 // The tournament the front page counts down to: one being played now, else the nearest start ahead, else the one marked to be played.
 function nextTour() {
@@ -5928,6 +6411,14 @@ const cdText = (ms, part) => { const x = cdParts(ms)[part]; return part === 'd' 
 const allTours = () => { const tabs = allowedTabs(); return !navOn(tabs) && tabs.indexOf('turnaukset') >= 0 ? `<button class="btn" id="hcd-all" data-act="tab" data-tab="turnaukset">Kaikki turnaukset</button>` : ''; };
 function homeCountdown() {
   const T = nextTour(), tabs = allowedTabs();
+  // no tournament ahead: the champion of the latest one, until a new one is made
+  const L = !T && toursSorted().find(x => { const pd = tourPodium(x); return pd && pd[0] && state.teams[pd[0].t]; });
+  if (L) {
+    const pod = tourPodium(L), at = activeTour(), go = (at && at.id === L.id && tabs.indexOf('kaynnissa') >= 0) || tabs.indexOf('turnaukset') >= 0;
+    return `<section class="thero hhero tdone st-done" data-k="h-cd">${confetti(28, ['#e2b33c', '#f6d777', '#ffffff', COLOR[state.teams[pod[0].t].color] || COLOR.grey])}<div class="thin">` + champBits(L, pod) +
+      `<p class="thm" data-k="hcd-none">Seuraavaa turnausta ei ole vielä sovittu.</p>` +
+      (go || allTours() ? `<div class="rowbtns thgo" data-k="hcd-go">${go ? `<button class="btn primary" id="hcd-open" data-act="vm-tour" data-tour="${esc(L.id)}" data-sub="yhteenveto">Turnauksen yhteenveto</button>` : ''}${allTours()}</div>` : '') + `</div></section>`;
+  }
   if (!T) return `<section class="thero hhero st-new" data-k="h-cd"><div class="thin"><img class="hlogo" src="${LOGO_L}" alt="" width="160" height="160"><p class="thk">Seuraava turnaus</p><h2 class="sec tht">${esc(state.config.title || 'Änärit')}</h2><p class="thm" data-k="hcd-none">Tulevia turnauksia ei ole vielä.</p>${allTours() ? `<div class="rowbtns thgo">${allTours()}</div>` : ''}</div></section>`;
   const st = tourState(T), at = startMs(T), now = nowMs(), d = at ? new Date(at) : null, on = st === 'live' || st === 'on';
   const go = (T.id === (activeTour() || {}).id && tabs.indexOf('kaynnissa') >= 0) || tabs.indexOf('turnaukset') >= 0
@@ -5988,9 +6479,33 @@ function homeDuo() {
   const sw = `<div class="seg wide hsw" role="group" aria-label="Näytä" data-k="h-sw"><button id="hsw-pp" data-act="home-side" data-v="pp" aria-pressed="${side === 'pp'}">Pistepörssi</button><button id="hsw-st" data-act="home-side" data-v="st" aria-pressed="${side === 'st'}">Sarjataulukko</button></div>`;
   return `<div class="hduo side-${side}" data-k="h-top">${sw}<div class="hduo-p">${homeBoard()}</div><div class="hduo-s">${homeTable()}</div></div>`;
 }
+// A player's own part of the front page, first thing: who he is and how he does, his match now, next or last, and his team,
+// which opens the team's page.
+function homeMe() {
+  const pid = ownPid();
+  if (!pid) return '';
+  const p = Object.assign({ id: pid }, state.players[pid]), t = state.teams[p.teamId] ? Object.assign({ id: p.teamId }, state.teams[p.teamId]) : null;
+  const rk = ranks('p'), trk = ranks('t'), r = playerRecord(pid);
+  let cur = null, last = null;
+  toursSorted().forEach(T => {
+    const m = myMatch(T);
+    if (m && (!cur || (m.startedAt && !cur.m.startedAt))) cur = { T, m };
+    matchList(T).forEach(x => { if (!isBye(x) && x.endedAt && playSide(T, x, pid) && (!last || x.endedAt > last.m.endedAt)) last = { T, m: x }; });
+  });
+  const show = cur || last, head = !show ? '' : cur ? (cur.m.startedAt ? 'Pelisi on käynnissä' : 'Seuraava pelisi') : 'Viimeisin pelisi';
+  const game = show ? `<div class="hmem" data-k="hme-m"><p class="fsgh" data-k="hme-mh">${HOCKEY_I}<span>${head}</span></p><ul class="mlist fsl-list" data-k="hme-ml"><li class="fsli${cur && cur.m.startedAt ? ' on' : ''}" data-k="hme-${esc(show.T.id)}-${esc(show.m.id)}">` +
+    `<button type="button" class="lrowb" id="hme-go" data-act="go-match" data-tour="${esc(show.T.id)}" data-id="${esc(show.m.id)}">${fsInner(show.T, show.m, show.T.name)}</button></li></ul></div>` : '';
+  const team = t ? `<ul class="mlist" data-k="hme-t"><li data-k="hme-t-${esc(t.id)}"><button type="button" class="lrowb crd hmet" id="hme-team" ${cardAttrs('t', t.id, 'hme-team')}>${teamAv(t, 'sm')}<span class="itxt"><b>${esc(t.name)}</b><small>Joukkueesi · sarjataulukossa ${trk.by[t.id]}./${trk.n}</small></span><span class="mres">${fmt(teamTotal(t))} <small>p</small></span></button></li></ul>` : '';
+  return `<section class="fsh hme" data-k="h-me" style="--pc:${COLOR[playerColor(p)] || COLOR.grey}"><div class="fsht">` +
+    `<div class="fshm"><span class="fslogo">${playerAv(p, 'lg')}</span><div class="fshn"><h2 class="fsname">${esc(p.name)}</h2>` +
+    `<p class="fsinfo"><span>Joukkue: <b>${t ? esc(t.name) : p.sub ? 'varapelaaja' : 'ei joukkuetta'}</b></span><span>Pistepörssissä: <b>${rk.by[pid]}./${rk.n}</b></span><span>Pisteet: <b data-bump>${fmt(points(p, 'p'))}</b></span></p></div></div>` +
+    `<div class="hmek" data-k="hme-k">${kpi(r.o, 'Ottelut')}${kpi(r.v, 'Voitot')}${kpi(r.g, 'Maalit')}${kpi(r.a, 'Syötöt')}</div>` + game + team +
+    `<div class="rowbtns" data-k="hme-b"><button type="button" class="btn" id="hme-own" data-act="own-open">Oma profiili</button></div>` +
+    `</div></section>`;
+}
 function viewHome() {
   const low = adSlot(1) + adSlot(2);
-  return `<main id="v-etusivu" class="stack home">` + homeCountdown() + pushBox('home') + adSlot(0, 'wide') +
+  return `<main id="v-etusivu" class="stack home">` + homeMe() + homeCountdown() + pushBox('home') + adSlot(0, 'wide') +
     homeDuo() + homeChamps() +
     (low ? `<div class="hgrid ads2" data-k="h-ads">${low}</div>` : '') + `</main>`;
 }
@@ -6097,7 +6612,8 @@ function render() {
   renderNow();
 }
 function renderNow() {
-  statsCache = null;
+  statsCache = null; ownTeamMemo = null;
+  if (ui.pendRoute && ui.ready && me() && !me().guest) { const r = ui.pendRoute; ui.pendRoute = null; routeQuiet = true; applyRoute(r); }
   allShifts();
   try { pushSync(); } catch (e) { /* notifications are extra */ }
   markSeen();
@@ -6107,6 +6623,7 @@ function renderNow() {
   const fa = document.activeElement, fid = fa && fa !== document.body && app.contains(fa) ? fa.id : '';
   const tpl = document.createElement('div');
   tpl.innerHTML = safeView();
+  syncHash();
   morphKids(app, tpl);
   if (fid && (!document.activeElement || document.activeElement === document.body)) { const back = document.getElementById(fid); if (back && back.focus) try { back.focus({ preventScroll: true }); } catch (e) { /* gone */ } }
   if (ui.ready) painted = true;
@@ -6115,6 +6632,7 @@ function renderNow() {
   for (const id in ui.pend) { const el = document.getElementById(id); if (!el || !fieldDiffers(el)) { delete ui.pend[id]; gone = true; } }
   if (gone) { const t2 = document.createElement('div'); t2.innerHTML = safeView(); morphKids(app, t2); }
   if (ui.ready && ui.backend === 'db' && !logSub && (can('admin') || (vmAllowed() && logReader()))) needLogs();
+  if (ui.ready && ui.backend === 'db') { const r = fbkReader(); if (r && !fbkSub) needFbk(); else if (!r && fbkSub) dropFbk(); }
   if (showOn()) fitShow();
   const pics = app.querySelectorAll('img[data-ph]');
   for (let i = 0; i < pics.length; i++) { const want = photos[pics[i].getAttribute('data-ph')] || ''; if ((pics[i].getAttribute('src') || '') !== want) { if (want) pics[i].setAttribute('src', want); else pics[i].removeAttribute('src'); } }
@@ -6216,6 +6734,7 @@ app.addEventListener('submit', e => {
   const f = e.target;
   if (f.dataset.form === 'gate') { gateUnlock(f); return; }
   if (f.dataset.form === 'ad-save') { if (can('admin')) saveAd(f); return; }
+  if (f.dataset.form === 'fbk') { if (!ui.readOnly) sendFeedback(f); return; }
   if (f.dataset.form === 'pz-save') { if (can('ottelu') && !ui.readOnly) pauseSave(f); return; }
   if (f.dataset.form === 'view-pw') { if (can('set:kirjautuminen') && ui.fb.lvl === 'admin') saveViewPw(f); return; }
   if (f.dataset.form === 'login-name') { loginName(f); return; }
@@ -6237,12 +6756,18 @@ app.addEventListener('keydown', e => {
   if (isSaveField(el)) { e.preventDefault(); if (fieldDiffers(el)) saveFields(el.id); return; }
   el.blur();
 });
-window.addEventListener('hashchange', () => {
+// The address changed by the back button, a link or by hand: the page it names. Before the data is in, it waits.
+function onRoute() {
   const h = (location.hash || '').replace('#', '');
   if (enterShow(h)) { render(); return; }
-  if (h === 'tulostaulu' && !(ui.tab === 'etusivu' && ui.homeBoard)) { ui.tab = 'etusivu'; ui.homeBoard = true; ui.confirm = null; render(); return; }
-  if (TABS.includes(h) && (h !== ui.tab || (h === 'etusivu' && ui.homeBoard))) { ui.tab = h; ui.homeBoard = false; ui.confirm = null; render(); }
-});
+  if (!ui.ready || !me() || me().guest) { ui.pendRoute = h; return; }
+  if ('#' + routeNow() === '#' + h) return;
+  routeQuiet = true;
+  if (applyRoute(h)) { ui.confirm = null; ui.goal = null; ui.note = null; ui.navOpen = false; ui.navSub = false; }
+  render();
+}
+window.addEventListener('hashchange', onRoute);
+window.addEventListener('popstate', onRoute);
 // With no shared store the page lives in this browser only; another tab of it (the big-screen show) follows along through storage events.
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); a2hsEvt = e; render(); });
 window.addEventListener('appinstalled', () => { a2hsEvt = null; ui.a2hs = false; render(); });
