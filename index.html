@@ -441,8 +441,12 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .cdn.big small{color:var(--board-dim);margin-top:6px}
 .hhero .hcdnow{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;margin:0}
 .thlv{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;width:100%;max-width:460px}
-.thlv li{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;padding:9px 12px;border-radius:10px;background:rgba(5,9,14,.65);border:1px solid var(--board-line)}
+.thlv li{border-radius:10px;background:rgba(5,9,14,.65);border:1px solid var(--board-line)}
+.thlv li > *,.thlvb{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;padding:9px 12px}
+.thlvb{width:100%;border:0;background:none;color:inherit;font:inherit;cursor:pointer;border-radius:10px}
+.thlvb:hover{background:rgba(255,255,255,.05)}
 .thlv .thlvn:first-child{text-align:right}
+.thlvb .thlvn:last-child{text-align:left}
 .thlvn{font:700 16px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.03em;overflow-wrap:anywhere}
 .thlv b{font:800 26px/1 var(--f-display);color:var(--board-ink);font-variant-numeric:tabular-nums}
 .thgo{justify-content:center}
@@ -1074,6 +1078,27 @@ button.fmt:hover .fslogo{box-shadow:0 0 0 3px rgba(255,255,255,.25)}
 .hme .lrowb:has(> .av.own) .itxt > b::after{content:none}
 .hme .fsht{display:flex;flex-direction:column;gap:14px}
 .hme .fshm{margin-top:4px}
+.htop2{display:flex;flex-direction:column;gap:16px}
+@media (min-width:1000px){.htop2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:stretch}.htop2 > .hhero{height:100%}.htop2 .hhero .thin{justify-content:center;height:100%}}
+.hmego{width:100%;border:0;background:none;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer;align-items:center}
+.hmego .fsname{display:block}
+.hmego .fsinfo{display:flex}
+.hmego .chev{margin-left:auto}
+.hmego:hover .fsname{text-decoration:underline;text-underline-offset:4px}
+@media (max-width:560px){
+  .hme .fsht{gap:10px;padding:14px}
+  .hme .fslogo{width:60px;height:60px;border-radius:12px}
+  .hme .fslogo .av.lg{width:46px;height:46px;font-size:18px}
+  .hme .fsname{font-size:22px}
+  .hme .fsinfo{margin-top:4px;font-size:13px;gap:0 10px}
+  .hmek .kpi{padding:6px 4px}
+  .hmek .kpi b{font-size:19px}
+  .hmek .kpi small{font-size:11px}
+  .hme .fsgh{padding:6px 10px;font-size:12px}
+  .hhero.st-live .hlogo,.hhero.st-on .hlogo{width:64px;margin-bottom:0}
+  .hhero.st-live .thin,.hhero.st-on .thin{padding:20px 14px 18px;gap:12px}
+  .hhero.st-live .tht,.hhero.st-on .tht{font-size:clamp(34px,11vw,52px)}
+}
 .hmek{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .hmek .kpi{padding:10px 6px}
 .hmem{display:flex;flex-direction:column;gap:6px}
@@ -6309,6 +6334,7 @@ function adSlot(i, cls) {
     `<button class="btn sm" id="adv-${i}" data-act="ad-vis" data-i="${i}">${a.hidden ? 'Näytä kaikille' : 'Piilota muilta'}</button></div>` : '';
   const hid = a.hidden ? ' hid' : '', tag = a.hidden ? `<span class="adhid" data-k="${id}-hid">Piilotettu muilta, näkyy vain adminille</span>` : '';
   if (a.kind === 'palaute') return fbkBox(i, a, cls, tag, hid, edit);
+  if (!a.title && !a.text && !adm) return '';   // an empty slot is only the admins' to see and fill
   if (!a.title && !a.text) return `<section class="ad empty${hid} ${cls || ''}" data-k="${id}" aria-label="Vapaa mainospaikka">${tag}<span class="adtag">Mainospaikka</span><b>Tämä paikka on vapaana</b>${edit}</section>`;
   return `<section class="ad full${hid} ${cls || ''}" data-k="${id}">${tag}${a.title ? `<h3 class="adh">${esc(a.title)}</h3>` : ''}${a.text ? `<p class="adp">${esc(a.text)}</p>` : ''}` +
     (a.link ? `<a class="btn sm adlink" id="adg-${i}" href="${esc(a.link)}" target="_blank" rel="noopener noreferrer">Lue lisää</a>` : '') + edit + `</section>`;
@@ -6426,7 +6452,7 @@ function homeCountdown() {
   const when = d ? `${WDAY[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} klo ${String(d.getHours()).padStart(2, '0')}.${String(d.getMinutes()).padStart(2, '0')}` : '';
   const ms = matchList(T).filter(m => !isBye(m)), live = ms.filter(m => mStatus(m) === 'live'), ids = tourTeamIds(T), show = ids.slice(0, 10);
   let body;
-  if (on) body = `<div class="hcdnow" data-k="hcd-now">` + (live.length ? `<ul class="thlv" data-k="hcd-live">${live.slice(0, 4).map(m => `<li><span class="thlvn">${esc(sideInfo(T, m.home).name)}</span><b>${m.hs}–${m.as}</b><span class="thlvn">${esc(sideInfo(T, m.away).name)}</span></li>`).join('')}</ul>` : '') + `<span class="thm">${esc(tourMeta(T))}</span></div>`;
+  if (on) body = `<div class="hcdnow" data-k="hcd-now">` + (live.length ? `<ul class="thlv" data-k="hcd-live">${live.slice(0, 4).map(m => `<li><button type="button" class="thlvb" data-act="go-match" data-tour="${esc(T.id)}" data-id="${esc(m.id)}"><span class="thlvn">${esc(sideInfo(T, m.home).name)}</span><b>${m.hs}–${m.as}</b><span class="thlvn">${esc(sideInfo(T, m.away).name)}</span></button></li>`).join('')}</ul>` : '') + `<span class="thm">${esc(tourMeta(T))}</span></div>`;
   else if (at && at > now) body = `<div class="cdn big" data-k="hcd-cdn" role="timer" aria-label="Aikaa turnauksen alkuun">${[['d', 'päivää'], ['h', 'tuntia'], ['m', 'min'], ['s', 's']].map(x => `<div><b data-clk="cd" data-part="${x[0]}" data-ts="${at}">${cdText(at - now, x[0])}</b><small>${x[1]}</small></div>`).join('')}</div>`;
   else if (at) body = `<p class="thm" data-k="hcd-soon">Turnauksen piti alkaa ${esc(when)}. Alkaa pian.</p>`;
   else body = `<p class="thm" data-k="hcd-nodate">Alkamisaikaa ei ole vielä päätetty.</p>`;
@@ -6497,15 +6523,15 @@ function homeMe() {
     `<button type="button" class="lrowb" id="hme-go" data-act="go-match" data-tour="${esc(show.T.id)}" data-id="${esc(show.m.id)}">${fsInner(show.T, show.m, show.T.name)}</button></li></ul></div>` : '';
   const team = t ? `<ul class="mlist" data-k="hme-t"><li data-k="hme-t-${esc(t.id)}"><button type="button" class="lrowb crd hmet" id="hme-team" ${cardAttrs('t', t.id, 'hme-team')}>${teamAv(t, 'sm')}<span class="itxt"><b>${esc(t.name)}</b><small>Joukkueesi · sarjataulukossa ${trk.by[t.id]}./${trk.n}</small></span><span class="mres">${fmt(teamTotal(t))} <small>p</small></span></button></li></ul>` : '';
   return `<section class="fsh hme" data-k="h-me" style="--pc:${COLOR[playerColor(p)] || COLOR.grey}"><div class="fsht">` +
-    `<div class="fshm"><span class="fslogo">${playerAv(p, 'lg')}</span><div class="fshn"><h2 class="fsname">${esc(p.name)}</h2>` +
-    `<p class="fsinfo"><span>Joukkue: <b>${t ? esc(t.name) : p.sub ? 'varapelaaja' : 'ei joukkuetta'}</b></span><span>Pistepörssissä: <b>${rk.by[pid]}./${rk.n}</b></span><span>Pisteet: <b data-bump>${fmt(points(p, 'p'))}</b></span></p></div></div>` +
+    `<button type="button" class="fshm hmego" id="hme-own" data-act="own-open" title="Oma profiili"><span class="fslogo">${playerAv(p, 'lg')}</span><span class="fshn"><span class="fsname">${esc(p.name)}</span>` +
+    `<span class="fsinfo"><span>Joukkue: <b>${t ? esc(t.name) : p.sub ? 'varapelaaja' : 'ei joukkuetta'}</b></span><span>Pistepörssissä: <b>${rk.by[pid]}./${rk.n}</b></span><span>Pisteet: <b data-bump>${fmt(points(p, 'p'))}</b></span></span></span><span class="chev" aria-hidden="true"></span></button>` +
     `<div class="hmek" data-k="hme-k">${kpi(r.o, 'Ottelut')}${kpi(r.v, 'Voitot')}${kpi(r.g, 'Maalit')}${kpi(r.a, 'Syötöt')}</div>` + game + team +
-    `<div class="rowbtns" data-k="hme-b"><button type="button" class="btn" id="hme-own" data-act="own-open">Oma profiili</button></div>` +
     `</div></section>`;
 }
 function viewHome() {
   const low = adSlot(1) + adSlot(2);
-  return `<main id="v-etusivu" class="stack home">` + homeMe() + homeCountdown() + pushBox('home') + adSlot(0, 'wide') +
+  const mine = homeMe();   // on a wide screen one's own part and the tournament's banner sit side by side
+  return `<main id="v-etusivu" class="stack home">` + (mine ? `<div class="htop2" data-k="h-top2">${mine}${homeCountdown()}</div>` : homeCountdown()) + pushBox('home') + adSlot(0, 'wide') +
     homeDuo() + homeChamps() +
     (low ? `<div class="hgrid ads2" data-k="h-ads">${low}</div>` : '') + `</main>`;
 }
