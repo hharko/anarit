@@ -386,7 +386,7 @@ button.wzs{padding:0 12px;cursor:pointer}
 .thchamp{display:flex;flex-direction:column;align-items:center;gap:12px;border:0;background:none;padding:4px;color:inherit;font:inherit;cursor:pointer}
 .thchamp .av.lg{width:clamp(84px,22vw,118px);height:clamp(84px,22vw,118px);font-size:clamp(28px,7vw,40px);box-shadow:0 0 0 4px #e2b33c,0 0 34px rgba(226,179,60,.45)}
 .thcn{font:800 clamp(30px,8.5vw,52px)/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.8)}
-.thchamp:hover .thcn{text-decoration:underline;text-underline-offset:6px}
+@media (hover:hover){.thchamp:hover .thcn{text-decoration:underline;text-underline-offset:6px}}
 .tdone .tht.tdn{font-size:clamp(18px,4.6vw,24px);color:#dfe7ef;margin-top:2px}
 .tdone .tdd{margin-top:-6px}
 .thsec{display:inline-flex;align-items:center;gap:10px;margin-top:4px;padding:7px 16px 7px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(5,9,14,.74);color:#e8eef5;font:600 15px/1 var(--f-body);cursor:pointer}
@@ -490,7 +490,8 @@ button.hm:active{background:var(--board-line)}
 .hero.mine .hml b{color:var(--board-ink)}
 .hms.vs{font-size:22px}
 .hms.vs i{font-size:1em}
-.hmt.me{text-decoration:underline;text-decoration-color:var(--board-accent);text-decoration-thickness:3px;text-underline-offset:6px}
+.hmt.me{color:#f5c242}   /* one's own team: gold with a star, like everywhere else (a line under a name on two rows went twice) */
+.hmt.me::after{content:"\00a0★";font-size:.8em}
 .hmcd{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;margin-top:4px;padding:10px 12px 12px;border-radius:8px;background:var(--board-line)}
 .hmcl{font:800 14px/1.1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--board-accent)}
 .hmct{font:800 clamp(44px,13vw,68px)/1 var(--f-display);font-variant-numeric:tabular-nums;color:var(--board-ink)}
@@ -1061,14 +1062,14 @@ html.showing body::before{background-image:linear-gradient(180deg,rgba(5,9,14,.5
 .tjl .lrowb{padding:10px 12px}
 .tjl .itxt b{font-size:17px}
 .bcl{padding:0;border:0;background:none;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;min-height:0;border-radius:4px}
-.bcl:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+@media (hover:hover){.bcl:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}}
 .fsh.pl{overflow:visible}
 .fsh.pl .pmeta{margin:8px 0 0}
 button.fmt{border:0;background:none;padding:6px;border-radius:12px;color:inherit;font:inherit;cursor:pointer}
-button.fmt:hover .fmn{text-decoration:underline;text-underline-offset:4px}
+@media (hover:hover){button.fmt:hover .fmn{text-decoration:underline;text-underline-offset:4px}}
 button.fmt:hover .fslogo{box-shadow:0 0 0 3px rgba(255,255,255,.25)}
 .rhgo{border:0;background:none;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
-.rhgo:hover b{text-decoration:underline}
+@media (hover:hover){.rhgo:hover b{text-decoration:underline}}
 /* the player's own team, wherever it shows: a gold ring on the badge, a gold edge and tint on its row, a star after its name */
 .tbl tr:has(.av.own) > *{background:rgba(245,194,66,.1)}
 .tbl tr:has(.av.own) > :first-child{box-shadow:inset 3px 0 0 #f5c242}
@@ -1086,7 +1087,7 @@ button.fmt:hover .fslogo{box-shadow:0 0 0 3px rgba(255,255,255,.25)}
 .hmego .fsname{display:block}
 .hmego .fsinfo{display:flex}
 .hmego .chev{margin-left:auto}
-.hmego:hover .fsname{text-decoration:underline;text-underline-offset:4px}
+@media (hover:hover){.hmego:hover .fsname{text-decoration:underline;text-underline-offset:4px}}
 @media (max-width:560px){
   .hme .fsht{gap:10px;padding:14px}
   .hme .fslogo{width:60px;height:60px;border-radius:12px}
