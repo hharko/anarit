@@ -1153,6 +1153,16 @@ button.fmt:hover .fslogo{box-shadow:0 0 0 3px rgba(255,255,255,.25)}
 .tbl.fs tr.me td,.tbl.fs tr.me th{background:rgba(255,64,88,.14)}
 .tform{display:flex;align-items:center;gap:12px;margin:4px 0}
 .tform .sub{margin:0;padding:0;line-height:24px}
+.arsum{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+.arch{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:10px;background:var(--sheet);border:1px solid var(--line)}
+.arch b{font-weight:700}.arch small{color:var(--ink-2)}
+.arch.none{border-style:dashed}
+.arlist li.arow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;padding:10px 4px}
+.arlist .itxt{min-width:0;flex:1 1 220px}
+.arp{margin:0;padding:0;flex-wrap:wrap;overflow:visible}
+.arp .pill{padding:8px 12px;text-transform:none;letter-spacing:0;font-size:14px}
+.arp .pill:disabled{opacity:.45;cursor:default}
+.arow.lock .itxt{opacity:.6}
 .mhead .mar{margin-left:2px;color:var(--ink-2);font-weight:600;font-size:.85em;letter-spacing:.02em}
 .tpage > .pills{margin:0}
 @media (max-width:560px){.fsht{padding:14px 14px 16px}.fshm{gap:14px;margin-top:14px}.fslogo{width:76px;height:76px;border-radius:12px}.fslogo .av.lg{width:58px;height:58px;font-size:22px}.fsinfo{gap:2px 12px;font-size:14px}}
@@ -1749,12 +1759,12 @@ const ACT_NEED = { 'note-new': 'kirj', 'note-side': 'kirj', 'note-p': 'kirj', 'n
   'nhl-open': 'joukkue', 'nhl-close': 'joukkue', 'nhl-pick': 'joukkue', 'nhl-all': 'joukkue', 'nhl-add': 'joukkue', 'tmdel-mode': 'joukkue', 'tmdel-pick': 'joukkue', 'tmdel-all': 'joukkue',
   'wiz-open': 'ottelu', 'wiz-close': 'ottelu', 'wiz-pick': 'ottelu', 'wiz-pool': 'ottelu', 'wiz-out': 'ottelu', 'wiz-shuffle': 'ottelu', 'wiz-clear': 'ottelu', 'wiz-next': 'ottelu', 'wiz-back': 'ottelu', 'wiz-cons': 'ottelu', 'wiz-gap': 'ottelu', 'wiz-save': 'ottelu',
   'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'new-match': 'ottelu', 'tour-active': 'pelattava', 'tour-bronze': 'tasetus', 'tour-team-all': 'tasetus',
-  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'lj-edit': 'tasetus', 'fbk-done': 'admin', 'fbk-filter': 'admin', 'fbk-open': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'tour-arenas': 'tasetus', 'tj-open': 'tasetus', 'tj-pick': 'tasetus', 'tj-all': 'tasetus', 'tj-add': 'tasetus', 'pl-new-go': 'admin', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
+  color: 'joukkue', 'photo-del': 'joukkue', 'first-team': 'joukkue', 'ad-edit': 'admin', 'ad-clear': 'admin', 'lj-edit': 'tasetus', 'm-arena-set': 'aika', 'fbk-done': 'admin', 'fbk-filter': 'admin', 'fbk-open': 'admin', 'ad-vis': 'admin', 'home-vis': 'admin', 'add-stat': 'set:pisteet', 'val-step': 'set:pisteet', acct: 'set:tunnukset', 'acct-open': 'set:tunnukset', 'acct-dd': 'set:tunnukset', 'tour-arenas': 'tasetus', 'tj-open': 'tasetus', 'tj-pick': 'tasetus', 'tj-all': 'tasetus', 'tj-add': 'tasetus', 'pl-new-go': 'admin', 'acct-goal': 'set:tunnukset', 'new-kind': 'admin', 'new-sub': 'admin', 'new-pw': 'admin', 'acct-pwreq': 'set:tunnukset', 'qa-mode': 'kokoonpano', 'tm-open': 'kokoonpano', 'tm-pick': 'kokoonpano', 'qa-open': 'kokoonpano', 'qa-pick': 'kokoonpano', 'qa-close': 'kokoonpano', kind: 'admin', sub: 'kokoonpano', setview: 'admin', 'log-filter': 'set:loki', 'log-more': 'set:loki', 'role-open': 'set:roolit', 'card-edit': 'profiilit', backup: 'set:varmuuskopiot', 'restore-cancel': 'set:varmuuskopiot', 'auto-now': 'set:varmuuskopiot', 'auto-pick': 'set:varmuuskopiot' };
 const FIELD_NEED = { 'm-arena': 'aika', 'rp-q': 'kokoonpano', 'wiz-pname': 'ottelu', 'wiz-first': 'ottelu', 'wiz-time': 'ottelu', 'tour-start': 'tasetus', 'team-short': 'joukkue', 'tour-arena': 'tasetus', 'tour-team-add': 'tasetus', 'tour-player-add': 'tasetus', 'tour-roster-add': 'tasetus', 'add-sub': 'tuur', 'm-time': 'aika', 'tour-name': 'tasetus', 'tour-break': 'tasetus', 'tour-match': 'tasetus', 'team-name': 'joukkue', 'player-name': 'ptiedot', 'player-badge': 'ptiedot', 'player-team': 'kokoonpano', 'assign-player': 'kokoonpano', photo: 'joukkue',
   'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
 const FORM_NEED = { 'pz-save': 'ottelu', 'view-pw': 'set:kirjautuminen', 'ad-save': 'admin', 'add-team': 'joukkue', 'add-player': 'admin', 'new-player': 'admin', 'add-tour': 'turnaus', 'add-match': 'ottelu', 'set-pw': 'set:tunnukset', 'add-acc': 'set:kirjautuminen' };
-const KEY_NEED = { 'fbk-del': 'admin', 'nhl-teams': 'joukkue', 'del-teams': 'joukkue', 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
+const KEY_NEED = { 'arena-auto': 'aika', 'fbk-del': 'admin', 'nhl-teams': 'joukkue', 'del-teams': 'joukkue', 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
 // ADMIN's account and every Superadmin's are the main account's to change; a Superadmin cannot touch them, nor give the role.
 const acctLocked = id => !can('main') && id === 'ADMIN';
 function mayKey(key) {
@@ -1982,6 +1992,35 @@ const mArena = (T, m) => +m.arena || (T.arenas && T.arenas.length === 1 && arena
 const arenaShown = (T, m) => !!mArena(T, m) && !isBye(m) && (!!(T.arenas && T.arenas.length) || arenaCount(T) > 1 || Object.values(T.matches).some(x => x.arena > 1));
 const arenaTxt = (T, m) => arenaShown(T, m) && !m.endedAt ? ' · ' + arenaName(T, mArena(T, m)) : '';
 const arenaBit = (T, m) => arenaShown(T, m) ? ' · ' + esc(arenaName(T, mArena(T, m))) : '';
+// Areenat on Ottelut: every match with a button for each arena, to share them out by hand, and a press that shares them out
+// in turn round by round. Matches already started keep theirs.
+function arenaOrder(T) {
+  const rs = rounds(T), ids = [];
+  rs.forEach((r, i) => { r.forEach(id => ids.push(id)); if (i === rs.length - 1 && T.matches.bronze) ids.push('bronze'); });
+  return { rs, ids: ids.filter(id => T.matches[id] && !isBye(Object.assign({ id }, T.matches[id]))) };
+}
+function arenaAuto(T) {
+  const n = arenaCount(T), { rs } = arenaOrder(T);
+  rs.forEach((r, i) => {
+    const ids = r.concat(i === rs.length - 1 && T.matches.bronze ? ['bronze'] : []).filter(id => T.matches[id] && !isBye(Object.assign({ id }, T.matches[id])));
+    ids.forEach((id, k) => { const m = T.matches[id]; if (!m.startedAt) { m.arena = (k % n) + 1; persistMatch(T.id, id, ['arena']); } });
+  });
+  logAct(T.id, Object.keys(T.matches)[0], 'm', 'jakoi ottelut areenoille');
+}
+function arenaPlan(T) {
+  const n = arenaCount(T), { ids } = arenaOrder(T), tid = esc(T.id), count = {};
+  ids.forEach(id => { const a = mArena(T, Object.assign({ id }, T.matches[id])); count[a] = (count[a] || 0) + 1; });
+  const sum = `<div class="arsum" data-k="ar-sum">${Array.from({ length: n }, (_, i) => `<span class="arch"><b>${esc(arenaName(T, i + 1))}</b><small>${count[i + 1] || 0} ottelua</small></span>`).join('')}${count[0] ? `<span class="arch none"><b>Ei areenaa</b><small>${count[0]} ottelua</small></span>` : ''}</div>`;
+  const row = id => {
+    const m = Object.assign({ id }, T.matches[id]), a = mArena(T, m), lock = !!m.startedAt;
+    const btn = (v, label) => `<button type="button" class="pill" id="ar-${tid}-${esc(id)}-${v}" data-act="m-arena-set" data-tour="${tid}" data-id="${esc(id)}" data-v="${v}" aria-pressed="${a === v}"${lock ? ' disabled' : ''}>${label}</button>`;
+    return `<li class="arow${lock ? ' lock' : ''}" data-k="ar-${esc(id)}"><span class="itxt">${pairHead(T, m)}${m.time ? ' · klo ' + esc(startTxt(m)) : ''}${lock ? ' · ' + (m.endedAt ? 'pelattu' : 'käynnissä') : ''}</small></span>` +
+      `<div class="pills arp" role="group" aria-label="Areena: ${esc(matchLabel(T, m))}">${Array.from({ length: n }, (_, i) => btn(i + 1, esc(arenaName(T, i + 1)))).join('')}${btn(0, '–')}</div></li>`;
+  };
+  return `<p class="hint" data-k="ar-h">Valitse, millä areenalla (konsolilla) kukin ottelu pelataan. Aloitettujen otteluiden areena pysyy. Areenoiden määrä ja nimet ovat turnauksen asetuksissa.</p>` + sum +
+    `<div class="rowbtns" data-k="ar-auto">${twice('ar-auto-' + T.id, 'arena-auto:' + T.id, 'Jaa automaattisesti', false, 'Vahvista: jaa kierroksittain vuorotellen', 'plain')}</div>` +
+    (ids.length ? `<ul class="mlist arlist" data-k="ar-l">${ids.map(row).join('')}</ul>` : `<p class="hint" data-k="ar-none">Turnauksessa ei ole vielä otteluita.</p>`);
+}
 // for whoever sets the times: which arena a coming match is played on
 function arenaSel(T, m, d) {
   const n = arenaCount(T);
@@ -3301,7 +3340,8 @@ function setPassword(form) {
 }
 function confirmed(key) {
   const i = key.indexOf(':'), k = i < 0 ? key : key.slice(0, i), id = i < 0 ? '' : key.slice(i + 1);
-  if (k === 'fbk-del') { if (fbk[id]) { delete fbk[id]; fbkWrite(id, true); } }
+  if (k === 'arena-auto') { const T = state.tournaments[id]; if (T) arenaAuto(T); }
+  else if (k === 'fbk-del') { if (fbk[id]) { delete fbk[id]; fbkWrite(id, true); } }
   else if (k === 'del-team') removeTeam(id);
   else if (k === 'nhl-teams') addNhlTeams();
   else if (k === 'del-teams' && ui.tmDel) { const ids = Object.keys(ui.tmDel).filter(id => ui.tmDel[id] && state.teams[id] && !teamPlayed(id)); ids.forEach(removeTeam); ui.nhlMsg = 'Poistettiin ' + ids.length + (ids.length === 1 ? ' joukkue.' : ' joukkuetta.'); ui.tmDel = null; }
@@ -3545,6 +3585,7 @@ function act(a, d) {
     case 'fbk-done': if (fbk[d.id]) { fbk[d.id].done = !fbk[d.id].done; fbkWrite(d.id); } break;
     case 'fbk-open': if (allowedTabs().indexOf('asetukset') >= 0) { act('tab', { tab: 'asetukset' }); ui.setView = 'palaute'; ui.toTop = true; } break;
     case 'lj-edit': ui.ljEdit = !ui.ljEdit; break;
+    case 'm-arena-set': { const T = state.tournaments[d.tour], m = T && T.matches[d.id], v = +d.v; if (m && !m.startedAt) { m.arena = v >= 1 && v <= 20 ? v : 0; persistMatch(d.tour, d.id, ['arena']); logAct(d.tour, d.id, 'm', m.arena ? 'asetti areenaksi ' + arenaName(T, m.arena) : 'poisti areenan'); } break; }
     case 'pill':
       if (d.key === 'lt') ui.ltView = d.v; else if (d.key === 'tb') ui.tbView = d.v;
       else if (d.key === 'tt') { const c = topCard(); if (c && c.k === 't') c.tour = d.v; else ui.teamTour = d.v; }
@@ -4912,7 +4953,7 @@ function bracketView(T, scope, big) {
   // the bronze match: each place reached by a dashed line from the semi-final whose loser comes there
   const bronze = () => {
     const s1 = rs[R - 2][0], s2 = rs[R - 2][1], g1 = gw(s1), y1 = (sw[s1 + 'h'] || 0) + (sw[s1 + 'a'] || 0) / 2, y2 = g1 + (sw[s2 + 'h'] || 0) + (sw[s2 + 'a'] || 0) / 2;
-    const meta = ['Pronssiottelu', status(bz)].filter(Boolean).join(' · '), deep = R === 2 ? ' z0' : '';
+    const meta = ['Pronssiottelu', arenaShown(T, bz) ? esc(arenaName(T, mArena(T, bz))) : '', status(bz)].filter(Boolean).join(' · '), deep = R === 2 ? ' z0' : '';
     return `<div class="bgr bz" data-k="bgr-bronze" style="flex-grow:2">` +
       place(bz, 'home', ' lx lx1' + deep, `flex-grow:1;--up:${(W + 0.5 - y1).toFixed(4)}`, meta) +
       place(bz, 'away', ' lx lx2' + deep, `flex-grow:1;--up:${(W + 1.5 - y2).toFixed(4)}`, '') + `</div>`;
@@ -5733,11 +5774,13 @@ function liveMatches(T, scope) {
   items.sort((x, y) => (at(y) - at(x)) || (rk[st(x)] - rk[st(y)]) ||
     (st(x) === 'done' ? ea(y) - ea(x) : st(x) === 'live' ? y.startedAt - x.startedAt : comeKey(y) - comeKey(x)) || (x.pz || y.pz ? 0 : byOrder(y, x)));
   const pid = ownPid(), done = items.filter(m => (m.pz ? m.pst : mStatus(m)) === 'done'), rest = items.filter(m => (m.pz ? m.pst : mStatus(m)) !== 'done');
+  const plan = can('aika') && !ui.readOnly && (arenaCount(T) > 1 || !!(T.arenas && T.arenas.length));   // whoever sets the times also shares the matches out to the arenas
+  if (plan && ui.ltView === 'areenat') return pills('lt', [['ohjelma', 'Otteluohjelma'], ['tulokset', 'Tulokset'], ['areenat', 'Areenat']], 'areenat') + arenaPlan(T);
   const view = ui.ltView === 'tulokset' || (ui.ltView !== 'ohjelma' && !rest.some(m => !m.pz)) ? 'tulokset' : 'ohjelma';
   // the programme runs from the first coming match down; the results from the latest one down
   const list = view === 'ohjelma' ? rest.slice().sort((x, y) => (rk[st(y)] - rk[st(x)]) || (st(x) === 'live' ? x.startedAt - y.startedAt : comeKey(x) - comeKey(y)) || (x.pz || y.pz ? 0 : byOrder(x, y)))
     : done.slice().sort((x, y) => ea(y) - ea(x));
-  return pills('lt', [['ohjelma', 'Otteluohjelma'], ['tulokset', 'Tulokset']], view) +
+  return pills('lt', [['ohjelma', 'Otteluohjelma'], ['tulokset', 'Tulokset']].concat(plan ? [['areenat', 'Areenat']] : []), view) +
     (list.length ? `<ul class="mlist fsl-list" data-k="lt">${list.map(m => m.pz ? pauseRow(T, m) : fsRow(T, m, scope, !!pid && !!playSide(T, m, pid))).join('')}</ul>`
       : `<p class="hint" data-k="lt-none">${view === 'ohjelma' ? 'Kaikki ottelut on pelattu.' : 'Yhtään ottelua ei ole vielä pelattu.'}</p>`);
 }
