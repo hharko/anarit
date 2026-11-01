@@ -4245,19 +4245,20 @@ function teamRoster(t) {
 function teamProfile(tid) {
   return backBtn('team', 'Kaikki joukkueet') + `<div class="tpage" data-k="tp-card">${teamPage(tid, 'team', ui.teamTab, ui.teamTour)}</div>`;
 }
-// The tournament a team's page opens in: the one it was opened from (a table, a match, the tournament's own pages), else the
-// running one; 'all' for every tournament together.
+// The tournament a team's page opens in: the one it was opened from (a table, a match, the tournament's own pages); '' elsewhere.
 function cardTourGuess(top) {
   if (top && top.k === 't' && top.tour) return top.tour;
   if (top && top.k === 'tr') return top.id;
+  if (top || ui.own || ui.tab === 'etusivu') return '';   // a profile or the front page: every tournament
   if (!top && ui.tab === 'kaynnissa' && activeTour()) return activeTour().id;
   if (!top && ui.tab === 'turnaukset' && ui.tour && state.tournaments[ui.tour]) return ui.tour;
   return '';
 }
+// Opened from a tournament (its tables, matches or pages) the team's page is that tournament's; from anywhere else (the front page,
+// a profile, the list of teams) it is all the tournaments together. The buttons under the tabs change it.
 function teamScope(tid, sel) {
-  const tours = teamTours(tid);
-  if (sel === 'all' || !tours.length) return null;
-  return tours.find(T => T.id === sel) || tours.find(T => /live|on/.test(tourState(T))) || tours[0];
+  if (!sel || sel === 'all') return null;
+  return teamTours(tid).find(T => T.id === sel) || null;
 }
 // A team's page as on the big results sites: a head with the way there, the badge on a white tile, the name and a line of facts,
 // and under it the sections as tabs. The same page opens from Joukkueet and from a name pressed in a table.
