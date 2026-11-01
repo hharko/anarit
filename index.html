@@ -1163,6 +1163,9 @@ button.fmt:hover .fslogo{box-shadow:0 0 0 3px rgba(255,255,255,.25)}
 .arp .pill{padding:8px 12px;text-transform:none;letter-spacing:0;font-size:14px}
 .arp .pill:disabled{opacity:.45;cursor:default}
 .arow.lock .itxt{opacity:.6}
+.arow.clash{box-shadow:inset 3px 0 0 #ff5a6e;background:linear-gradient(90deg,rgba(255,90,110,.12),transparent 70%)}
+.warnmsg.clash ul{margin:6px 0 8px;padding-left:18px}
+.warnmsg.clash small{display:block;margin-top:6px;color:var(--ink-2)}
 .mhead .mar{margin-left:2px;color:var(--ink-2);font-weight:600;font-size:.85em;letter-spacing:.02em}
 .tpage > .pills{margin:0}
 @media (max-width:560px){.fsht{padding:14px 14px 16px}.fshm{gap:14px;margin-top:14px}.fslogo{width:76px;height:76px;border-radius:12px}.fslogo .av.lg{width:58px;height:58px;font-size:22px}.fsinfo{gap:2px 12px;font-size:14px}}
@@ -1764,7 +1767,7 @@ const FIELD_NEED = { 'm-arena': 'aika', 'rp-q': 'kokoonpano', 'wiz-pname': 'otte
   'role-sec': 'set:roolit', 'role-rgroup': 'set:roolit', 'acct-sec': 'set:tunnukset', 'acct-rgroup': 'set:tunnukset',
   title: 'admin', 'stat-name': 'set:pisteet', 'stat-short': 'set:pisteet', 'stat-value': 'set:pisteet', 'stat-target': 'set:pisteet', 'link-goal': 'set:pisteet', 'link-assist': 'set:pisteet', 'link-win': 'set:pisteet', 'acct-tab': 'set:tunnukset', 'acct-right': 'set:tunnukset', 'acct-role': 'set:tunnukset', 'role-name': 'set:roolit', 'role-tab': 'set:roolit', 'role-right': 'set:roolit', restore: 'set:varmuuskopiot' };
 const FORM_NEED = { 'pz-save': 'ottelu', 'view-pw': 'set:kirjautuminen', 'ad-save': 'admin', 'add-team': 'joukkue', 'add-player': 'admin', 'new-player': 'admin', 'add-tour': 'turnaus', 'add-match': 'ottelu', 'set-pw': 'set:tunnukset', 'add-acc': 'set:kirjautuminen' };
-const KEY_NEED = { 'arena-auto': 'aika', 'fbk-del': 'admin', 'nhl-teams': 'joukkue', 'del-teams': 'joukkue', 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
+const KEY_NEED = { 'replan': 'aika', 'arena-auto': 'aika', 'fbk-del': 'admin', 'nhl-teams': 'joukkue', 'del-teams': 'joukkue', 'del-user': 'set:tunnukset', 'tour-team-del': 'tasetus', 'tour-player-del': 'tasetus', 'del-team': 'joukkue', 'del-player': 'admin', release: 'kokoonpano', 'del-stat': 'set:pisteet', 'clear-all': 'set:nollaus', 'reset-all': 'set:nollaus', 'del-tour': 'turnaus', 'del-match': 'ottelu', 'del-ev': 'kmuok', 'sub-out': 'tuur', 'undo-goal': 'kmuok', 'auth-off': 'set:kirjautuminen', 'del-role': 'set:roolit', 'clear-log': 'set:loki', 'del-acc': 'set:kirjautuminen', restore: 'set:varmuuskopiot', 'reset-match': 'admin', 'm-start': 'kulku', 'm-end': 'kulku', 'm-resume': 'kulku', 'm-break': 'tauot', 'm-break-end': 'tauot', 'm-pause': 'tauot', 'm-unpause': 'tauot', 'ok-goal': 'kmuok' };
 // ADMIN's account and every Superadmin's are the main account's to change; a Superadmin cannot touch them, nor give the role.
 const acctLocked = id => !can('main') && id === 'ADMIN';
 function mayKey(key) {
@@ -2006,6 +2009,72 @@ function arenaAuto(T) {
     ids.forEach((id, k) => { const m = T.matches[id]; if (!m.startedAt) { m.arena = (k % n) + 1; persistMatch(T.id, id, ['arena']); } });
   });
   logAct(T.id, Object.keys(T.matches)[0], 'm', 'jakoi ottelut areenoille');
+  replanTimes(T);
+}
+// The clock of a tournament's evening in minutes from the first match's time; times well before it are past midnight.
+function tourClock(T) {
+  const toMin = s => { const x = /^(\d{2}):(\d{2})$/.exec(s || ''); return x ? +x[1] * 60 + +x[2] : null; };
+  const ts = matchList(T).map(m => toMin(m.time)).filter(v => v != null), anchor = ts.length ? Math.min(...ts) : null;
+  const rel = s => { let v = toMin(s); if (v == null) return null; if (v < anchor - 360) v += 1440; return v; };
+  // a moment that has passed (a start, an end) counted back from now, so it lands on the same clock as the times
+  const nd = new Date(nowMs()); let nowRel = nd.getHours() * 60 + nd.getMinutes(); if (anchor != null && nowRel < anchor - 360) nowRel += 1440;
+  const at = ms => nowRel - Math.round((nowMs() - ms) / 60000);
+  const hhmm = v => String(Math.floor(v / 60) % 24).padStart(2, '0') + ':' + String(v % 60).padStart(2, '0');
+  return { anchor, rel, at, hhmm, len: matchLen(T.matchMin) || MATCH_DEF };
+}
+// Matches on the same arena at the same time: each one not yet over takes its arena from its start for the match's length.
+function arenaClashes(T) {
+  const C = tourClock(T);
+  if (C.anchor == null) return [];
+  const lanes = {};
+  matchList(T).forEach(m => {
+    if (isBye(m) || m.endedAt) return;
+    const a = mArena(T, m), t = m.startedAt ? C.at(m.startedAt) : C.rel(m.time);
+    if (!a || t == null) return;
+    (lanes[a] = lanes[a] || []).push({ m, t });
+  });
+  const out = [];
+  Object.keys(lanes).forEach(a => {
+    const L = lanes[a].sort((x, y) => x.t - y.t);
+    for (let i = 1; i < L.length; i++) if (L[i].t < L[i - 1].t + C.len) out.push({ a: +a, x: L[i - 1].m, y: L[i].m, at: C.hhmm(L[i].t) });
+  });
+  return out;
+}
+// New times from the arenas: each arena plays its matches one after another and the arenas side by side; a match also waits for
+// the matches its teams come from, and for the tournament's breaks. Only matches not yet started move; one without an arena stays.
+function replanTimes(T0) {
+  const T = Object.assign({ id: T0.id }, T0), C = tourClock(T), n = arenaCount(T);
+  if (C.anchor == null) return 0;
+  const all = matchList(T), started = all.some(m => m.startedAt), nowM = started ? C.at(nowMs()) : -1e9;
+  const free = {}, end = {};
+  for (let i = 1; i <= n; i++) free[i] = C.anchor;
+  all.forEach(m => {
+    if (m.endedAt) end[m.id] = C.at(m.endedAt);
+    else if (m.startedAt) { end[m.id] = Math.max(C.at(m.startedAt) + C.len, nowM); const a = mArena(T, m); if (a) free[a] = Math.max(free[a] || 0, end[m.id]); }
+  });
+  const pz = (T0.pauses || []).map(p => [C.rel(p.at), C.rel(p.at) + (+p.min || 0)]).filter(p => p[0] != null);
+  let moved = 0;
+  arenaOrder(T).ids.forEach(id => {
+    const m = T0.matches[id];
+    if (!m || m.startedAt) return;
+    const a = mArena(T, Object.assign({ id }, m));
+    if (!a) return;
+    const deps = [m.home, m.away].filter(sd => sd && (sd.w || sd.l)).map(sd => sd.w || sd.l);
+    let t = Math.max(C.anchor, nowM, free[a] != null ? free[a] : C.anchor, ...deps.map(x => end[x] != null ? end[x] : C.anchor));
+    for (let g = 0; g < 30; g++) { const p = pz.find(x => t < x[1] && t + C.len > x[0]); if (!p) break; t = p[1]; }
+    const time = C.hhmm(t);
+    if (m.time !== time || +m.arena !== a) { m.time = time; m.arena = a; moved++; persistMatch(T0.id, id, ['time', 'arena']); }
+    end[id] = t + C.len; free[a] = t + C.len;
+  });
+  if (moved) { const first = arenaOrder(T).ids[0]; if (first) logAct(T0.id, first, 'm', 'laski otteluiden alkamisajat uudelleen areenoiden mukaan (' + moved + ' ottelua)'); }
+  return moved;
+}
+// The clashes as a warning with a press that sorts them out.
+function clashNote(T, k, only) {
+  const cl = arenaClashes(T).filter(c => !only || c.x.id === only || c.y.id === only);
+  if (!cl.length) return '';
+  return `<div class="warnmsg clash" data-k="${k}" role="alert"><b>Päällekkäisiä otteluita samalla areenalla:</b><ul>${cl.map(c => `<li>${esc(arenaName(T, c.a))} klo ${c.at}: ${esc(matchLabel(T, c.x))} ja ${esc(matchLabel(T, c.y))}</li>`).join('')}</ul>` +
+    (can('aika') && !ui.readOnly ? `<div class="rowbtns">${twice('replan-' + k, 'replan:' + T.id, 'Korjaa ajat automaattisesti', false, 'Vahvista: laske ajat uudelleen', 'primary')}</div><small>Saman areenan ottelut siirretään peräkkäin (ottelun pituus ${tourClock(T).len} min), ja jatko-ottelut alkavat vasta edellisten jälkeen.</small>` : '') + `</div>`;
 }
 function arenaPlan(T) {
   const n = arenaCount(T), { ids } = arenaOrder(T), tid = esc(T.id), count = {};
@@ -2014,11 +2083,13 @@ function arenaPlan(T) {
   const row = id => {
     const m = Object.assign({ id }, T.matches[id]), a = mArena(T, m), lock = !!m.startedAt;
     const btn = (v, label) => `<button type="button" class="pill" id="ar-${tid}-${esc(id)}-${v}" data-act="m-arena-set" data-tour="${tid}" data-id="${esc(id)}" data-v="${v}" aria-pressed="${a === v}"${lock ? ' disabled' : ''}>${label}</button>`;
-    return `<li class="arow${lock ? ' lock' : ''}" data-k="ar-${esc(id)}"><span class="itxt">${pairHead(T, m)}${m.time ? ' · klo ' + esc(startTxt(m)) : ''}${lock ? ' · ' + (m.endedAt ? 'pelattu' : 'käynnissä') : ''}</small></span>` +
+    return `<li class="arow${lock ? ' lock' : ''}${clash[id] ? ' clash' : ''}" data-k="ar-${esc(id)}"><span class="itxt">${pairHead(T, m)}${m.time ? ' · klo ' + esc(startTxt(m)) : ''}${lock ? ' · ' + (m.endedAt ? 'pelattu' : 'käynnissä') : ''}</small></span>` +
       `<div class="pills arp" role="group" aria-label="Areena: ${esc(matchLabel(T, m))}">${Array.from({ length: n }, (_, i) => btn(i + 1, esc(arenaName(T, i + 1)))).join('')}${btn(0, '–')}</div></li>`;
   };
-  return `<p class="hint" data-k="ar-h">Valitse, millä areenalla (konsolilla) kukin ottelu pelataan. Aloitettujen otteluiden areena pysyy. Areenoiden määrä ja nimet ovat turnauksen asetuksissa.</p>` + sum +
-    `<div class="rowbtns" data-k="ar-auto">${twice('ar-auto-' + T.id, 'arena-auto:' + T.id, 'Jaa automaattisesti', false, 'Vahvista: jaa kierroksittain vuorotellen', 'plain')}</div>` +
+  const clash = {}; arenaClashes(T).forEach(c => { clash[c.x.id] = 1; clash[c.y.id] = 1; });
+  const msg = ui.replanMsg && ui.replanMsg.tid === T.id ? `<p class="okmsg" role="status" data-k="ar-msg">${esc(ui.replanMsg.text)}</p>` : '';
+  return `<p class="hint" data-k="ar-h">Valitse, millä areenalla (konsolilla) kukin ottelu pelataan. Aloitettujen otteluiden areena pysyy. Areenoiden määrä ja nimet ovat turnauksen asetuksissa.</p>` + sum + clashNote(T, 'ar-clash') + msg +
+    `<div class="rowbtns" data-k="ar-auto">${twice('ar-auto-' + T.id, 'arena-auto:' + T.id, 'Jaa automaattisesti', false, 'Vahvista: jaa areenat ja laske ajat', 'plain')}${tourClock(T).anchor != null ? twice('ar-re-' + T.id, 'replan:' + T.id, 'Laske ajat areenoiden mukaan', false, 'Vahvista: laske ajat uudelleen', 'plain') : ''}</div>` +
     (ids.length ? `<ul class="mlist arlist" data-k="ar-l">${ids.map(row).join('')}</ul>` : `<p class="hint" data-k="ar-none">Turnauksessa ei ole vielä otteluita.</p>`);
 }
 // for whoever sets the times: which arena a coming match is played on
@@ -3340,7 +3411,8 @@ function setPassword(form) {
 }
 function confirmed(key) {
   const i = key.indexOf(':'), k = i < 0 ? key : key.slice(0, i), id = i < 0 ? '' : key.slice(i + 1);
-  if (k === 'arena-auto') { const T = state.tournaments[id]; if (T) arenaAuto(T); }
+  if (k === 'arena-auto') { const T = state.tournaments[id]; if (T) arenaAuto(Object.assign({ id }, T)); }
+  else if (k === 'replan') { const T = state.tournaments[id]; if (T) { const n = replanTimes(Object.assign({ id }, T)); ui.replanMsg = { tid: id, text: n ? 'Ajat laskettiin uudelleen: ' + n + (n === 1 ? ' ottelu siirtyi.' : ' ottelua siirtyi.') : 'Ajat olivat jo kunnossa.' }; } }
   else if (k === 'fbk-del') { if (fbk[id]) { delete fbk[id]; fbkWrite(id, true); } }
   else if (k === 'del-team') removeTeam(id);
   else if (k === 'nhl-teams') addNhlTeams();
@@ -5030,7 +5102,7 @@ function matchControls(T, m) {
   if (!K && !P && !A) return '';
   const key = a2 => a2 + ':' + T.id + '|' + m.id, two = (id, a2, label, armedLabel, tone, off) => twice(id + '-' + m.id, key(a2), label, false, armedLabel, tone || 'plain', off);
   const box = (k, cls, inner) => inner ? `<div class="${cls}" data-k="${k}">${inner}</div>` : '';
-  if (st === 'new') return box('mc-new', 'mctl', (A ? `<label class="f"><span>Alkamisaika</span><input type="time" id="mt-${mid}" data-field="m-time" ${d} value="${esc(m.time)}"></label>` + arenaSel(T, m, d) : '') + (K ? two('mst', 'm-start', 'Aloita ottelu', 'Vahvista aloitus', 'primary', !ready) : '') + (A ? saveBar('mt-' + m.id, 'Tallenna alkamisaika') : '')) +
+  if (st === 'new') return box('mc-new', 'mctl', (A ? `<label class="f"><span>Alkamisaika</span><input type="time" id="mt-${mid}" data-field="m-time" ${d} value="${esc(m.time)}"></label>` + arenaSel(T, m, d) + clashNote(T, 'mc-clash', m.id) : '') + (K ? two('mst', 'm-start', 'Aloita ottelu', 'Vahvista aloitus', 'primary', !ready) : '') + (A ? saveBar('mt-' + m.id, 'Tallenna alkamisaika') : '')) +
     (ready || !K ? '' : `<p class="hint" data-k="mc-wait">Ottelun voi aloittaa, kun molemmat joukkueet ovat selvillä.</p>`);
   const end = K ? two('men', 'm-end', 'Päätä ottelu', 'Vahvista päätös') : '';
   if (st === 'done') return K ? `<div class="mctl" data-k="mc-done">${two('mre', 'm-resume', 'Jatka ottelua', 'Vahvista jatko')}</div>` : '';
