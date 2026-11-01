@@ -5204,7 +5204,7 @@ function matchProfile(T, mid, scope) {
   // The form they open comes up right under the controls; other kinds of points and a finished match keep their buttons in place.
   const bar = entry && st === 'live' && !open;
   const back = ui.vmBack ? `<button class="btn back" id="mp-back" data-act="vm-back">Takaisin valvomoon</button>` : `<button class="btn back" id="mp-back" data-act="close-match" data-scope="${scope}">Takaisin turnaukseen</button>`;
-  const tabs = [['ottelu', 'Ottelu']].concat(h.team && a.team ? [['h2h', 'Keskinäiset']] : []).concat(tourTeamRows(T, tourStats(T)).length ? [['taulukko', 'Sarjataulukko']] : []);
+  const tabs = [['ottelu', 'Ottelu']].concat(h.team && a.team ? [['h2h', 'Head to head']] : []).concat(tourTeamRows(T, tourStats(T)).length ? [['taulukko', 'Sarjataulukko']] : []);
   const tab = tabs.some(x => x[0] === ui.mpTab) ? ui.mpTab : 'ottelu';
   const head = `<div data-k="mp-back">${back}</div>` + matchBanner(T, m, h, a, st, line, tabs.length > 1 ? secTabs('mp', tabs, tab, 'Ottelun osiot') : '');
   if (tab === 'h2h') return head + `<div class="pbody" data-k="mp-h2h">${matchH2H(T, m, h, a)}</div>`;
