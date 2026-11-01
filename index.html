@@ -86,6 +86,7 @@ h1,h2,h3,h4,p{margin:0}
 .tbl.fs td.p{font:800 17px/1 var(--f-display);color:var(--ink)}
 .tbl.fs td.jk,.tbl.fs th.jk{text-align:left;color:var(--ink-2);font-weight:600}
 .jkn{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+@media (max-width:560px){.jknm{display:none}}   /* on a phone the scorers' team is its badge, so the player's name has room */
 .tbl thead th{font:700 13px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);border-bottom:2px solid var(--ink)}
 .tbl .l{text-align:left}
 .tbl .rk{width:2.4em;color:var(--ink-2)}
@@ -94,7 +95,7 @@ h1,h2,h3,h4,p{margin:0}
 .tbl td.p span{display:inline-block}
 .tbl abbr{text-decoration:none}
 .tn{display:flex;align-items:center;gap:8px;min-width:0}
-.tn > span{min-width:0;overflow-wrap:anywhere}
+.tn > span{min-width:0;overflow-wrap:break-word}
 .tn small{display:block;font-weight:400;font-size:13px;color:var(--ink-2)}
 .legend{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--ink-2);font-size:14px}
 .legend b{color:var(--ink)}
@@ -735,8 +736,9 @@ button.tchip:hover{border-color:var(--ink-2)}
 .crow{cursor:pointer}
 @media (hover:hover){.crow:hover > th,.crow:hover > td{background:var(--press)}}
 .cardb{display:block;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;touch-action:manipulation}
-.cardb .nm{text-decoration:underline;text-decoration-color:var(--line);text-decoration-thickness:2px;text-underline-offset:3px}
-.cardb:hover .nm{text-decoration-color:var(--ink-2)}
+/* a name that opens a page: no line under it (a long name on two lines got two), only on hover with a mouse */
+.cardb .nm{text-decoration:none}
+@media (hover:hover){.cardb:hover .nm,.crow:hover .cardb .nm{text-decoration:underline;text-decoration-color:var(--ink-2);text-decoration-thickness:2px;text-underline-offset:3px}}
 span.cardb{cursor:default}
 span.cardb .nm{text-decoration:none}
 .lrowb.crd{touch-action:manipulation}
@@ -2270,20 +2272,38 @@ function applyColl(name, norm, snap) {
     }
   }
   state[name] = next;
+  subOk();
   settle(name, snap); checkReady(); render();
 }
-function subErr() { ui.subError = true; ui.ready = true; render(); }
+// A listener the database refused or dropped. Signing in or out with Google changes the sign-in under the open listeners for a
+// moment, and they are refused in between; so the page listens again after a short wait, and says the connection broke only
+// when that keeps failing.
+let subs = [], subTries = 0, subTimer = null;
+function subErr(e) {
+  try { console.warn('[anarit] kuuntelu katkesi:', (e && (e.code || e.message)) || e); } catch (x) { /* no console */ }
+  ui.subCode = String((e && e.code) || '').slice(0, 40);
+  if (subTimer) return;
+  if (++subTries > 5) { ui.subError = true; ui.ready = true; render(); return; }
+  subTimer = setTimeout(() => { subTimer = null; resubscribe(); }, 1200 * subTries);
+}
+function subOk() { if (subTries || ui.subError) { subTries = 0; if (ui.subError) { ui.subError = false; render(); } } }
+function resubscribe() {
+  subs.forEach(off => { try { off(); } catch (e) { /* gone already */ } }); subs = [];
+  try { subscribe(); } catch (e) { subErr(e); }
+}
 function subscribe() {
-  db.doc('meta/config').onSnapshot(snap => {
+  const keep = off => { if (typeof off === 'function') subs.push(off); };
+  keep(db.doc('meta/config').onSnapshot(snap => {
+    subOk();
     if (!isDirty('meta/config')) state.config = snap.exists ? normConfig(clone(snap.data() || {})) : defaultConfig();
     ui.rolesOld = snap.exists && (snap.data() || {}).rolesV !== 2;   // the roles of an earlier version: Valvomo's page stores them as they now are
     settle('config', snap); checkReady(); render();
-  }, subErr);
-  db.collection('teams').onSnapshot(snap => applyColl('teams', normTeam, snap), subErr);
-  db.collection('players').onSnapshot(snap => applyColl('players', normPlayer, snap), subErr);
-  db.collection('users').onSnapshot(snap => applyColl('users', normUser, snap), subErr);
-  db.collection('tournaments').onSnapshot(snap => { applyColl('tournaments', normTour, snap); if ((!snap.metadata || !snap.metadata.fromCache) && syncTours()) render(); }, () => { /* scores keep working without tournaments */ });
-  db.collection('photos').onSnapshot(snap => {
+  }, subErr));
+  keep(db.collection('teams').onSnapshot(snap => applyColl('teams', normTeam, snap), subErr));
+  keep(db.collection('players').onSnapshot(snap => applyColl('players', normPlayer, snap), subErr));
+  keep(db.collection('users').onSnapshot(snap => applyColl('users', normUser, snap), subErr));
+  keep(db.collection('tournaments').onSnapshot(snap => { applyColl('tournaments', normTour, snap); if ((!snap.metadata || !snap.metadata.fromCache) && syncTours()) render(); }, subErr));
+  keep(db.collection('photos').onSnapshot(snap => {
     const next = {};
     for (const d of snap.docs) { const v = normPhoto(d.data()); if (v) next[d.id] = v; }
     for (const [path, w] of writers) {
@@ -2292,7 +2312,7 @@ function subscribe() {
     for (const k of Object.keys(photos)) delete photos[k];
     Object.assign(photos, next);
     render();
-  }, () => { /* pictures are optional; scores keep working without them */ });
+  }, () => { /* pictures are optional; scores keep working without them */ }));
 }
 function readLocal() {
   try {
@@ -4010,7 +4030,7 @@ function liveTable(T) {
   return pills('tb', [['sarja', 'Sarjataulukko'], ['kunto', 'Kunto'], ['maalit', 'Maalintekijät']], view) + `<div class="tbv tbv-${view}" data-k="tb-cols"><div data-k="tb-c1">${view === 'kunto' ? kunto : ''}<div class="tscroll" data-k="tb-teams"><table class="tbl fs"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Joukkue</th>${ab('OTT', 'Pelatut ottelut')}${ab('V', 'Voitot')}${ties ? ab('T', 'Tasapelit') : ''}${ab('H', 'Häviöt')}${ab('M', 'Maalit: tehdyt ja päästetyt')}${ab('PIS', 'Pisteet')}</tr></thead><tbody>` +
     tr.map(r => `<tr data-k="tbt-${esc(r.t.id)}" class="crow" ${cardAttrs('t', r.t.id, 'tbt-' + r.t.id)}><td class="l rk"><span class="rkb r${Math.min(r.rank, 4)}">${r.rank}.</span></td><th class="l" scope="row">${cardName('t', r.t, 'tbt-' + r.t.id)}</th><td>${r.s.o}</td><td>${r.s.v}</td>${ties ? `<td>${r.s.t}</td>` : ''}<td>${r.s.h}</td><td>${r.s.gf}:${r.s.ga}</td><td class="p"><span data-bump>${fmt(r.pts)}</span></td></tr>`).join('') + `</tbody></table></div>` +
     `</div><div data-k="tb-c2">` + (pr.length ? `<div class="tscroll" data-k="tb-players"><table class="tbl fs"><thead><tr><th class="l rk" scope="col">#</th><th class="l" scope="col">Pelaaja</th><th class="l jk" scope="col">Joukkue</th>${ab('PIS', 'Pisteet')}${pst.map(x => ab(esc(x.short), esc(x.name))).join('')}</tr></thead><tbody>` +
-      shown.map(r => `<tr data-k="tbp-${esc(r.q.id)}" class="crow" ${cardAttrs('p', r.q.id, 'tbp-' + r.q.id)}><td class="l rk"><span class="rkb">${r.rank}.</span></td><th class="l" scope="row">${cardName('p', r.q, 'tbp-' + r.q.id)}</th><td class="l jk">${(t => t && state.teams[t] ? `<span class="jkn">${teamAv(state.teams[t], 'sm')}${esc(state.teams[t].name)}</span>` : '–')(tTeam(T, r.q.id))}</td><td class="p"><span data-bump>${fmt(r.pts)}</span></td>${pst.map(x => `<td>${r.c[x.id] || 0}</td>`).join('')}</tr>`).join('') + `</tbody></table></div>` +
+      shown.map(r => `<tr data-k="tbp-${esc(r.q.id)}" class="crow" ${cardAttrs('p', r.q.id, 'tbp-' + r.q.id)}><td class="l rk"><span class="rkb">${r.rank}.</span></td><th class="l" scope="row">${cardName('p', r.q, 'tbp-' + r.q.id)}</th><td class="l jk">${(t => t && state.teams[t] ? `<span class="jkn" title="${esc(state.teams[t].name)}">${teamAv(state.teams[t], 'sm')}<span class="jknm">${esc(state.teams[t].name)}</span></span>` : '–')(tTeam(T, r.q.id))}</td><td class="p"><span data-bump>${fmt(r.pts)}</span></td>${pst.map(x => `<td>${r.c[x.id] || 0}</td>`).join('')}</tr>`).join('') + `</tbody></table></div>` +
       (cut || ui.tbAll && pr.some(r => r.rank > 10) ? `<div data-k="tb-all"><button class="btn sm" id="tb-all" data-act="tb-all" aria-expanded="${!cut}">${cut ? 'Näytä kaikki ' + pr.length : 'Näytä vain kärki'}</button></div>` : '')
       : `<p class="hint" data-k="tb-nop">Turnauksen joukkueissa ei ole vielä pelaajia.</p>`) + `</div></div>` +
     `<p class="legend" data-k="tb-key"><span><b>OTT</b> ottelut</span><span><b>V</b> voitot</span>${ties ? '<span><b>T</b> tasapelit</span>' : ''}<span><b>H</b> häviöt</span><span><b>M</b> maalit tehty:päästetty</span><span><b>PIS</b> pisteet</span>${pst.map(x => `<span><b>${esc(x.short)}</b> ${esc(x.name)} ${signed(x.value)} p</span>`).join('')}${linkStat('win') ? `<span>Voitosta joukkue saa ${signed(linkStat('win').value)} p</span>` : ''}</p>`;
@@ -6559,7 +6579,7 @@ function view() {
   const own = !!ui.own && me().id !== 'ADMIN' && !!state.players[me().id];   // the signed-in player's own page sits on top of whichever tab was open
   const card = topCard();   // and a card opened from a table sits on top of both
   let h = topBar(own ? '' : tab, tabs);
-  if (ui.subError) h += `<div class="note" data-k="n-sub"><span>Yhteys tallennukseen katkesi. Lataa sivu uudelleen, niin pisteet päivittyvät taas.</span></div>`;
+  if (ui.subError) h += `<div class="note" data-k="n-sub"><span>Yhteys tallennukseen katkesi${ui.subCode ? ' (' + esc(ui.subCode) + ')' : ''}. Lataa sivu uudelleen, niin pisteet päivittyvät taas.</span></div>`;
   if (ui.readOnly) h += `<div class="note" data-k="n-ro"><span>Katselet tulostaulua. Muutoksia voi tallentaa vain sivun omistaja.</span></div>`;
   const mm = me(), mu = mm && !mm.guest && mm.id !== 'ADMIN' ? state.users[mm.id] : null;
   if (ui.err === 'refused') h += `<div class="note" data-k="n-ref"><span>Viimeisintä muutosta ei tallennettu.</span></div>`;
